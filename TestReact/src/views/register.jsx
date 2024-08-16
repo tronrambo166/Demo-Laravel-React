@@ -2,7 +2,7 @@ import axios from "axios";
 import { useRef } from "react";
 import { Link } from "react-router-dom";
 import axiosClient from "../axiosClient";
-import { useStateContext } from "../contexts/contextprovider";
+import { useStateContext } from "../contexts/contextProvider";
 export default function register() {
 
 	const nameRef = useRef();
@@ -18,13 +18,15 @@ export default function register() {
             password: passwordRef.current.value,
         }
         axiosClient.post("/register",payload).then(({data})=>{
+            //console.log(data);
             setUser(data.user);
             setToken(data.token);
-    }).catch(err => {
+            
+    }).catch(err => { 
+    	console.log(err);
         const response = err.response;
-        console.log(err.response);
         if(response && response.status === 422){
-            alert(response.data.errors);
+            console.log(response.data.errors);
         }
     });
 }

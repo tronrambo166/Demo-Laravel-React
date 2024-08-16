@@ -2,7 +2,9 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Controllers\AuthController;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\UserController;
+use App\Models\User;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,9 +17,18 @@ use App\Controllers\AuthController;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::middleware('auth:sanctum')->group(function() {
+    Route::get('logout',[AuthController::class,'logout']);
+    Route::get('/user/{id}', function ($id) {
+         $user = User::where('id',$id)->first();
+         return response()->json($user);
+    });
+
+    Route::get('/users', [UserController::class, 'index']);
+    Route::post('/create', [UserController::class, 'store']);
+    Route::put('/update/{id}', [UserController::class, 'update']);
+    Route::get('/delete/{id}', [UserController::class, 'destroy']);
 });
 
-Route::post('login',[AuthController::class,'login']);
-Route::post('register',[AuthController::class,'register']);
+Route::post('login',[AuthController::class,'login'])->name('login');
+Route::post('register',[AuthController::class,'register'])->name('register');
