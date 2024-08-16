@@ -8,7 +8,7 @@ import ServiceTable from './partials/servicestable';
 import Table from './partials/Table';
 import Homepage from './pages/Homepage';
 import Servicepage from './pages/Servicepage';
-import ListingResults from './partials/ListingResults';
+import ListingResults from './partials/listingResults';
 import ListingDetails from './partials/ListingDetails';
 import PaymentForm from './partials/PaymentForm';
 import ServiceDetails from './partials/ServiceDetails';
