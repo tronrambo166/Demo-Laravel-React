@@ -11,12 +11,13 @@ use Illuminate\Support\Facades\Auth;
 class AuthController extends Controller
 {
     public function login(LoginRequest $request)
-    {
+    {   
+        //if(Auth::check()) return 'yes'; else return 'no';
         $data = $request->validated();
-        
         if(!Auth::attempt($data)){
             return response([
-                'message' => 'email or password are wrong'
+                'message' => 'email or password are wrong',
+                'auth' => Auth::check()
             ]);
         }
         $user = Auth::user();
@@ -24,7 +25,8 @@ class AuthController extends Controller
 
         return response()->json([
             'user' => $user,
-            'token' => $token
+            'token' => $token,
+            'auth' => Auth::check()
         ]);
 
     }
@@ -43,7 +45,8 @@ class AuthController extends Controller
 
         return response()->json([
             'user' => $user,
-            'token' => $token
+            'token' => $token,
+            'auth' => Auth::check()
         ]);
     }
 

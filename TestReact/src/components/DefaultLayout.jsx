@@ -1,39 +1,33 @@
 import { Navigate, Outlet } from 'react-router-dom'
 import { useStateContext } from '../contexts/contextProvider'
 import axiosClient from "../axiosClient";
+import { Link } from "react-router-dom";
+
+import Navbar from './partials/Navbar';
+import Footer from './partials/footer';
+import ServiceTable from './partials/servicestable';
+import Table from './partials/Table';
+import Homepage from './pages/Homepage';
+import Servicepage from './pages/Servicepage';
+import ListingResults from './partials/listingResults';
+import ListingDetails from './partials/ListingDetails';
+import PaymentForm from './partials/PaymentForm';
+import ServiceDetails from './partials/ServiceDetails';
 
 export default function DefaultLayout() {
 	const{user,token,setUser, setToken} = useStateContext();
-
-	if(!token){
-		return <Navigate to='./login'/>
+    //alert(auth + ' ' + token);
+	if(!token ){
+		return <Navigate to='./guest'/>
 	}
-
-     const onLogout =  (ev) =>{
-        ev.preventDefault();
-        axiosClient.get('/logout')
-        .then(({}) => {
-           setUser(null)
-           setToken(null)
-        })
-    }
-	
 	return (
-	<div id="defaultLayout">
-         <div className="content">
-            <header>
-                <div>
-                    Header / DefaultLayout
-                </div>
-                <div>
-                    {user.email}
-                    <a href="#" onClick={onLogout} className="btn-logout"> Logout</a>
-                </div>
-            </header>
-            <main>
-            <Outlet />
-            </main>
-            </div>
+        <div id="defaultLayout" className="bg-white bg-dark-bg flex flex-col min-h-screen">
+              <Navbar />
+              <main>
+              <Outlet />
+              </main>
+              
+              <Footer />
         </div>
 	)
 }

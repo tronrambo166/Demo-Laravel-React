@@ -2,22 +2,11 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom'; // Import Link from react-router-dom
 import logo from '../../images/logo.png';
 import Modal from './Authmodal';
-import { useStateContext } from '../../contexts/contextProvider'
-import axiosClient from "../../axiosClient";
+
 
 const Navbar = () => {
-  const{user,token,setUser, setToken} = useStateContext();
   const [isOpen, setIsOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const onLogout =  (ev) =>{
-        ev.preventDefault();
-        axiosClient.get('/logout')
-        .then(({}) => {
-           setUser(null)
-           setToken(null)
-        })
-    }
 
   return (
   <nav className="bg-white  sm:px-8 dark:bg-dark-bg border-b-black/50" style={{ borderBottom: '1px solid #0000002b' }}>
@@ -41,15 +30,15 @@ const Navbar = () => {
           <Link to="/services" className="hover:text-green dark:hover:text-dark-green">Services</Link>
           <Link to="/" className="hover:text-green dark:hover:text-dark-green">Add Your Business</Link>
           <Link to="/" className="hover:text-green dark:hover:text-dark-green">Create Investor Account</Link>
-          <Link to="/dashboard" className="hover:text-green dark:hover:text-dark-green">Dashboard</Link>
 
         </div>
 
-        <div >
-          <button onClick={onLogout}
-            className="btn-logout hidden md:block border hover:text-green border-black text-black px-4 py-2 text-sm font-semibold rounded-lg hover:bg-green-700 dark:bg-dark-green dark:hover:bg-dark-slate"
-          >    {user.name} | Sign Out
-
+        <div className="hidden md:block">
+          <button
+            className="border hover:text-green border-black text-black px-4 py-2 text-sm font-semibold rounded-lg hover:bg-green-700 dark:bg-dark-green dark:hover:bg-dark-slate"
+            onClick={() => setIsModalOpen(true)}
+          >
+            Sign In
           </button>
         </div>
       </div>

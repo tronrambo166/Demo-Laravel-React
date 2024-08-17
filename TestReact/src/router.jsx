@@ -51,20 +51,28 @@ import PaymentForm from './components/partials/PaymentForm';
 //Jitume Routes
 
 const router = createBrowserRouter([
-	{ path: '/',element: <DefaultLayout /> },
+	{ path: '/',element: <DefaultLayout />,
 
+		children: [
+		{ path:'/', element: <Homepage />},
+		{ path:'/home', element: <Homepage />},
+		{ path:'/services', element: <Servicepage />}
+	]},
+
+	//GUEST
 	{ 
 	path: '/', element: <GuestLayout />, 
 	children: [
+	{ path:'/guest', element: <Homepage />},
 	{path: '/login',element: <Login />},
-	{path: '/register',element: <Register />},
+	{ path: '/register',element: <Register />},
 	{ path:'/home', element: <Homepage />},
 	{ path:'/services', element: <Servicepage />}
 
 	]},
 
 	//Jitume Routes
-	{ path:'/', element: Homepage},
+	
 	
 	// { path:'/applyShow', element: applyShow},
 	// { path:'/looking_investor', element: looking_investor},
