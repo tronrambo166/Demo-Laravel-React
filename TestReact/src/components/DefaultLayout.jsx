@@ -2,7 +2,10 @@ import { Navigate, Outlet } from 'react-router-dom'
 import { useStateContext } from '../contexts/contextProvider'
 import axiosClient from "../axiosClient";
 import { Link } from "react-router-dom";
+import { useEffect } from 'react'
+import { useState } from 'react'
 
+import NavbarGuest from './partials/NavbarGuest';
 import Navbar from './partials/Navbar';
 import Footer from './partials/footer';
 import ServiceTable from './partials/servicestable';
@@ -15,14 +18,25 @@ import PaymentForm from './partials/PaymentForm';
 import ServiceDetails from './partials/ServiceDetails';
 
 export default function DefaultLayout() {
-	const{user,token,setUser, setToken} = useStateContext();
-    //alert(auth + ' ' + token);
-	if(!token ){
-		return <Navigate to='./guest'/>
-	}
+	const{user,token,setUser, setToken, setAuth, auth} = useStateContext();
+    //if(!token ){}
+    // const [loading, setLoading] = useState(false);
+    // useEffect(()=> {
+    //     checkAuth();
+    // }, [])
+
+    //  const checkAuth = () => {
+    //     setLoading(true)
+    //     axiosClient.get('/checkAuth')
+    //       .then(({ data }) => {
+    //         console.log(data);
+    //         setAuth(data.auth);
+    //       })
+    //   }
+
 	return (
         <div id="defaultLayout" className="bg-white bg-dark-bg flex flex-col min-h-screen">
-              <Navbar />
+              {!token ? <NavbarGuest /> : <Navbar />}
               <main>
               <Outlet />
               </main>

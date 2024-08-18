@@ -10,6 +10,12 @@ use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
+    public function checkAuth() {
+         return response()->json([
+            'auth' => Auth::check()
+        ]);
+    }
+    
     public function login(LoginRequest $request)
     {   
         //if(Auth::check()) return 'yes'; else return 'no';

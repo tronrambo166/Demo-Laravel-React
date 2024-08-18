@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,7 +29,8 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::post('/create', [UserController::class, 'store']);
     Route::put('/update/{id}', [UserController::class, 'update']);
     Route::get('/delete/{id}', [UserController::class, 'destroy']);
+    Route::get('/checkAuth', [AuthController::class,'checkAuth']);
 });
 
 Route::post('login',[AuthController::class,'login'])->name('login');
-Route::post('register',[AuthController::class,'register'])->name('register');
+Route::post('register', [AuthController::class,'register'])->name('register');

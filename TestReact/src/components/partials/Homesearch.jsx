@@ -32,7 +32,7 @@ const Homesearch = () => {
         </div>
         <div className="relative w-full md:flex-1">
           <select className='border border-[#666666]/30 w-full text-md rounded-xl py-2 px-4 focus:outline-none appearance-none'>
-            <option className='text-slate-400' value="" disabled selected>Select a category</option>
+            <option className='text-slate-400' value="" disabled >Select a category</option>
             <option value="food">Food</option>
             <option value="retail">Retail</option>
             <option value="services">Services</option>

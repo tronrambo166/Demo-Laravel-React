@@ -56,20 +56,23 @@ const router = createBrowserRouter([
 		children: [
 		{ path:'/', element: <Homepage />},
 		{ path:'/home', element: <Homepage />},
-		{ path:'/services', element: <Servicepage />}
+		{ path:'/services', element: <Servicepage />},
+		{ path:'/users', element: <Users />},
+		{ path:'/listingResults/:results/:loc',name: 'listingResults', element: <ListingResults />},
+		{ path:'/listing/:id', element: <ListingDetails />},
 	]},
 
 	//GUEST
-	{ 
-	path: '/', element: <GuestLayout />, 
-	children: [
-	{ path:'/guest', element: <Homepage />},
-	{path: '/login',element: <Login />},
-	{ path: '/register',element: <Register />},
-	{ path:'/home', element: <Homepage />},
-	{ path:'/services', element: <Servicepage />}
+	// { 
+	// path: '/', element: <GuestLayout />, 
+	// children: [
+	// { path:'/guest', element: <Homepage />},
+	// {path: '/login',element: <Login />},
+	// { path: '/register',element: <Register />},
+	// { path:'/home', element: <Homepage />},
+	// { path:'/services', element: <Servicepage />}
 
-	]},
+	// ]},
 
 	//Jitume Routes
 	
