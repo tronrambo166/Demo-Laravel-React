@@ -26,7 +26,7 @@ import Messages from './components/partials/Messages';
 import AccountPage from './components/partials/AccountPage';
 import AddBusiness from './components/partials/Addbusiness';
 import PaymentForm from './components/partials/PaymentForm';
-//import ServiceDetails from './partials/ServiceDetails';
+import ServiceDetails from './components/partials/ServiceDetails';
 
 //import home from '../components/pages/home'
 // import services from '../components/pages/services'
