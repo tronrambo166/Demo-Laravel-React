@@ -31,6 +31,5 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::get('/delete/{id}', [UserController::class, 'destroy']);
     Route::get('/checkAuth', [AuthController::class,'checkAuth']);
 });
-
 Route::post('login',[AuthController::class,'login'])->name('login');
 Route::post('register', [AuthController::class,'register'])->name('register');
