@@ -3,6 +3,7 @@ import Navbar from "../partials/Navbar";
 import Servicecards from "../partials/Service-cards";
 import banner from "../../images/banner.png";
 import Localservicesection from "./Localservicesection";
+import { Link } from "react-router-dom";
 
 const Servicepage = () => {
   const handleInputChange = (event) => {
@@ -122,12 +123,14 @@ const Servicepage = () => {
                     </div>
                   </div>
                 </div>
+                <Link to="/serviceresults">
                 <button
                   className="bg-[#198754] rounded-[14px] text-white py-2 px-4 mt-4 mb-4 w-full sm:w-[125px]"
                   type="submit"
                 >
                   Search
                 </button>
+                </Link>
               </div>
             </form>
           </div>

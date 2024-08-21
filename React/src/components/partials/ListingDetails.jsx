@@ -1,11 +1,13 @@
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLock, faStar, faStarHalfAlt, faExclamationCircle, faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons';
 import Navbar from './Navbar';
-import Footer from './footer';
 
 const ListingDetails = () => {
   const { id } = useParams();
+  const navigate = useNavigate(); // Hook for navigation
+
   const form = {
     name: 'Business Name',
     image: 'https://via.placeholder.com/500',
@@ -14,13 +16,19 @@ const ListingDetails = () => {
     rating_count: 20,
     amount_required: 5000,
     investors_fee: 100,
-    listing_id: id, // Use the id from URL
+    listing_id: id,
     range: 'gold',
   };
 
   const auth_user = true;
   const plan = 'gold';
   const subscrib_id = '123';
+
+  const [amount, setAmount] = useState('');
+  const [percentage, setPercentage] = useState('');
+  const [equipmentAmount, setEquipmentAmount] = useState('');
+  const [equipmentPercentage, setEquipmentPercentage] = useState('');
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
 
   const unlockBySubs = (listingId, subscribId, plan) => {
     console.log(`Unlocking listing ${listingId} with plan ${plan}`);
@@ -47,9 +55,61 @@ const ListingDetails = () => {
     return stars;
   };
 
+  const handleAmountChange = (e) => {
+    const enteredAmount = e.target.value;
+    setAmount(enteredAmount);
+    if (enteredAmount && form.amount_required > 0) {
+      const calculatedPercentage = ((enteredAmount / form.amount_required) * 100).toFixed(2);
+      setPercentage(calculatedPercentage);
+    } else {
+      setPercentage('');
+    }
+  };
+
+  const handleEquipmentAmountChange = (e) => {
+    const enteredAmount = e.target.value;
+    setEquipmentAmount(enteredAmount);
+    if (enteredAmount && form.investors_fee > 0) {
+      const calculatedPercentage = ((enteredAmount / form.investors_fee) * 100).toFixed(2);
+      setEquipmentPercentage(calculatedPercentage);
+    } else {
+      setEquipmentPercentage('');
+    }
+  };
+
+  const openPopup = () => setIsPopupOpen(true);
+  const closePopup = () => setIsPopupOpen(false);
+
+  const handleInvestClick = () => {
+    navigate('/checkout'); // Navigate to checkout page
+  };
+
+  const handleEquipmentInvestClick = () => {
+    console.log(`Investing ${equipmentAmount} in equipment.`);
+    // Implement the action for equipment investment here
+  };
+
+  const Popup = ({ isOpen, onClose }) => {
+    if (!isOpen) return null;
+
+    return (
+      <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
+        <div className="bg-white p-4 rounded-lg shadow-lg w-[450px]">
+          <h2 className="text-xl font-bold mb-4">Financial Statements</h2>
+          <p>Here you can add the content for financial statements download or instructions.</p>
+          <button
+            className="mt-4 btn-primary text-white px-4 py-2 rounded"
+            onClick={onClose}
+          >
+            Close
+          </button>
+        </div>
+      </div>
+    );
+  };
+
   return (
     <>
-      <Navbar />
       <div className="container mx-auto flex flex-col md:flex-row justify-center items-center py-4 lg:py-8 mt-3">
         <div className="px-4 md:px-6 lg:px-8 xl:px-12 my-3 pt-3 w-full flex flex-col md:flex-row justify-center mx-auto gap-4 md:gap-6 lg:gap-8">
           <div className="md:w-1/3 px-6">
@@ -119,9 +179,69 @@ const ListingDetails = () => {
               </div>
             </div>
           </div>
+          <div className='bg-gray-100 py-4 flex flex-col gap-4 items-center px-6'>
+            <button
+              className='whitespace-nowrap border border-black px-4 py-2 rounded-lg w-[300px]'
+              onClick={openPopup}
+            >
+              Download Financial Statements
+            </button>
+            <button className='whitespace-nowrap border border-black px-4 py-2 rounded-lg w-[300px]'>Download Business Documentation</button>
+            <button className='whitespace-nowrap border border-black px-4 py-2 rounded-lg w-[300px]'>View Business Milestones</button>
+
+            <div className='w-full flex flex-col items-center mt-4'>
+              <h2 className='text-lg font-semibold mb-4'>Enter A Bid To Invest</h2>
+              <label htmlFor='investmentAmount' className='text-sm font-medium'>Amount:</label>
+              <input
+                type="number"
+                id="investmentAmount"
+                value={amount}
+                onChange={handleAmountChange}
+                className='border border-gray-300 rounded-lg p-2 mb-2 w-full'
+                placeholder='$'
+              />
+              {amount && (
+                <div className='text-sm'>
+                  <p>Bid Percentage: <span className='font-bold'>{percentage}%</span></p>
+                </div>
+              )}
+              <button
+                onClick={handleInvestClick}
+                className='bg-green-600 text-black border px-4 py-2 rounded-lg mt-4'
+              >
+                Invest Now
+              </button>
+            </div>
+
+            {plan === 'gold' && (
+              <div className='w-full flex flex-col items-center mt-4'>
+                <h2 className='text-lg font-semibold mb-4'>Enter Equipment Investment</h2>
+                <label htmlFor='equipmentAmount' className='text-sm font-medium'>Amount:</label>
+                <input
+                  type="number"
+                  id="equipmentAmount"
+                  value={equipmentAmount}
+                  onChange={handleEquipmentAmountChange}
+                  className='border border-gray-300 rounded-lg p-2 mb-2 w-full'
+                  placeholder='$'
+                />
+                {equipmentAmount && (
+                  <div className='text-sm'>
+                    <p>Equipment Investment Percentage: <span className='font-bold'>{equipmentPercentage}%</span></p>
+                  </div>
+                )}
+                <button
+                  onClick={handleEquipmentInvestClick}
+                  className='bg-green-600 text-black border px-4 py-2 rounded-lg mt-4'
+                >
+                  Invest in Equipment
+                </button>
+              </div>
+            )}
+          </div>
         </div>
       </div>
-      <Footer />
+      <Popup isOpen={isPopupOpen} onClose={closePopup} />
     </>
   );
 };

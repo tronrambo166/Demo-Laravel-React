@@ -1,6 +1,7 @@
 import { useRef } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLocationDot, faChevronDown,faSearch } from '@fortawesome/free-solid-svg-icons';
+import { Link } from 'react-router-dom';
 
 const Homesearch = () => {
   const locationInputRef = useRef(null);
@@ -43,9 +44,11 @@ const Homesearch = () => {
             className="absolute right-4 top-1/2 transform -translate-y-1/2 text-black cursor-pointer pointer-events-none"
           />
         </div>
+        <Link to="/listingResults/:results/:loc">
         <button className='btn-primary w-full md:w-auto py-3  rounded-full px-4 focus:outline-none mt-4 md:mt-0'>
           <FontAwesomeIcon icon={faSearch} />
         </button>
+        </Link>
       </div>
       {/* search section ends */}
 

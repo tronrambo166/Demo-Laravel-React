@@ -15,7 +15,7 @@ const ServiceDetails = () => {
     rating: 4.5,
     rating_count: 20,
     amount_required: 3300,
-    service_id: id, // Use the id from URL
+    service_id: id,
     range: 'silver',
   };
 
@@ -93,6 +93,9 @@ const ServiceDetails = () => {
                   rows="4"
                 />
               </div>
+              <div>
+                <button className='btn-primary my-3 rounded-xl py-2 px-6 text-white font-semibold'>Book Now</button>
+              </div>
             </div>
           </div>
         </div>
@@ -101,18 +104,11 @@ const ServiceDetails = () => {
           <p className="py-3 text-lg font-semibold text-black">{form.name}</p>
           <p className="py-3 text-[13px]">
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic quasi delectus dolores, quos aperiam ut illum deleniti quaerat quod, ex, expedita atque officiis molestias ipsam natus saepe ipsum dolorum quisquam reprehenderit? Quae magni architecto dignissimos nesciunt numquam libero vero autem magnam distinctio quod iste, fuga voluptatibus voluptas corporis sit eos temporibus et nemo! Aspernatur nam, accusamus cumque quidem ducimus iusto!
-
           </p>
-          <div className='flex items-center mt-2 gap-6 text-sm '>
-                <button className='border rounded-md py-1 px-2 '>
-
-Service Milestone Breakdown</button>
-                <button className='border py-1 rounded-md px-6 '>Contact us</button>
-              </div>
-          <div className="flex gap-2">
-           
+          <div className='flex items-center mt-2 gap-6 text-sm'>
+            <button className='border rounded-md py-1 px-2'>Service Milestone Breakdown</button>
+            <button className='border py-1 rounded-md px-6'>Contact us</button>
           </div>
-         
           <div className="my-4 text-left">
             <h3 className="font-bold my-3">Reviews</h3>
             <div>
@@ -120,11 +116,8 @@ Service Milestone Breakdown</button>
               <p className="inline text-sm">
                 <b className="text-green-700">Person</b> Lorem60
               </p>
-
-            
             </div>
           </div>
-          {/* New Content Section */}
         </div>
       </div>
     </div>

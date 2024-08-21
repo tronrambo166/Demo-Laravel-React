@@ -1,5 +1,4 @@
 import { useState, useRef } from "react";
-//import "tailwindcss/tailwind.css";
 import Select from "react-select";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLocationDot, faSearch, faPhone } from "@fortawesome/free-solid-svg-icons";
@@ -66,7 +65,7 @@ const categories = [
   { value: "Technology/Communications", label: "Technology/Communications" },
 ];
 
-const ListingResults = () => {
+const ServiceResults = () => {
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [results, setResults] = useState(dummyResults);
   const locationInputRef = useRef(null);
@@ -134,7 +133,6 @@ const ListingResults = () => {
         </button>
       </div>
       <div className="flex">
-        <PriceRangeFilter />
         <PriceRangeFilter />
       </div>
 
@@ -215,4 +213,4 @@ const ListingResults = () => {
   );
 };
 
-export default ListingResults;
+export default ServiceResults;

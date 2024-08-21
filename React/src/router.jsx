@@ -27,6 +27,8 @@ import AccountPage from './components/partials/AccountPage';
 import AddBusiness from './components/partials/Addbusiness';
 import PaymentForm from './components/partials/PaymentForm';
 import ServiceDetails from './components/partials/ServiceDetails';
+import MilestonesPage from './components/partials/Milestonepage';
+import ServiceResults from './components/partials/Serviceresults';
 
 //import home from '../components/pages/home'
 // import services from '../components/pages/services'
@@ -60,6 +62,17 @@ const router = createBrowserRouter([
 		{ path:'/users', element: <Users />},
 		{ path:'/listingResults/:results/:loc',name: 'listingResults', element: <ListingResults />},
 		{ path:'/listing/:id', element: <ListingDetails />},
+		{ path:'dashboard', element: <Dashboard/>},
+		{ path:'/service-details/:id', element: <ServiceDetails/>},
+		{ path:'/business-milestone', element: <MilestonesPage/>},
+		{ path:'/checkout', element: <PaymentForm/>},
+		{ path:'/serviceresults', element: <ServiceResults/>},
+
+
+
+
+
+
 	]},
 
 	//GUEST
