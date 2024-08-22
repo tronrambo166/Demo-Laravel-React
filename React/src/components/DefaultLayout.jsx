@@ -19,7 +19,14 @@ import ServiceDetails from './partials/ServiceDetails';
 
 export default function DefaultLayout() {
 	const{user,token,setUser, setToken, setAuth, auth} = useStateContext();
-    //if(!token ){}
+
+  const test = ev => {
+    ev.preventDefault()
+        axiosClient.get('/test')
+          .then((data) => {
+            console.log(data);
+          })
+      }
     // const [loading, setLoading] = useState(false);
     // useEffect(()=> {
     //     checkAuth();
@@ -35,6 +42,7 @@ export default function DefaultLayout() {
     //   }
 
 	return (
+
         <div id="defaultLayout" className="bg-white bg-dark-bg flex flex-col min-h-screen">
               {!token ? <NavbarGuest /> : <Navbar />}
               <main>
@@ -42,6 +50,7 @@ export default function DefaultLayout() {
               </main>
               
               <Footer />
+              <button className="btn-delete" onClick={test}>test</button>
         </div>
 	)
 }
