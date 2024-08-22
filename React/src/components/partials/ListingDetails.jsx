@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLock, faStar, faStarHalfAlt, faExclamationCircle, faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons';
 import Navbar from './Navbar';
-
+import AuthModal from './Authmodal'; 
 const ListingDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate(); // Hook for navigation
@@ -29,6 +29,7 @@ const ListingDetails = () => {
   const [equipmentAmount, setEquipmentAmount] = useState('');
   const [equipmentPercentage, setEquipmentPercentage] = useState('');
   const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
 
   const unlockBySubs = (listingId, subscribId, plan) => {
     console.log(`Unlocking listing ${listingId} with plan ${plan}`);
@@ -37,6 +38,15 @@ const ListingDetails = () => {
   const makeSession = (listingId) => {
     console.log(`Making session for listing ${listingId}`);
   };
+
+
+  const openAuthModal = () => {
+  setIsAuthModalOpen(true);
+};
+
+const closeAuthModal = () => {
+  setIsAuthModalOpen(false);
+};
 
   const renderStars = (rating) => {
     const stars = [];
@@ -77,16 +87,21 @@ const ListingDetails = () => {
     }
   };
 
+
+  const [showAuthModal, setShowAuthModal] = useState(false); 
+
+  const handleUnlockClick = () => {
+    setShowAuthModal(true); 
+  };
   const openPopup = () => setIsPopupOpen(true);
   const closePopup = () => setIsPopupOpen(false);
 
   const handleInvestClick = () => {
-    navigate('/checkout'); // Navigate to checkout page
+    navigate('/checkout'); 
   };
 
   const handleEquipmentInvestClick = () => {
     console.log(`Investing ${equipmentAmount} in equipment.`);
-    // Implement the action for equipment investment here
   };
 
   const Popup = ({ isOpen, onClose }) => {
@@ -119,26 +134,27 @@ const ListingDetails = () => {
               Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
             </p>
             <div className="flex gap-2">
-              <div className="flex w-full items-center gap-10">
-                {auth_user ? (
-                  <a
-                    onClick={() => unlockBySubs(form.listing_id, subscrib_id, plan)}
-                    className="bg-black hover:bg-green w-1/2 text-sm text-center rounded-full text-white py-[6px] cursor-pointer"
-                  >
-                    <FontAwesomeIcon icon={faLock} className="mr-2 text-sm" />
-                    Unlock To Invest
-                  </a>
-                ) : (
-                  <a
-                    onClick={() => makeSession(form.listing_id)}
-                    className="bg-gray-700 w-1/2 text-center rounded-lg text-white py-2 cursor-pointer"
-                  >
-                    <FontAwesomeIcon icon={faLock} className="mr-2" />
-                    Unlock To Invest
-                  </a>
-                )}
-              </div>
-            </div>
+  <div className="flex w-full items-center gap-10">
+    {auth_user ? (
+      <a
+        onClick={openAuthModal} // Opens the AuthModal
+        className="bg-black hover:bg-green w-1/2 text-sm text-center rounded-full text-white py-[6px] cursor-pointer"
+      >
+        <FontAwesomeIcon icon={faLock} className="mr-2 text-sm" />
+        Unlock To Invest
+      </a>
+    ) : (
+      <a
+        onClick={() => makeSession(form.listing_id)}
+        className="bg-gray-700 w-1/2 text-center rounded-lg text-white py-2 cursor-pointer"
+      >
+        <FontAwesomeIcon icon={faLock} className="mr-2" />
+        Unlock To Invest
+      </a>
+    )}
+  </div>
+</div>
+
             <p className="text-slate-700 text-sm flex gap-2 py-2 whitespace-nowrap items-center py-2 px-2">
               <FontAwesomeIcon icon={faExclamationCircle} className="text-sm text-black font-bold mr-1" />
               Unlock this business to learn more about it and invest
@@ -207,7 +223,7 @@ const ListingDetails = () => {
               )}
               <button
                 onClick={handleInvestClick}
-                className='bg-green-600 text-black border px-4 py-2 rounded-lg mt-4'
+                className='btn-primary text-white border px-4 py-2 rounded-lg mt-4'
               >
                 Invest Now
               </button>
@@ -232,7 +248,7 @@ const ListingDetails = () => {
                 )}
                 <button
                   onClick={handleEquipmentInvestClick}
-                  className='bg-green-600 text-black border px-4 py-2 rounded-lg mt-4'
+                  className='btn-primary text- px-4 py-2 rounded-lg mt-4'
                 >
                   Invest in Equipment
                 </button>

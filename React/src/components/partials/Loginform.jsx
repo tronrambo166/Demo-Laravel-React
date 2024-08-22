@@ -66,7 +66,7 @@ const LoginForm = () => {
           className="border rounded-xl p-3 w-full"
         />
       </div>
-      <button type="submit" className="bg-green-800 text-white px-4 py-2 rounded-full mt-2">
+      <button type="submit" className="btn-primary  text-white px-4 py-2 rounded-full mt-2">
         Proceed
       </button>
       <a href="http://" className="text-center text-black underline text-[13px]">Forgot password</a>
