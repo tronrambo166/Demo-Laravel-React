@@ -9,25 +9,38 @@ import { useStateContext } from "../contexts/contextProvider";
 export default function users(){
 
 	const [users, setUsers] = useState([]);
-    const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-     useEffect(()=> {
-        getUsers();
-    }, [])
+  //    useEffect(()=> {
+  //       getUsers();
+  //   }, [])
 
-	 const getUsers = () => {
-        setLoading(true)
-        axiosClient.get('/users')
-          .then(({ data }) => {
-          	console.log(data)
-            setLoading(false)
-            setUsers(data)
-          })
-          .catch(err => {
-          	console.log(err)
-            setLoading(false)
-          })
+	 // const getUsers = () => {
+  //       setLoading(true)
+  //       axiosClient.get('/users')
+  //         .then(({ data }) => {
+  //         	console.log(data)
+  //           setLoading(false)
+  //           setUsers(data)
+  //         })
+  //         .catch(err => {
+  //         	console.log(err)
+  //           //setLoading(false)
+  //         })
+  //     }
+
+   useEffect(() => {
+    const fetchCards = async () => {
+      try {
+        const { data } = await axios.get('/latBusiness');
+        setCards(data.data);
+      } catch (err) {
+        console.error('Error fetching cards:', err);
       }
+    };
+
+    fetchCards();
+  }, []);
 
       const onDeleteClick = user => {
         if (!window.confirm("Are you sure you want to delete this user?")) {

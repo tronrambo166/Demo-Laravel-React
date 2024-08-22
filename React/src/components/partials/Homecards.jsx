@@ -1,18 +1,34 @@
 import { Link } from 'react-router-dom';
+import axiosClient from "../../axiosClient";
+import { useState } from 'react'
 import { useRef } from 'react';
+import { useEffect } from 'react'
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
+import { useStateContext } from "../../contexts/contextProvider";
 
 const CardList = () => {
-  const cards = [
-    { id: 1, image: 'https://source.unsplash.com/random/300x200?nature', title: 'Mountain Adventure', description: 'Explore the majestic mountains with breathtaking views.' },
-    { id: 2, image: 'https://source.unsplash.com/random/300x200?beach', title: 'Beach Paradise', description: 'Relax on the sandy beaches with crystal clear waters.' },
-    { id: 3, image: 'https://source.unsplash.com/random/300x200?city', title: 'City Lights', description: 'Experience the vibrant city life with endless entertainment.' },
-    { id: 4, image: 'https://source.unsplash.com/random/300x200?desert', title: 'Desert Safari', description: 'Embark on a thrilling journey through the vast deserts.' },
-    { id: 5, image: 'https://source.unsplash.com/random/300x200?forest', title: 'Forest Retreat', description: 'Enjoy a peaceful escape into the lush forests.' },
-    { id: 6, image: 'https://source.unsplash.com/random/300x200?river', title: 'River Cruise', description: 'Sail down the serene rivers and enjoy the views.' },
-    { id: 7, image: 'https://source.unsplash.com/random/300x200?island', title: 'Tropical Island', description: 'Discover the beauty of tropical islands and clear blue waters.' },
-    { id: 8, image: 'https://source.unsplash.com/random/300x200?historical', title: 'Historical Sites', description: 'Explore ancient historical sites and learn their stories.' },
-  ];
+const [cards, setCards] = useState([]);
+const [users, setUsers] = useState([]);
+const [loading, setLoading] = useState(false);
+
+   useEffect(()=> {
+        getCards();
+    }, [])
+
+    const getCards = () => {
+      setLoading(true)
+        axiosClient.get('/latBusiness')
+          .then(({ data }) => {
+            setLoading(false)
+            setCards(data.data);
+          })
+          .catch(err => {
+            console.log(err)
+            setLoading(false)
+          })
+    }
+//console.log(cards)
+
 
   const containerRef = useRef(null);
 
@@ -46,12 +62,12 @@ const CardList = () => {
           <Link to={`/listing/${card.id}`} key={card.id} className="bg-white w-[280px] rounded-xl shadow-lg flex-shrink-0">
             <img
               src={card.image}
-              alt={card.title}
+              alt={card.name}
               className="w-full h-48 object-cover"
             />
             <div className="p-4">
-              <h2 className="text-xl font-semibold mb-2">{card.title}</h2>
-              <p className="text-gray-700 hidden">{card.description}</p>
+              <h2 className="text-xl font-semibold mb-2">{card.name}</h2>
+              <p className="text-gray-700 hidden">{card.details}</p>
               <div className='flex text-black font-bold gap-1 items-center'>
                 <button>Learn more</button>
                 <FaChevronRight size={15} />

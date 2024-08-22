@@ -6,6 +6,8 @@ const StateContext = createContext({
 	user:null,
 	token:null,
     auth:null,
+    cards:null,
+    setCards: () => {},
     setAuth: () => {},
 	setUser: () => {},
 	setToken: () => {}
@@ -15,6 +17,7 @@ export const ContextProvider = ({children}) => {
 	const [user, setUser] = useState({});
 	const [token, _setToken] = useState(localStorage.getItem('ACCESS_TOKEN'))
     const [auth, setAuth] = useState({});
+    const [cards, setCards] = useState({});
 	//const [token, setToken] = useState({});
 
 	const setToken = (token) => {
@@ -35,7 +38,9 @@ export const ContextProvider = ({children}) => {
             setUser,
             setToken,
             setAuth,
-            auth
+            auth,
+            cards, 
+            setCards
         }}>
             {children}
         </StateContext.Provider>
