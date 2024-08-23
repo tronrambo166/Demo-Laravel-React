@@ -17,4 +17,5 @@ Route::get('/', function () {
     return view('welcome');
 
 });
+Route::get('latBusiness', [PagesController::class,'latBusiness'])->name('latBusiness');
 Route::get('/users', [UserController::class, 'index']);

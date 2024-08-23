@@ -1,3 +1,4 @@
+import axios from "axios";
 import { Link } from 'react-router-dom';
 import axiosClient from "../../axiosClient";
 import { useState } from 'react'
@@ -12,22 +13,42 @@ const [users, setUsers] = useState([]);
 const [loading, setLoading] = useState(false);
 
    useEffect(()=> {
-        getCards();
-    }, [])
-
     const getCards = () => {
       setLoading(true)
         axiosClient.get('/latBusiness')
           .then(({ data }) => {
             setLoading(false)
+            //Encrypt
             setCards(data.data);
           })
           .catch(err => {
             console.log(err)
             setLoading(false)
           })
-    }
-//console.log(cards)
+    };
+      getCards();
+    }, [])
+
+    
+
+  //  useEffect(() => {
+  //   const fetchCards = async () => {
+  //     try {
+  //       axios.get('/latBusiness').then((data) => {
+  //       setCards(data.data || []);
+  //       console.log(data)
+  //     });
+  //     } catch (err) {
+  //       console.error('Error fetching cards:', err);
+  //       //setCards([]);
+  //     }
+  //   };
+
+  //   fetchCards();
+  // }, []);
+
+
+console.log(cards)
 
 
   const containerRef = useRef(null);
@@ -59,7 +80,7 @@ const [loading, setLoading] = useState(false);
         }}
       >
         {cards.map((card) => (
-          <Link to={`/listing/${card.id}`} key={card.id} className="bg-white w-[280px] rounded-xl shadow-lg flex-shrink-0">
+          <Link to={`/listing/${btoa(btoa(card.id))}`} key={card.id} className="bg-white w-[280px] rounded-xl shadow-lg flex-shrink-0">
             <img
               src={card.image}
               alt={card.name}

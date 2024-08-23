@@ -1,10 +1,32 @@
 import { useRef } from 'react';
+import { useState } from 'react';
+import { useEffect } from 'react'
+import axiosClient from "../../axiosClient";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLocationDot, faChevronDown,faSearch } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
 
 const Homesearch = () => {
   const locationInputRef = useRef(null);
+  const [results, setResults] = useState('');
+
+  //KEVIN
+  useEffect(()=> {
+  const setRes= () => { 
+        axiosClient.get('/searchResults/'+'test_id')
+          .then(({ data }) => {
+           setResults(data.data);
+            //console.log(amount_required)
+          })
+          .catch(err => {
+            console.log(err); 
+          })
+    };
+      setRes();
+    }, [])
+  console.log(results)
+
+  //KEVIN
 
   return (
     <div className='flex flex-col pt-6 justify-center'>

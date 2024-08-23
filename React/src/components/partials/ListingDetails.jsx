@@ -4,25 +4,36 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLock, faStar, faStarHalfAlt, faExclamationCircle, faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons';
 import Navbar from './Navbar';
 import AuthModal from './Authmodal'; 
+import { useEffect } from 'react'
+import axiosClient from "../../axiosClient";
+import { useStateContext } from "../../contexts/contextProvider";
+
 const ListingDetails = () => {
+  const [loading, setLoading] = useState(false);
+
   const { id } = useParams();
   const navigate = useNavigate(); // Hook for navigation
-
   const form = {
-    name: 'Business Name',
-    image: 'https://via.placeholder.com/500',
+    name: '',
+    image: '',
     location: 'Business Location',
     rating: 4.5,
     rating_count: 20,
     amount_required: 5000,
     investors_fee: 100,
-    listing_id: id,
+    listing_id: atob(atob(id)),
     range: 'gold',
+    conv:'test'
   };
 
   const auth_user = true;
   const plan = 'gold';
   const subscrib_id = '123';
+
+  const [conv, setConv] = useState('');
+  const [details, setDetails] = useState('');
+  const [allowToReview, setAllow] = useState('');
+  const [amount_r, setAmount_r] = useState('');
 
   const [amount, setAmount] = useState('');
   const [percentage, setPercentage] = useState('');
@@ -68,8 +79,8 @@ const closeAuthModal = () => {
   const handleAmountChange = (e) => {
     const enteredAmount = e.target.value;
     setAmount(enteredAmount);
-    if (enteredAmount && form.amount_required > 0) {
-      const calculatedPercentage = ((enteredAmount / form.amount_required) * 100).toFixed(2);
+    if (enteredAmount && amount_r > 0) {
+      const calculatedPercentage = ((enteredAmount / amount_r) * 100).toFixed(2);
       setPercentage(calculatedPercentage);
     } else {
       setPercentage('');
@@ -79,8 +90,8 @@ const closeAuthModal = () => {
   const handleEquipmentAmountChange = (e) => {
     const enteredAmount = e.target.value;
     setEquipmentAmount(enteredAmount);
-    if (enteredAmount && form.investors_fee > 0) {
-      const calculatedPercentage = ((enteredAmount / form.investors_fee) * 100).toFixed(2);
+    if (enteredAmount && amount_r > 0) {
+      const calculatedPercentage = ((enteredAmount / amount_r) * 100).toFixed(2);
       setEquipmentPercentage(calculatedPercentage);
     } else {
       setEquipmentPercentage('');
@@ -104,9 +115,49 @@ const closeAuthModal = () => {
     console.log(`Investing ${equipmentAmount} in equipment.`);
   };
 
+
+//CORE METHODS
+  useEffect(()=> {
+    const getDetails = () => { 
+        axiosClient.get('/searchResults/'+form.listing_id)
+          .then(({ data }) => {
+
+            data.data[0]['rating'] = parseFloat(data.data[0]['rating']) / parseFloat(data.data[0]['rating_count']);
+            data.data[0]['rating'] = data.data[0]['rating'].toFixed(2);
+            if(data.data[0]['rating_count'] == 0) data.data[0]['rating'] = 0;
+
+            setDetails(data.data[0]);
+              
+           if(details.investors_fee == null)
+           setConv(true);
+          })
+          .catch(err => {
+            console.log(err); //setLoading(false)
+          })
+    };
+      
+
+      const getMilestones = () => { 
+        axiosClient.get('/getMilestones/'+form.listing_id)
+          .then(({ data }) => {
+           setAllow(data.allowToReview);
+           setAmount_r(data.amount_required);
+            //console.log(amount_required)
+          })
+          .catch(err => {
+            console.log(err); 
+          })
+    };
+      getDetails();
+      getMilestones();
+
+    }, [])
+  //console.log(amount+'jj')
+
+//CORE METHODS END
+
   const Popup = ({ isOpen, onClose }) => {
     if (!isOpen) return null;
-
     return (
       <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
         <div className="bg-white p-4 rounded-lg shadow-lg w-[450px]">
@@ -129,7 +180,7 @@ const closeAuthModal = () => {
         <div className="px-4 md:px-6 lg:px-8 xl:px-12 my-3 pt-3 w-full flex flex-col md:flex-row justify-center mx-auto gap-4 md:gap-6 lg:gap-8">
           <div className="md:w-1/3 px-6">
             <h2 className="text-[#0A0A0A]/60 text-sm sm:text-xs md:text-sm lg:text-base font-bold">More business information</h2>
-            <p className="py-3 text-lg font-semibold text-black">{form.name}</p>
+            <p className="py-3 text-lg font-semibold text-black">{details.name}</p>
             <p className="py-3 text-[15px]">
               Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
             </p>
@@ -160,11 +211,11 @@ const closeAuthModal = () => {
               Unlock this business to learn more about it and invest
             </p>
             <div className="my-4 text-left">
-              <h3 className="font-bold my-3">Reviews</h3>
+              <h3 className="font-bold my-3">Reviews </h3>
               <div>
-                <img className="inline" src="https://via.placeholder.com/30" alt="User" width="30" />
+                <img className="inline rounded-[50%]" src="https://via.placeholder.com/30" alt="User" width="30" />
                 <p className="inline text-sm">
-                  <b className="text-green-700">Person</b> Lorem ipsum dolor sit amet, consectetur adipiscing elit
+                  <b className="text-green-700"> Person</b> Lorem ipsum dolor sit amet, consectetur adipiscing elit
                 </p>
               </div>
             </div>
@@ -173,25 +224,25 @@ const closeAuthModal = () => {
             <div className="relative">
               <img
                 className="w-full max-h-[250px] shadow-sm rounded-lg"
-                src={form.image}
+                src={'../'+details.image}
                 alt="Business"
               />
               <div className="absolute bottom-0 left-0 w-full bg-gray-800 bg-opacity-60 rounded-b-lg text-white text-center py-2">
                 <p className="flex items-center justify-center">
                   <FontAwesomeIcon icon={faMapMarkerAlt} className="mr-2" />
-                  {form.location}
+                  {details.location}
                 </p>
               </div>
             </div>
             <div className="w-full py-3 flex flex-col text-right">
               <div className="text-black font-bold mb-2">
-                Amount Requested: <span className="font-semibold text-green-700">${form.amount_required}</span>
+                Amount Requested: <span className="font-semibold text-green-700">${amount_r}</span>
               </div>
               <div className="flex items-center justify-end text-right mb-2">
-                {renderStars(form.rating)}
+                {renderStars(details.rating)} ( {details.rating} )
               </div>
               <div className="text-gray-500 text-sm">
-                {form.rating_count} Ratings
+                {details.rating_count} Ratings
               </div>
             </div>
           </div>

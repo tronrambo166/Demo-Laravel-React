@@ -14,6 +14,8 @@ Route::middleware('auth:sanctum')->group(function() {
 });
 
 Route::get('latBusiness', [PagesController::class,'latBusiness'])->name('latBusiness');
+Route::get('searchResults/{ids}', [PagesController::class,'searchResults'])->name('searchResults');
+Route::get('getMilestones/{id}', [BusinessController::class,'getMilestones'])->name('getMilestones');
 
 //Auth Routes
 Route::post('login',[AuthController::class,'login'])->name('login');
