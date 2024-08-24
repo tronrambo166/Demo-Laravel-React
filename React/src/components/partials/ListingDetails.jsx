@@ -1,4 +1,5 @@
 import { useParams, useNavigate } from 'react-router-dom';
+import {decode as base64_decode, encode as base64_encode} from 'base-64';
 import { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLock, faStar, faStarHalfAlt, faExclamationCircle, faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons';
@@ -7,8 +8,10 @@ import AuthModal from './Authmodal';
 import { useEffect } from 'react'
 import axiosClient from "../../axiosClient";
 import { useStateContext } from "../../contexts/contextProvider";
+import { Link } from 'react-router-dom';
 
 const ListingDetails = () => {
+  const{token,setUser,setAuth, auth} = useStateContext();
   const [loading, setLoading] = useState(false);
 
   const { id } = useParams();
@@ -81,7 +84,11 @@ const closeAuthModal = () => {
     setAmount(enteredAmount);
     if (enteredAmount && amount_r > 0) {
       const calculatedPercentage = ((enteredAmount / amount_r) * 100).toFixed(2);
-      setPercentage(calculatedPercentage);
+      if(calculatedPercentage > 100){
+       setPercentage(0);
+      }
+      else
+       setPercentage(calculatedPercentage);
     } else {
       setPercentage('');
     }
@@ -108,7 +115,31 @@ const closeAuthModal = () => {
   const closePopup = () => setIsPopupOpen(false);
 
   const handleInvestClick = () => {
-    navigate('/checkout'); 
+      var amount = $('#investmentAmount').val();
+      var percent = document.getElementById("percent").innerHTML;
+
+      if (amount == '' || amount == 0)
+        $.alert({
+          title: 'Alert!',
+          content: 'Please enter a bid to invest!',
+        });
+      else {
+        var amount = base64_encode(amount);
+        var percent = base64_encode(percent) 
+        $.confirm({
+          title: 'Are you sure?',
+          content: 'Are you sure to bid?',
+          buttons: {
+            confirm: function () {
+              window.location.href = '/checkout/' + amount + '/' + form.listing_id + '/' + percent;
+            },
+            cancel: function () {
+              $.alert('Canceled!');
+            },
+          }
+        });
+      }
+      //navigate('/checkout'); 
   };
 
   const handleEquipmentInvestClick = () => {
@@ -152,6 +183,46 @@ const closeAuthModal = () => {
       getMilestones();
 
     }, [])
+
+      const download_business = () => {
+      //id = form.listing_id; 
+
+      axiosClient({
+          url: 'download_business/' + form.listing_id, //your url
+          method: 'GET',
+          responseType: 'blob',
+        }).then((data) => {
+        console.log(data);
+        if((data.data.size == 3)){
+          $.alert({
+          title: 'Alert!',
+          content: 'The business has no such document or the file not found!',
+           type: 'red',
+            buttons: {
+            tryAgain: {
+            text: 'Close',
+            btnClass: 'btn-red',
+            action: function(){
+            }
+        }}  
+        });
+        } //console.log(data);
+        else{
+          const href = URL.createObjectURL(data.data);
+          const link = document.createElement('a');
+          link.href = href;
+
+          if(data.data.type == 'application/vnd.openxmlformats-officedocument.wordprocessingml.document')
+          link.setAttribute('download', 'statement.docx'); //or any other extension
+          else
+           link.setAttribute('download', 'statement.pdf');
+            
+          document.body.appendChild(link);
+          link.click();
+        }
+
+      });
+    }
   //console.log(amount+'jj')
 
 //CORE METHODS END
@@ -246,15 +317,19 @@ const closeAuthModal = () => {
               </div>
             </div>
           </div>
-          <div className='bg-gray-100 py-4 flex flex-col gap-4 items-center px-6'>
+
+           {token  && (
+          <div  className='bg-gray-100 py-4 flex flex-col gap-4 items-center px-6'>
             <button
               className='whitespace-nowrap border border-black px-4 py-2 rounded-lg w-[300px]'
               onClick={openPopup}
             >
               Download Financial Statements
             </button>
-            <button className='whitespace-nowrap border border-black px-4 py-2 rounded-lg w-[300px]'>Download Business Documentation</button>
-            <button className='whitespace-nowrap border border-black px-4 py-2 rounded-lg w-[300px]'>View Business Milestones</button>
+            <button onClick={download_business} className='whitespace-nowrap border border-black px-4 py-2 rounded-lg w-[300px]'>Download Business Documentation</button>
+            <button className='whitespace-nowrap border border-black px-4 py-2 rounded-lg w-[300px]'>
+            <Link to={`/business-milestones/${btoa(btoa(details.id))}`} key={details.id}>
+             View Business Milestones </Link> </button>
 
             <div className='w-full flex flex-col items-center mt-4'>
               <h2 className='text-lg font-semibold mb-4'>Enter A Bid To Invest</h2>
@@ -269,7 +344,7 @@ const closeAuthModal = () => {
               />
               {amount && (
                 <div className='text-sm'>
-                  <p>Bid Percentage: <span className='font-bold'>{percentage}%</span></p>
+                  <p>Bid Percentage: <span id="percent" className='font-bold'>{percentage}</span>%</p>
                 </div>
               )}
               <button
@@ -306,6 +381,8 @@ const closeAuthModal = () => {
               </div>
             )}
           </div>
+           )}
+
         </div>
       </div>
       <Popup isOpen={isPopupOpen} onClose={closePopup} />

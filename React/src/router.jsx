@@ -64,8 +64,8 @@ const router = createBrowserRouter([
 		{ path:'/listing/:id', element: <ListingDetails />},
 		{ path:'dashboard', element: <Dashboard/>},
 		{ path:'/service-details/:id', element: <ServiceDetails/>},
-		{ path:'/business-milestone', element: <MilestonesPage/>},
-		{ path:'/checkout', element: <PaymentForm/>},
+		{ path:'/business-milestones/:id', element: <MilestonesPage/>},
+		{ path:'/checkout/:amount/:listing_id/:percent', element: <PaymentForm/>},
 		{ path:'/serviceresults', element: <ServiceResults/>},
 
 
@@ -74,18 +74,6 @@ const router = createBrowserRouter([
 
 
 	]},
-
-	//GUEST
-	// { 
-	// path: '/', element: <GuestLayout />, 
-	// children: [
-	// { path:'/guest', element: <Homepage />},
-	// {path: '/login',element: <Login />},
-	// { path: '/register',element: <Register />},
-	// { path:'/home', element: <Homepage />},
-	// { path:'/services', element: <Servicepage />}
-
-	// ]},
 
 	//Jitume Routes
 	
@@ -99,7 +87,6 @@ const router = createBrowserRouter([
 	// { path:'/donate_eqp/:id', element: donate_eqp},
 	// { path:'/subscribe/:id', element: subscribe},
 	// { path:'/invest/:listing_id/:id', element: invest_eqp},
-	// { path:'/cart', element: cart},
 
 	// { path:'/serviceResults/:results/:loc',name: 'serviceResults', element: serviceResults},
 	// { path:'/serviceDetails/:id', element: serviceDetails},

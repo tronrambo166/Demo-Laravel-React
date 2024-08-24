@@ -1,9 +1,16 @@
 import { useState } from 'react';
+import {decode as base64_decode, encode as base64_encode} from 'base-64';
+import { useParams, useNavigate } from 'react-router-dom';
 import { FaCreditCard, FaHome } from 'react-icons/fa';
 
 const PaymentForm = () => {
+  const { listing_id } = useParams();
+  let { amount } = useParams();
+  const amount_real = base64_decode(amount);
+  const { percent } = useParams();
+
   const [showModal, setShowModal] = useState(false);
-  const [price] = useState(100); // Fixed price value
+  const price = parseFloat(amount_real)+parseFloat(0.05*amount_real); // Fixed price value
   const [purpose, setPurpose] = useState('');
 
   const handleSubmit = (event) => {

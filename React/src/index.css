@@ -86,3 +86,8 @@
     margin-left: 0;
   }
 }
+
+.jconfirm-holder{
+  width: 50%;
+  margin: auto;
+}

@@ -50,7 +50,6 @@ export default function DefaultLayout() {
               </main>
               
               <Footer />
-              <button className="btn-delete" onClick={test}>test</button>
         </div>
 	)
 }
