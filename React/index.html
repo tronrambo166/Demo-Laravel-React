@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Jitume React</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.4/jquery-confirm.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
   </head>
   <body>
     <div id="root"></div>
@@ -14,5 +15,21 @@
     <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
     <!-- <script src="https://code.jquery.com/jquery-3.6.0.js"></script> -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.4/jquery-confirm.min.js"></script>
+
+    <script type="text/javascript">
+        function address(place,lat2,lng2) {
+            document.getElementById('searchbox').value = place;
+            //$("#result_list").html('');
+            document.getElementById("result_list").style.display = 'none';
+
+              const lat = document.getElementById('lat');
+              const lng = document.getElementById('lng');
+
+              lat.value = lat2;
+              lng.value = lng2;
+        }
+    </script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script src="/openMap.js"> </script>
   </body>
 </html>

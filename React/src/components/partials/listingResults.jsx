@@ -8,6 +8,7 @@ import PriceRangeFilter from "./PriceRangeFilter";
 import Navbar from "./Navbar";
 import axiosClient from "../../axiosClient";
 import { Link } from 'react-router-dom';
+import { useStateContext } from "../../contexts/contextProvider";
 import {decode as base64_decode, encode as base64_encode} from 'base-64';
 
 // Dummy data
@@ -32,58 +33,63 @@ const ListingResults = () => {
 ];
 
   const { resIds }  = useParams();
-  //const  resIds  = base64_decode(Ids);
   const { loc } = useParams();
 
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [results, setResults] = useState('');
   const locationInputRef = useRef(null);
+  const count = results.length;
+  let res = [];
 
   const openInNewTab = (url) => {
     window.open(url, "_blank");
   };
-  const count = results.length;
-
+  
 //CORE METHODS
   useEffect(()=> {
     const getResults = () => { 
         axiosClient.get('/searchResults/'+base64_decode(resIds))
           .then(({ data }) => {
            setResults(data.data);
-           console.log(data);              
+           res = data.data;
+           //console.log(res);
+            var x = navigator.geolocation;
+            x.getCurrentPosition(success, failure);
+              
           })
           .catch(err => {
             console.log(err); 
           })
       };
       getResults();
+      //console.log(res);
 
-      const setRange = () =>{
-      axiosClient.get('/priceFilter/'+ '/' + '/'+ 'test_id')
-      .then(({ data }) => {
-        setRangeResults(data.data);
-         //console.log(amount_required)
-       })
-       .catch(err => {
-         console.log(err); 
-       })
-    };
-    setRange();    
+    //   const setRange = () =>{
+    //   axiosClient.get('/priceFilter/'+ '/' + '/'+ 'test_id')
+    //   .then(({ data }) => {
+    //     setRangeResults(data.data);
+    //      //console.log(amount_required)
+    //    })
+    //    .catch(err => {
+    //      console.log(err); 
+    //    })
+    // };
+    // setRange();    
     //end set Range
 
     // begin set range amount
     //this is from the rangeAmount () in listingDetails.vue
-    const setRangeAmount = () =>{
-      axiosClient.get('/priceFilter_amount/'+ '/' + '/'+ 'test_id')
-      .then(({ data }) => {
-        setRangeAmountResults(data.data);
-         //console.log(amount_required)
-       })
-       .catch(err => {
-         console.log(err); 
-       })
-    };
-    setRangeAmount();    
+    // const setRangeAmount = () =>{
+    //   axiosClient.get('/priceFilter_amount/'+ '/' + '/'+ 'test_id')
+    //   .then(({ data }) => {
+    //     setRangeAmountResults(data.data);
+    //      //console.log(amount_required)
+    //    })
+    //    .catch(err => {
+    //      console.log(err); 
+    //    })
+    // };
+    // setRangeAmount();    
 
     //end rangeAmount
 
@@ -99,7 +105,96 @@ const ListingResults = () => {
   //         })
   //   };
   //     setRes();
+
+  
+ 
+   //x.getCurrentPosition(success, failure);
     }, [] )
+
+
+  //MAP -- MAP
+
+        const success = (position) => {
+        if((loc == true || loc == "true") && count !=0){
+            var myLat = sessionStorage.getItem('queryLat');// this.queryLat;
+            var myLong = sessionStorage.getItem('queryLng');// this.queryLng;
+        }
+
+        else{
+             var myLat = position.coords.latitude;
+             var myLong = position.coords.longitude;
+        } 
+
+        
+
+        var coords = ([myLat,myLong]);
+        var mapOptions = {
+        zoom:8,
+        center:coords,
+        //center:new google.maps.LatLng(51.508742,-0.120850),
+        }
+
+        //MAP CONTAINER
+        let map = new L.map('map' , mapOptions);
+        let layer = new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
+        map.addLayer(layer);
+        
+        
+        Object.entries(res).map(([key, value]) => {
+          console.log('okff');
+            //INFO
+
+                const contentString = '<a class="info_map py-0 font-weight-bold  text-center" target="_blank" href="https://test.jitume.com/#/listingDetails/'+value.id+'">'
+                +value.name+'</a>';
+
+            //INFO
+              const investment_needed = (value.investment_needed/1000)+"K";
+              //this.addMarker({lat:value.lat, lng:value.lng},map,value.name,investment_needed,infowindow);
+              var coord = ([value.lat,value.lng]);
+              addMarker(coord,map,contentString);
+            })
+        
+
+            addMarkerHome(coords,map);
+        }
+
+        const addMarker = (coords,map,contentString) => {
+        let customIcon = {
+         iconUrl:'../../images/map/other_business.png',
+         iconSize:[32,32]
+        }; let myIcon = L.icon(customIcon);
+
+        let iconOptions = {
+         title:'Spurs',
+         draggable:true,
+         icon:myIcon
+        }
+
+        var marker = new L.Marker(coords, iconOptions);
+        marker.addTo(map);
+        marker.bindPopup(contentString).openPopup();
+        }
+
+        const addMarkerHome = (coords,map) => {
+        let customIcon = {
+         iconUrl:'../../images/map/myloc.png',
+         iconSize:[32,32]
+        }; let myIcon = L.icon(customIcon);
+
+        let iconOptions = {
+         title:'Spurs',
+         draggable:true,
+         icon:myIcon
+        }
+
+        var marker = new L.Marker(coords, iconOptions);
+        marker.addTo(map);
+
+        }
+
+        const failure = () => {}
+        //MAP -- MAP
+
 
   return (
     <div className="container mx-auto px-4">
@@ -156,7 +251,7 @@ const ListingResults = () => {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div className="space-y-4 overflow-y-auto">
-          {results.length === 0 ? (
+          {count === 0 ? (
             <p className="text-center text-gray-500">No results found.</p>
           ) : (
             results.map((row, index) => (
@@ -165,21 +260,21 @@ const ListingResults = () => {
                 key={index}
               >
                 {row.video ? (
-                  <video
-                    src={row.video}
+                  <img
+                    src={'../../' + row.image}
+                    alt={row.name}
                     className="w-1/3 h-48 object-cover rounded-l-lg"
-                    controls
                   />
                 ) : (
                   <img
                     src={'../../' + row.image}
-                    alt={row.listing_name}
+                    alt={row.name}
                     className="w-1/3 h-48 object-cover rounded-l-lg"
                   />
                 )}
                 <div className="p-4 flex flex-col">
                   <p className="mb-1 text-lg whitespace-nowrap font-semibold">
-                    {row.listing_name}
+                    {row.name}
                   </p>
                   <div className="inline-block py-2">
                     <p className="mb-1 rounded-full bg-black py-1 px-2 text-sm text-white inline-block">
@@ -220,7 +315,10 @@ const ListingResults = () => {
 
         <div className="h-[500px] border border-gray-300 rounded-lg flex items-center justify-center">
           {/* Placeholder for the map */}
-          <p className="text-center text-gray-500">Map goes here</p>
+                <div class="m-auto map_style">
+                     <div id="map" style={{ height: '95%' }}></div> 
+                </div>
+
         </div>
       </div>
 

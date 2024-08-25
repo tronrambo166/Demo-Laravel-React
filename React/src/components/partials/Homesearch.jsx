@@ -12,6 +12,8 @@ const Homesearch = () => {
   const locationInputRef = useRef(null);
   const categoryRef = useRef(null);
   const nameRef = useRef(null);
+  const latRef = useRef(null);
+  const lngRef = useRef(null);
 
   const navigate = useNavigate();
   const [results, setResults] = useState('');
@@ -25,7 +27,10 @@ const Homesearch = () => {
             location: locationInputRef.current.value,
             category: categoryRef.current.value,
             name: nameRef.current.value,
-        }
+            lat: $('#lat').val(),
+            lng: $('#lng').val(),
+        } 
+        console.log(payload);
         axiosClient.post("/search",payload).then(({data})=>{
             console.log(data);
             Object.entries(data.results).forEach(entry => {
@@ -86,6 +91,15 @@ const Homesearch = () => {
 
             });
       }
+      const address = (place,lat2,lng2) => {
+            document.getElementById('searchbox').value = place;
+            //$("#result_list").html('');
+            document.getElementById("result_list").style.display = 'none';
+              const lat = document.getElementById('lat');
+              const lng = document.getElementById('lng');
+              lat.value = lat2;
+              lng.value = lng2;
+        }
 
   //KEVIN
   useEffect(()=> {
@@ -115,6 +129,7 @@ const Homesearch = () => {
         />
         <div className="relative w-full md:flex-1">
           <input onKeyUp={getPlaces}
+            id="searchbox"
             type="text" 
             placeholder="Location"
             className="border border-[#666666]/30 w-full text-md rounded-xl py-2 px-4 focus:outline-none" 
@@ -150,6 +165,8 @@ const Homesearch = () => {
       <div id="result_list" class="absolute w-[250px] bg-white  border-gray-300 border-t-0 rounded-b-md shadow-lg z-10 top-full">
 
       </div>
+      <input  type="text" name="lat" id="lat" hidden value=""/>
+      <input  type="text" name="lng" id="lng" hidden value=""/> 
       {/* search section ends */}
 
       <div className='flex font-semibold flex-wrap gap-4 py-6 justify-center items-center w-full mx-auto'>
@@ -161,6 +178,7 @@ const Homesearch = () => {
         </button>
       </div>
     </div>
+
   );
 }
 

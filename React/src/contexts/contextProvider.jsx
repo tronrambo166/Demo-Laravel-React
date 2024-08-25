@@ -18,6 +18,7 @@ export const ContextProvider = ({children}) => {
 	const [token, _setToken] = useState(localStorage.getItem('ACCESS_TOKEN'))
     const [auth, setAuth] = useState({});
     const [cards, setCards] = useState({});
+    const [res, setRes] = useState('');
 	//const [token, setToken] = useState({});
 
 	const setToken = (token) => {
@@ -40,7 +41,9 @@ export const ContextProvider = ({children}) => {
             setAuth,
             auth,
             cards, 
-            setCards
+            setCards,
+            res,
+            setRes
         }}>
             {children}
         </StateContext.Provider>
