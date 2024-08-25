@@ -60,7 +60,7 @@ const router = createBrowserRouter([
 		{ path:'/home', element: <Homepage />},
 		{ path:'/services', element: <Servicepage />},
 		{ path:'/users', element: <Users />},
-		{ path:'/listingResults/:results/:loc',name: 'listingResults', element: <ListingResults />},
+		{ path:'/listingResults/:resIds/:loc',name: 'listingResults', element: <ListingResults />},
 		{ path:'/listing/:id', element: <ListingDetails />},
 		{ path:'dashboard', element: <Dashboard/>},
 		{ path:'/service-details/:id', element: <ServiceDetails/>},

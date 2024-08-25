@@ -91,3 +91,10 @@
   width: 50%;
   margin: auto;
 }
+#result_list{
+  left: 556px;
+  top: 722px
+}
+.small{
+font-size: 14px
+}

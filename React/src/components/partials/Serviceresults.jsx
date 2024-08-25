@@ -1,4 +1,5 @@
 import { useState, useRef } from "react";
+import { useEffect } from 'react';
 import Select from "react-select";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLocationDot, faSearch, faPhone } from "@fortawesome/free-solid-svg-icons";
@@ -70,6 +71,9 @@ const ServiceResults = () => {
   const [results, setResults] = useState(dummyResults);
   const locationInputRef = useRef(null);
 
+  const [cartRes, setCartRes] = useState('');
+
+
   const search = () => {
     let filteredResults = dummyResults;
 
@@ -87,6 +91,67 @@ const ServiceResults = () => {
   };
 
   const count = results.length;
+
+  //KEVIN
+
+  useEffect(()=> {
+
+    // begin setRes
+    // this is from the setRes () in serviceResults.vue
+    const setRes = () =>{
+      axiosClient.get('/ServiceResults/'+ 'test_id')
+      .then(({ data }) => {
+        setResults(data.data);        
+       })
+       .catch(err => {
+         console.log(err); 
+       })
+    };
+    setRes();    
+
+    //end setRes
+
+    // begin setRange
+    // this is from the range () in serviceResults.vue
+
+    const setRange = () =>{
+      axiosClient.get('/priceFilter/'+ '/' + '/'+ 'test_id')
+      .then(({ data }) => {
+        setRangeResults(data.data);
+         //console.log(amount_required)
+       })
+       .catch(err => {
+         console.log(err); 
+       })
+    };
+    setRange();    
+    //end set Range
+
+    // begin cart
+    // this is from the cart () in serviceResults.vue
+
+    const cart = () =>{
+      axiosClient.get('/cart/')
+      .then(({ data }) => {
+        setCartRes(data.data);
+         //console.log(amount_required)
+       })
+       .catch(err => {
+         console.log(err); 
+       })
+    };
+    cart();    
+    //end cart
+
+
+
+
+
+  },[])
+
+    
+
+  //KEVIN
 
   return (
     <div className="container mx-auto px-4">

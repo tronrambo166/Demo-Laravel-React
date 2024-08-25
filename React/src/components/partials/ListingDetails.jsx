@@ -184,11 +184,47 @@ const closeAuthModal = () => {
 
     }, [])
 
-      const download_business = () => {
-      //id = form.listing_id; 
-
+      const download_business = () => { 
       axiosClient({
           url: 'download_business/' + form.listing_id, //your url
+          method: 'GET',
+          responseType: 'blob',
+        }).then((data) => {
+        console.log(data);
+        if((data.data.size == 3)){
+          $.alert({
+          title: 'Alert!',
+          content: 'The business has no such document or the file not found!',
+           type: 'red',
+            buttons: {
+            tryAgain: {
+            text: 'Close',
+            btnClass: 'btn-red',
+            action: function(){
+            }
+        }}  
+        });
+        } //console.log(data);
+        else{
+          const href = URL.createObjectURL(data.data);
+          const link = document.createElement('a');
+          link.href = href;
+
+          if(data.data.type == 'application/vnd.openxmlformats-officedocument.wordprocessingml.document')
+          link.setAttribute('download', 'statement.docx'); //or any other extension
+          else
+           link.setAttribute('download', 'statement.pdf');
+            
+          document.body.appendChild(link);
+          link.click();
+        }
+
+      });
+    }
+
+      const download_statement = () => { 
+      axiosClient({
+          url: 'download_statement/' + form.listing_id, //your url
           method: 'GET',
           responseType: 'blob',
         }).then((data) => {
@@ -322,7 +358,7 @@ const closeAuthModal = () => {
           <div  className='bg-gray-100 py-4 flex flex-col gap-4 items-center px-6'>
             <button
               className='whitespace-nowrap border border-black px-4 py-2 rounded-lg w-[300px]'
-              onClick={openPopup}
+              onClick={download_statement}
             >
               Download Financial Statements
             </button>

@@ -1,53 +1,18 @@
-import { useState, useRef } from "react";
-//import "tailwindcss/tailwind.css";
+import { useState, useRef, useEffect } from "react";
+import { useParams, useNavigate } from 'react-router-dom';
 import Select from "react-select";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLocationDot, faSearch, faPhone } from "@fortawesome/free-solid-svg-icons";
 import Footer from "./footer";
 import PriceRangeFilter from "./PriceRangeFilter";
 import Navbar from "./Navbar";
+import axiosClient from "../../axiosClient";
+import { Link } from 'react-router-dom';
+import {decode as base64_decode, encode as base64_encode} from 'base-64';
 
 // Dummy data
-const dummyResults = [
-  {
-    id: 1,
-    listing_name: "Sample Listing 1",
-    location: "Location 1",
-    category: "Agriculture",
-    average_price: 100,
-    rating: 4.5,
-    image: "https://via.placeholder.com/300",
-  },
-  {
-    id: 2,
-    listing_name: "Sample Listing 2",
-    location: "Location 2",
-    category: "Technology/Communications",
-    average_price: 150,
-    rating: 4.0,
-    video: "https://www.w3schools.com/html/mov_bbb.mp4", // Sample video URL
-  },
-  {
-    id: 3,
-    listing_name: "Sample Listing 3",
-    location: "Location 3",
-    category: "Arts/Culture",
-    average_price: 200,
-    rating: 5.0,
-    image: "https://via.placeholder.com/300",
-  },
-  {
-    id: 4,
-    listing_name: "Sample Listing 4",
-    location: "Location 4",
-    category: "Finance/Accounting",
-    average_price: 300,
-    rating: 3.5,
-    image: "https://via.placeholder.com/300",
-  },
-];
-
-const categories = [
+const ListingResults = () => {
+  const categories = [
   { value: "Agriculture", label: "Agriculture" },
   { value: "Arts/Culture", label: "Arts/Culture" },
   { value: "Auto", label: "Auto" },
@@ -66,28 +31,75 @@ const categories = [
   { value: "Technology/Communications", label: "Technology/Communications" },
 ];
 
-const ListingResults = () => {
+  const { resIds }  = useParams();
+  //const  resIds  = base64_decode(Ids);
+  const { loc } = useParams();
+
   const [selectedCategory, setSelectedCategory] = useState(null);
-  const [results, setResults] = useState(dummyResults);
+  const [results, setResults] = useState('');
   const locationInputRef = useRef(null);
-
-  const search = () => {
-    let filteredResults = dummyResults;
-
-    if (selectedCategory) {
-      filteredResults = filteredResults.filter(
-        (result) => result.category === selectedCategory.value
-      );
-    }
-
-    setResults(filteredResults);
-  };
 
   const openInNewTab = (url) => {
     window.open(url, "_blank");
   };
-
   const count = results.length;
+
+//CORE METHODS
+  useEffect(()=> {
+    const getResults = () => { 
+        axiosClient.get('/searchResults/'+base64_decode(resIds))
+          .then(({ data }) => {
+           setResults(data.data);
+           console.log(data);              
+          })
+          .catch(err => {
+            console.log(err); 
+          })
+      };
+      getResults();
+
+      const setRange = () =>{
+      axiosClient.get('/priceFilter/'+ '/' + '/'+ 'test_id')
+      .then(({ data }) => {
+        setRangeResults(data.data);
+         //console.log(amount_required)
+       })
+       .catch(err => {
+         console.log(err); 
+       })
+    };
+    setRange();    
+    //end set Range
+
+    // begin set range amount
+    //this is from the rangeAmount () in listingDetails.vue
+    const setRangeAmount = () =>{
+      axiosClient.get('/priceFilter_amount/'+ '/' + '/'+ 'test_id')
+      .then(({ data }) => {
+        setRangeAmountResults(data.data);
+         //console.log(amount_required)
+       })
+       .catch(err => {
+         console.log(err); 
+       })
+    };
+    setRangeAmount();    
+
+    //end rangeAmount
+
+    //begin setRes
+  // const setRes= () => { 
+  //       axiosClient.get('/searchResults/'+'test_id')
+  //         .then(({ data }) => {
+  //          setResults(data.data);
+  //           //console.log(amount_required)
+  //         })
+  //         .catch(err => {
+  //           console.log(err); 
+  //         })
+  //   };
+  //     setRes();
+    }, [] )
 
   return (
     <div className="container mx-auto px-4">
@@ -128,7 +140,7 @@ const ListingResults = () => {
         />
         <button
           className="btn-primary w-full md:w-auto py-3 rounded-full px-4 focus:outline-none mt-4 md:mt-0"
-          onClick={search}
+          
         >
           <FontAwesomeIcon icon={faSearch} />
         </button>
@@ -148,7 +160,7 @@ const ListingResults = () => {
             <p className="text-center text-gray-500">No results found.</p>
           ) : (
             results.map((row, index) => (
-              <div
+              <Link to={`/listing/${btoa(btoa(row.id))}`} key={row.id} > <div
                 className="border h-48 border-gray-300 rounded-lg shadow-md flex"
                 key={index}
               >
@@ -160,7 +172,7 @@ const ListingResults = () => {
                   />
                 ) : (
                   <img
-                    src={row.image}
+                    src={'../../' + row.image}
                     alt={row.listing_name}
                     className="w-1/3 h-48 object-cover rounded-l-lg"
                   />
@@ -200,7 +212,8 @@ const ListingResults = () => {
                     </div>
                   </div>
                 </div>
-              </div>
+              </div> </Link>
+
             ))
           )}
         </div>

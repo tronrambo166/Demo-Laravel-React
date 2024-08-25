@@ -1,29 +1,101 @@
+import { useParams, useNavigate } from 'react-router-dom';
 import { useRef } from 'react';
 import { useState } from 'react';
-import { useEffect } from 'react'
+import { useEffect } from 'react';
 import axiosClient from "../../axiosClient";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLocationDot, faChevronDown,faSearch } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
+import {decode as base64_decode, encode as base64_encode} from 'base-64';
 
 const Homesearch = () => {
   const locationInputRef = useRef(null);
+  const categoryRef = useRef(null);
+  const nameRef = useRef(null);
+
+  const navigate = useNavigate();
   const [results, setResults] = useState('');
+  const [rangeResults, setRangeResults] = useState('');
+  const [rangeAmountResults, setRangeAmountResults] = useState('');
+
+  const Search = (e) =>{
+    e.preventDefault();
+        let ids = '';
+        const payload = {
+            location: locationInputRef.current.value,
+            category: categoryRef.current.value,
+            name: nameRef.current.value,
+        }
+        axiosClient.post("/search",payload).then(({data})=>{
+            console.log(data);
+            Object.entries(data.results).forEach(entry => {
+            const [index, row] = entry;
+            ids = ids + row.id + ',';
+          }); //console.log(ids);
+          if (!ids) ids = 0;
+          navigate('/listingResults/'
+              +base64_encode(ids)+ '/'+ data.loc
+            ); 
+            
+      }).catch(err => { console.log(err);
+          const response = err.response;
+          if(response && response.status === 422){
+              console.log(response.data.errors);
+          }
+          console.log(err);
+
+      });
+  }
+
+  const getPlaces = (e) => { 
+    e.preventDefault();
+    $("#result_list").html('');
+    const searchText = locationInputRef.current.value;
+
+        $.ajax({
+                url: 'https://photon.komoot.io/api/?q=' + encodeURIComponent(searchText),
+                method: 'get',
+                dataType: 'json',
+                success: function(response) {
+                  var i;  console.log(response.features);
+                
+                    for (i = 0; i < 10; i++) { //console.log(response.features[i].name);
+                        var name = response.features[i].properties.name;
+                        var city = response.features[i].properties.city;
+                        if(city == null || city == 'undefined')
+                        city = '';
+                        var country = response.features[i].properties.country;
+                        var lng = response.features[i].geometry.coordinates[0];
+                        var lat = response.features[i].geometry.coordinates[1];
+
+                        $("#result_list").show();
+                            if(i<10)
+
+                            if(city == '')
+                            $("#result_list").append(' <div onclick="address(\'' + name + ','  + country + '\', \'' + lat + '\', \'' + lng + '\');" style="" data-id="' + name + '" class="address  py-1 px-1 my-0 border-top bg-white single_comms">  <p class="h6 small text-dark d-inline" ><i class="fa fa-map-marker mr-1 text-dark" aria-hidden="true"></i> ' + name + '</p> <p  class="d-inline text-dark"><small>, ' + country + '</small> </p> </div>');
+                            else
+                            $("#result_list").append(' <div onclick="address(\'' + name + ','+ city + ','  + country + '\', \'' + lat + '\', \'' + lng + '\');" style="" data-id="' + name + '" class="address  py-1 px-1 my-0 border-top bg-white single_comms">  <p class="small h6 text-dark d-inline" ><i class="fa fa-map-marker mr-1 text-dark" aria-hidden="true"></i> ' + name + '</p> <p  class="d-inline text-dark"><small>, ' + city + ',' + country + '</small> </p> </div>');
+
+
+                        }
+                        //document.getElementById('result_list').style.overflowY="scroll";                      
+                },
+                error: function(error) {
+                    console.log(error);
+                }
+
+            });
+      }
 
   //KEVIN
   useEffect(()=> {
-  const setRes= () => { 
-        axiosClient.get('/searchResults/'+'test_id')
-          .then(({ data }) => {
-           setResults(data.data);
-            //console.log(amount_required)
-          })
-          .catch(err => {
-            console.log(err); 
-          })
-    };
-      setRes();
+
+    // begin setRange
+    // this is from the range () in listingDetails.vue
+
+    
     }, [])
+
   console.log(results)
 
   //KEVIN
@@ -36,13 +108,13 @@ const Homesearch = () => {
 
       {/* search section starts */}
       <div className='flex flex-col md:flex-row gap-4 justify-center pt-8 px-2 sm:px-6 md:px-4 items-center w-full max-w-3xl mx-auto'>
-        <input 
+        <input ref={nameRef}
           type="text"
           className='border py-2 text-md px-4 font-regular border-[#666666]/30 rounded-xl focus:outline-none w-full md:flex-1' 
           placeholder="What are you looking for?" 
         />
         <div className="relative w-full md:flex-1">
-          <input 
+          <input onKeyUp={getPlaces}
             type="text" 
             placeholder="Location"
             className="border border-[#666666]/30 w-full text-md rounded-xl py-2 px-4 focus:outline-none" 
@@ -54,8 +126,9 @@ const Homesearch = () => {
           />
         </div>
         <div className="relative w-full md:flex-1">
-          <select className='border border-[#666666]/30 w-full text-md rounded-xl py-2 px-4 focus:outline-none appearance-none'>
-            <option className='text-slate-400' value="" disabled >Select a category</option>
+          <select className='border border-[#666666]/30 w-full text-md rounded-xl py-2 px-4 focus:outline-none appearance-none'
+          ref={categoryRef} >
+            <option className='text-slate-400' value=""  >Select a category</option>
             <option value="food">Food</option>
             <option value="retail">Retail</option>
             <option value="services">Services</option>
@@ -66,11 +139,16 @@ const Homesearch = () => {
             className="absolute right-4 top-1/2 transform -translate-y-1/2 text-black cursor-pointer pointer-events-none"
           />
         </div>
-        <Link to="/listingResults/:results/:loc">
-        <button className='btn-primary w-full md:w-auto py-3  rounded-full px-4 focus:outline-none mt-4 md:mt-0'>
+ {/*       <Link to="/listingResults/:results/:loc">*/}
+        <button onClick = {Search} className='btn-primary w-full md:w-auto py-3  rounded-full px-4 focus:outline-none mt-4 md:mt-0'>
           <FontAwesomeIcon icon={faSearch} />
         </button>
-        </Link>
+     {/*   </Link>*/}
+      </div>
+      <ul id="suggestion-list" class="absolute w-[250px] bg-white  border-t-0 rounded-b-md shadow-lg z-10 top-full">
+      </ul>
+      <div id="result_list" class="absolute w-[250px] bg-white  border-gray-300 border-t-0 rounded-b-md shadow-lg z-10 top-full">
+
       </div>
       {/* search section ends */}
 

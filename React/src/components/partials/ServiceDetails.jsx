@@ -7,6 +7,11 @@ import Navbar from './Navbar';
 const ServiceDetails = () => {
   const { id } = useParams();
   const [notes, setNotes] = useState('');
+  const [rebookRes, setRebookRes] = useState('');
+  const [detailsRes, setDetailsRes] = useState('');
+  const [milestonesRes, setMilestonesRes] = useState('');
+  const [cartRes, setCartRes] = useState('');
+  const [ratingRes, setRatingRes] = useState('');
 
   const form = {
     name: 'Service Name',
@@ -47,6 +52,81 @@ const ServiceDetails = () => {
     }
     return stars;
   };
+
+    // begin rebook
+    // this is from the rebook () in serviceDetails.vue
+    const rebook = () =>{
+      axiosClient.get('/rebook_service/'+ 'test_id')
+      .then(({ data }) => {
+        setReebokRes(data.data);         
+       })
+       .catch(err => {
+         console.log(err); 
+       })
+    };
+    rebook();    
+
+    //end rebook
+
+    // begin getDetails
+    // this is from the getDetails () in serviceDetails.vue
+    const getDetails = () =>{
+      axiosClient.get('/ServiceResults/'+ 'test_id')
+      .then(({ data }) => {
+        setDetailsRes(data.data);        
+       })
+       .catch(err => {
+         console.log(err); 
+       })
+    };
+    getDetails();    
+
+    //end getDetails
+
+    // begin getMilestones
+    // this is from the getMilestones () in serviceDetails.vue
+    const getMilestones = () =>{
+      axiosClient.get('/getMilestonesS/'+ 'test_id')
+      .then(({ data }) => {
+        setMilestonesRes(data.data);        
+       })
+       .catch(err => {
+         console.log(err); 
+       })
+    };
+    getMilestones();    
+
+    //end getMilestones
+
+    // begin addToCart
+    // this is from the addToCart () in serviceDetails.vue
+    const addToCart = () =>{
+      axiosClient.get('/addToCart/'+ 'test_id'+ '-' + 'qty')
+      .then(({ data }) => {
+        setCartRes(data.data);        
+       })
+       .catch(err => {
+         console.log(err); 
+       })
+    };
+    addToCart();    
+
+    //end addToCart
+
+    // begin rating
+    // this is from the rating () in serviceDetails.vue
+    const rating = () =>{
+      axiosClient.get('/ratingService/'+ 'test_id'+ '/' + 'rating' + 'text')
+      .then(({ data }) => {
+        setRatingRes(data.data);        
+       })
+       .catch(err => {
+         console.log(err); 
+       })
+    };
+    rating();    
+
+    //end rating
 
   return (
     <div className="container mx-auto flex flex-col md:flex-row justify-center items-center py-4 lg:py-8 mt-3">

@@ -296,7 +296,7 @@ return response()->json(['data'=>$results]);
 public function search(Request $request){
 $listing_name = $request->listing_name;
 
-$location = $request->search;
+$location = $request->location;
 $lat = (float)$request->lat;
 $lng = (float)$request->lng;
 $category = $request->category;
@@ -353,9 +353,12 @@ foreach($ids as $id){
     $listing = Listing::where('id',$id)->first();
     $files = businessDocs::where('business_id',$id)
     ->where('media',1)->first();
+
+  if($listing){
     if(isset($files->file))
     $listing->file = $files->file;
-    else $listing->file = false;
+    else 
+      $listing->file = false;
     $listing->investment_needed = $listing->investment_needed;
 
 
@@ -368,6 +371,7 @@ foreach($ids as $id){
     $listing->lng = (float)$listing->lng;
 
     $listing->id = $listing->id;
+  }
     $results[] = $listing;
 }
 }
