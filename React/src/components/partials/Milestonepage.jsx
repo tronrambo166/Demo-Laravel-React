@@ -1,4 +1,38 @@
+import { useState, useRef, useEffect } from "react";
+import { useParams, useNavigate } from 'react-router-dom';
+import Select from "react-select";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faLocationDot, faSearch, faPhone } from "@fortawesome/free-solid-svg-icons";
+import Footer from "./footer";
+import PriceRangeFilter from "./PriceRangeFilter";
+import Navbar from "./Navbar";
+import axiosClient from "../../axiosClient";
 import React from 'react';
+
+const MilestonePage = () => {
+
+const { id } = useParams();
+const listing_id = atob(atob(id));
+const [miles, setMiles] = useState('');
+//const miles = [];
+const [hasMile, setHasmile] = useState('');
+
+useEffect (() => {
+const getMilestones = () => { 
+        axiosClient.get('/getMilestones/'+listing_id)
+          .then(({ data }) => {
+            setMiles(data.data);
+            console.log(miles);
+              if (data.length == 0)
+              setHasmile(true);
+          })
+          .catch(err => {
+            console.log(err); 
+          })
+    };
+      getMilestones();
+    }, [])
+
 
 const milestones = [
   {
@@ -28,11 +62,11 @@ const milestones = [
   },
 ];
 
-const MilestonePage = () => {
-  const handleStatusChange = (milestoneName, status) => {
-    console.log(`Milestone ${milestoneName} status changed to: ${status}`);
-    // Update milestone status logic here
-  };
+// const MilestonePage = () => {
+//   const handleStatusChange = (milestoneName, status) => {
+//     console.log(`Milestone ${milestoneName} status changed to: ${status}`);
+//     // Update milestone status logic here
+//   };
 
   return (
     <div className="container mx-auto p-5">
@@ -86,17 +120,17 @@ const MilestonePage = () => {
           </tr>
         </thead>
         <tbody>
-          {milestones.map((milestone, index) => (
+          {miles.map((milestone, index) => (
             <tr key={index} className="hover:bg-gray-100">
-              <td className="border border-gray-300 px-4 py-2">{milestone.name}</td>
+              <td className="border border-gray-300 px-4 py-2">{milestone.title}</td>
               <td className="border border-gray-300 px-4 py-2">{milestone.amount}</td>
               <td className="border border-gray-300 px-4 py-2">
-                <a href={milestone.documentLink} className="text-blue-500 hover:underline">Download Milestone Documentation</a>
+                <a href={milestone.document} className="text-blue-500 hover:underline">Download Milestone Documentation</a>
               </td>
               <td className="border border-gray-300 px-4 py-2">
                 <div className="flex space-x-2">
                   <button
-                    onClick={() => handleStatusChange(milestone.name, 'Paid')}
+                    onClick={() => handleStatusChange(milestone.title, 'Paid')}
                     className={`px-3 py-1 rounded ${
                       milestone.status === 'Paid'
                         ? 'bg-green-500 text-white'
@@ -106,7 +140,7 @@ const MilestonePage = () => {
                     Paid
                   </button>
                   <button
-                    onClick={() => handleStatusChange(milestone.name, 'Done')}
+                    onClick={() => handleStatusChange(milestone.title, 'Done')}
                     className={`px-3 py-1 rounded ${
                       milestone.status === 'Done'
                         ? 'bg-blue-500 text-white'
@@ -117,7 +151,7 @@ const MilestonePage = () => {
                   </button>
                 </div>
                 {milestone.status === 'In Progress' && (
-                  <div className="text-red-500 mt-2">{milestone.due}</div>
+                  <div className="text-red-500 mt-2"></div>
                 )}
               </td>
             </tr>

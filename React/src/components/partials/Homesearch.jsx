@@ -38,6 +38,9 @@ const Homesearch = () => {
             ids = ids + row.id + ',';
           }); //console.log(ids);
           if (!ids) ids = 0;
+
+          sessionStorage.setItem('queryLat', payload.lat);
+          sessionStorage.setItem('queryLng', payload.lng);
           navigate('/listingResults/'
               +base64_encode(ids)+ '/'+ data.loc
             ); 

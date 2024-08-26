@@ -26,7 +26,7 @@ const ListingDetails = () => {
     investors_fee: 100,
     listing_id: atob(atob(id)),
     range: 'gold',
-    conv:'test'
+    conv:false
   };
 
   const auth_user = true;

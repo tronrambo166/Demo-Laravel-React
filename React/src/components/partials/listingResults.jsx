@@ -64,6 +64,10 @@ const ListingResults = () => {
       getResults();
       //console.log(res);
 
+      const onChangeSlider = () => { 
+        alert('slider is moving');
+      }
+
     //   const setRange = () =>{
     //   axiosClient.get('/priceFilter/'+ '/' + '/'+ 'test_id')
     //   .then(({ data }) => {
@@ -115,7 +119,7 @@ const ListingResults = () => {
   //MAP -- MAP
 
         const success = (position) => {
-        if((loc == true || loc == "true") && count !=0){
+        if((loc == true || loc == "true") && res.length !=0){
             var myLat = sessionStorage.getItem('queryLat');// this.queryLat;
             var myLong = sessionStorage.getItem('queryLng');// this.queryLng;
         }
@@ -141,10 +145,8 @@ const ListingResults = () => {
         
         
         Object.entries(res).map(([key, value]) => {
-          console.log('okff');
             //INFO
-
-                const contentString = '<a class="info_map py-0 font-weight-bold  text-center" target="_blank" href="https://test.jitume.com/#/listingDetails/'+value.id+'">'
+                const contentString = '<a class="info_map py-0 font-weight-bold  text-center" target="_blank" href="/listing/'+btoa(btoa(value.id))+'">'
                 +value.name+'</a>';
 
             //INFO
