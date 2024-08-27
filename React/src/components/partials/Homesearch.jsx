@@ -163,9 +163,9 @@ const Homesearch = () => {
         </button>
      {/*   </Link>*/}
       </div>
-      <ul id="suggestion-list" class="absolute w-[250px] bg-white  border-t-0 rounded-b-md shadow-lg z-10 top-full">
+      <ul id="suggestion-list" className="absolute w-[250px] bg-white  border-t-0 rounded-b-md shadow-lg z-10 top-full">
       </ul>
-      <div id="result_list" class="absolute w-[250px] bg-white  border-gray-300 border-t-0 rounded-b-md shadow-lg z-10 top-full">
+      <div id="result_list" className="absolute w-[250px] bg-white  border-gray-300 border-t-0 rounded-b-md shadow-lg z-10 top-full">
 
       </div>
       <input  type="text" name="lat" id="lat" hidden value=""/>

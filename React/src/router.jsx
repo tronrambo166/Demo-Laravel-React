@@ -29,6 +29,7 @@ import PaymentForm from './components/partials/PaymentForm';
 import ServiceDetails from './components/partials/ServiceDetails';
 import MilestonesPage from './components/partials/Milestonepage';
 import ServiceResults from './components/partials/Serviceresults';
+import Subscribepage from './components/partials/Subscribepage';
 
 //import home from '../components/pages/home'
 // import services from '../components/pages/services'
@@ -67,6 +68,11 @@ const router = createBrowserRouter([
 		{ path:'/business-milestones/:id', element: <MilestonesPage/>},
 		{ path:'/checkout/:amount/:listing_id/:percent', element: <PaymentForm/>},
 		{ path:'/serviceresults', element: <ServiceResults/>},
+		{ path:'/subscribe', element: <Subscribepage/>},
+		{ path:'/checkout', element: <PaymentForm/>},
+
+
+
 
 
 
