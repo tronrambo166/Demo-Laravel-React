@@ -60,20 +60,21 @@ class checkoutController extends Controller
      */
 
      public function stripeConversation(Request $request)
-    {
+    {  return $request->all();
         $listing_id=$request->listing;
         $package=$request->package;
 
         //Stripe
-    try{
+    try{ 
 
         $curr='USD'; //$request->currency; 
-        $amount= Session::get('small_fee_new_price'); //$request->price;
+        $amount= $request->amount; //Session::get('small_fee_new_price'); //$request->price;
         $transferAmount= round($amount-($amount*.05),2);
+
 
         $this->validate($request, [
             'stripeToken' => ['required', 'string']
-        ]);
+        ]); 
         $charge = $this->Client->charges->create ([ 
                 //"billing_address_collection": null,
                 "amount" => $amount*100, //100 * 100,
@@ -81,11 +82,13 @@ class checkoutController extends Controller
                 "source" => $request->stripeToken,
                 "description" => "This payment is test purpose only!"
         ]);
+        
         }
       catch(\Exception $e){
-      Session::put('Stripe_failed',$e->getMessage());
-      return redirect()->back();
+      return response()->json(['status' => 400, 'message' => $e->getMessage()]);
+      //return redirect()->back();
     }
+
 
     $business_id = $request->listing;
     $Business = listing::where('id',$business_id)->first();
@@ -102,38 +105,25 @@ class checkoutController extends Controller
                 "source_transaction" => $charge->id,
                 'destination' => $owner->connect_id
         ]);
-        }
 
-catch(\Exception $e){
-  Session::put('Stripe_failed',$e->getMessage());
-    return redirect()->back();
+        //DB INSERT
+        Conversation::create([
+            'investor_id' => Auth::id(),
+            'listing_id' => $listing_id,
+            'package' => $package,
+            'price' => $amount
+        ]); 
+       return response()->json(['status' => 200, 'message' => 'success']);
+      }
+
+ catch(\Exception $e){
+  return response()->json(['status' => 400, 'message' => $e->getMessage()]);
 }
 
  //Stripe
 
 
-//DB INSERT
-    Conversation::create([
-        'investor_id' => Auth::id(),
-        'listing_id' => $listing_id,
-        'package' => $package,
-        'price' => $amount
-    ]);
-
-        // $info=['eq_name'=>$Equipment->eq_name, 
-        //     'Name'=>$investor->name,'amount'=>$amount,
-        //     'email' => $investor->email, 'type'=>'invest']; 
-        // $user['to'] = 'sohaankane@gmail.com';//$listing->contact_mail;
-
-        // Mail::send('invest_mail', $info, function($msg) use ($user){
-        //     $msg->to($user['to']);
-        //     $msg->subject('Test Invest Alert!');
-        // });  
-
-       Session::put('Stripe_pay','Success!');
-       return redirect("/");
-
-    }
+}
 
     //UNLOCK PAYMENT
 

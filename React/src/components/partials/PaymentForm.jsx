@@ -1,9 +1,62 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import {decode as base64_decode, encode as base64_encode} from 'base-64';
 import { useParams, useNavigate } from 'react-router-dom';
 import { FaCreditCard, FaHome } from 'react-icons/fa';
+import axiosClient from "../../axiosClient";
 
 const PaymentForm = () => {
+
+  //Stripe Code
+    $(function() {
+    var $form = $(".require-validation");
+    $('form.require-validation').bind('submit', function(e) {
+        var $form = $(".require-validation"),
+            inputSelector = ['input[type=email]', 'input[type=password]',
+                'input[type=text]', 'input[type=file]',
+                'textarea'
+            ].join(', '),
+            $inputs = $form.find('.required').find(inputSelector),
+            $errorMessage = $form.find('div.error'),
+            valid = true;
+        $errorMessage.addClass('hide');
+        $('.has-error').removeClass('has-error');
+        $inputs.each(function(i, el) {
+            var $input = $(el);
+            if ($input.val() === '') {
+                $input.parent().addClass('has-error');
+                $errorMessage.removeClass('hide');
+                e.preventDefault();
+            }
+        });
+        if (!$form.data('cc-on-file')) {
+            e.preventDefault();
+            Stripe.setPublishableKey($form.data('stripe-publishable-key'));
+            Stripe.createToken({
+                number: $('.card-number').val(),
+                cvc: $('.card-cvc').val(),
+                exp_month: $('.card-expiry-month').val(),
+                exp_year: $('.card-expiry-year').val()
+            }, stripeResponseHandler);
+        }
+    });
+    function stripeResponseHandler(status, response) {
+        if (response.error) { 
+            $('.error')
+                .removeClass('collapse')
+                .find('.alert')
+                .text(response.error.message);
+                console.log(response.error.message)
+        } else {
+            /* token contains id, last4, and card type */
+            var token = response['id'];
+            $form.find('input[type=text]').empty();
+            $form.append("<input type='hidden' id='stripeToken' name='stripeToken' value='" + token + "'/>");
+            //$form.get(0).submit();
+        }
+    }
+});
+  //Stripe Code
+
   const { listing_id } = useParams();
   let { amount } = useParams();
   const amount_real = base64_decode(amount);
@@ -12,10 +65,38 @@ const PaymentForm = () => {
   const [showModal, setShowModal] = useState(false);
   const price = parseFloat(amount_real)+parseFloat(0.05*amount_real); // Fixed price value
   const [purpose, setPurpose] = useState('');
+  //const stripeToken = useRef(null);
+  function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    // Handle form submission logic here
+     sleep(500);
+      const payload = {
+            listing: listing_id,
+            package: $('#package').val(),
+            amount: $('#amount').val(),
+            stripeToken: $('#stripeToken').val(),
+            //stripeToken: event.target.stripeToken.value
+        } 
+        //console.log(payload);
+        axiosClient.post("/stripe.post.coversation", payload).then(({data})=>{
+        console.log(data);
+        if(data.status == 200){
+          alert('Bid placed, you will be notified if bid is accepted');
+          navigate('/');
+        }
+        if(data.status == 400) 
+          alert(data.message);
+            
+      }).catch(err => { console.log(err);
+          const response = err.response;
+          if(response && response.status === 422){
+              console.log(response.data.errors);
+          }
+          console.log(err);
+      });
   };
 
   const popupClose = () => {
@@ -67,7 +148,16 @@ const PaymentForm = () => {
             </h5>
           </div>
 
-          <form onSubmit={handleSubmit} className="mt-4">
+          {/*  action="{{ route('stripe.post.coversation') }}"*/} 
+          <form role="form" onSubmit={handleSubmit}
+          method="post" class="class2 require-validation m-auto" 
+          data-cc-on-file="false" data-stripe-publishable-key="pk_test_51JFWrpJkjwNxIm6zf1BN9frgMmLdlGWlSjkcdVpgVueYK5fosCf1fAKlMpGrkfGoiXGMb0PpcMEOdINTEVcJoCNa00tJop21w6" 
+          id="payment-form">
+
+            <div class="row error mx-1 text-center collapse">
+            <p style={{color:'#e31313', background: '#cfcfcf82',fontWeight: '600'}} class="alert my-2 py-1 w-100"></p>
+            </div> 
+
             <div className="mb-4">
               <label className="block text-sm font-semibold">Email</label>
               <input
@@ -95,7 +185,8 @@ const PaymentForm = () => {
                   <FaCreditCard className='text-white font-semibold'/>
                 </div>
                 <input
-                  className="flex-1 p-2 border-0 outline-none"
+                autocomplete='on' size='20'
+                  className="card-number flex-1 p-2 border-0 outline-none"
                   type="text"
                   placeholder="1234 5678 9012 3456"
                 />
@@ -106,7 +197,9 @@ const PaymentForm = () => {
               <div className="w-1/3">
                 <label className="block text-sm font-semibold">CVC</label>
                 <input
-                  className="w-full p-2 border border-gray-300 rounded"
+                autocomplete='off' 
+                placeholder='ex. 311' size='4'
+                  className="card-cvc w-full p-2 border border-gray-300 rounded"
                   type="text"
                   placeholder="ex. 311"
                 />
@@ -114,33 +207,29 @@ const PaymentForm = () => {
               <div className="w-1/3">
                 <label className="block text-sm font-semibold">Exp. Month</label>
                 <input
-                  className="w-full p-2 border border-gray-300 rounded"
+                  className="card-expiry-month w-full p-2 border border-gray-300 rounded"
                   type="text"
                   placeholder="MM"
+                  size="2"
                 />
               </div>
               <div className="w-1/3">
                 <label className="block text-sm font-semibold">Exp. Year</label>
                 <input
-                  className="w-full p-2 border border-gray-300 rounded"
+                  className="card-expiry-year w-full p-2 border border-gray-300 rounded"
                   type="text"
                   placeholder="YYYY"
+                  size="4"
                 />
               </div>
             </div>
-
-          </form>
-        </div>
-      </div>
-
-      {/* Form right */}
-      <div className="mt-12 w-50 mb-12">
-        <form
+{/* other form */}
+<div className="mt-12 w-50 mb-12">
+        {/*<form
           onSubmit={handleSubmit}
           className="max-w-lg  p-6 "
-        >
+        >*/}
           {/* Hidden input for listing */}
-          <input hidden type="number" name="listing" value={123} />
 
           <div className="mb-4">
             <label className="block text-sm font-semibold">
@@ -149,6 +238,12 @@ const PaymentForm = () => {
             <p className="w-full p-2 border border-gray-300 rounded bg-gray-100 text-gray-700">
               ${price}
             </p>
+            <input hidden size='4' name="amount" id="amount"
+             type='number' value={price} readonly />
+
+             <input  hidden  name="package" id="package"
+             type='text' value="gold" readonly />
+             
           </div>
 
           <div className="flex flex-col gap-3 mb-4">
@@ -189,8 +284,20 @@ const PaymentForm = () => {
               Pay <span id="paynow"></span><span id="stripBtn"></span>
             </button>
           </div>
-        </form>
+
+        {/*</form>*/}
+
       </div>
+
+{/* other form */}
+
+
+          </form>
+        </div>
+      </div>
+
+      {/* Form right */}
+      
     </div>
   );
 };

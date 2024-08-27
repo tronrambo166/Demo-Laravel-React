@@ -6,7 +6,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\BusinessController;
 use App\Http\Controllers\PagesController;
-
+use App\Http\Controllers\checkoutController;
 //P R O T E C T E D    R O U T E S
 Route::middleware('auth:sanctum')->group(function() {
     Route::get('logout',[AuthController::class,'logout']);
@@ -48,7 +48,7 @@ Route::middleware('auth:sanctum')->group(function() {
     //Unlock small fee
     Route::get('/stripe/{amount}/{business_id}', [checkoutController::class, 'goCheckout'])->name('stripe');
     Route::post('/stripe', [checkoutController::class, 'stripePost'])->name('stripe.post');
-    Route::post('/stripe', [checkoutController::class, 'stripeConversation'])->name('stripe.post.coversation');
+    Route::post('/stripe.post.coversation', [checkoutController::class, 'stripeConversation'])->name('stripe.post.coversation');
 
     //Subscribe***
     Route::get('isSubscribed/{id}', [BusinessController::class, 'isSubscribed'])->name('isSubscribed');
