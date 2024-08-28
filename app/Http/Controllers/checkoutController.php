@@ -60,7 +60,7 @@ class checkoutController extends Controller
      */
 
      public function stripeConversation(Request $request)
-    {  return $request->all();
+    {   //return $request->all();
         $listing_id=$request->listing;
         $package=$request->package;
 

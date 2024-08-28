@@ -5,7 +5,7 @@ import { FaCreditCard, FaHome } from 'react-icons/fa';
 import axiosClient from "../../axiosClient";
 
 const PaymentForm = () => {
-
+const navigate = useNavigate();
   //Stripe Code
     $(function() {
     var $form = $(".require-validation");
@@ -72,8 +72,9 @@ const PaymentForm = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-     sleep(500);
-      const payload = {
+      
+      setTimeout(() => {
+        const payload = {
             listing: listing_id,
             package: $('#package').val(),
             amount: $('#amount').val(),
@@ -81,6 +82,7 @@ const PaymentForm = () => {
             //stripeToken: event.target.stripeToken.value
         } 
         //console.log(payload);
+         
         axiosClient.post("/stripe.post.coversation", payload).then(({data})=>{
         console.log(data);
         if(data.status == 200){
@@ -97,6 +99,9 @@ const PaymentForm = () => {
           }
           console.log(err);
       });
+    //timeout  
+    }, 500);
+      //timeout
   };
 
   const popupClose = () => {
@@ -279,7 +284,7 @@ const PaymentForm = () => {
             <button
               id="pay"
               className="w-full py-2 text-lg font-semibold text-white btn-primary rounded-lg"
-              type="submit"
+              
             >
               Pay <span id="paynow"></span><span id="stripBtn"></span>
             </button>
