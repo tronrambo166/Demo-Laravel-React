@@ -30,7 +30,7 @@ import ServiceDetails from './components/partials/ServiceDetails';
 import MilestonesPage from './components/partials/Milestonepage';
 import ServiceResults from './components/partials/Serviceresults';
 import Subscribepage from './components/partials/Subscribepage';
-
+import Investequip from './components/partials/Investequip';
 //import home from '../components/pages/home'
 // import services from '../components/pages/services'
 // import applyShow from '../components/pages/applyShow'
@@ -70,6 +70,8 @@ const router = createBrowserRouter([
 		{ path:'/serviceresults', element: <ServiceResults/>},
 		{ path:'/subscribe', element: <Subscribepage/>},
 		{ path:'/checkout', element: <PaymentForm/>},
+		{ path:'/invest', element: <Investequip/>},
+
 
 
 

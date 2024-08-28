@@ -1,55 +1,28 @@
 import axios from "axios";
 import { Link } from 'react-router-dom';
 import axiosClient from "../../axiosClient";
-import { useState } from 'react'
-import { useRef } from 'react';
-import { useEffect } from 'react'
+import { useState, useRef, useEffect } from 'react';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
-import { useStateContext } from "../../contexts/contextProvider";
 
 const CardList = () => {
-const [cards, setCards] = useState([]);
-const [users, setUsers] = useState([]);
-const [loading, setLoading] = useState(false);
+  const [cards, setCards] = useState([]);
+  const [loading, setLoading] = useState(false);
 
-   useEffect(()=> {
+  useEffect(() => {
     const getCards = () => {
-      setLoading(true)
-        axiosClient.get('/latBusiness')
-          .then(({ data }) => {
-            setLoading(false)
-            //Encrypt
-            setCards(data.data);
-          })
-          .catch(err => {
-            console.log(err)
-            setLoading(false)
-          })
+      setLoading(true);
+      axiosClient.get('/latBusiness')
+        .then(({ data }) => {
+          setLoading(false);
+          setCards(data.data);
+        })
+        .catch(err => {
+          console.log(err);
+          setLoading(false);
+        });
     };
-      getCards();
-    }, [])
-
-    
-
-  //  useEffect(() => {
-  //   const fetchCards = async () => {
-  //     try {
-  //       axios.get('/latBusiness').then((data) => {
-  //       setCards(data.data || []);
-  //       console.log(data)
-  //     });
-  //     } catch (err) {
-  //       console.error('Error fetching cards:', err);
-  //       //setCards([]);
-  //     }
-  //   };
-
-  //   fetchCards();
-  // }, []);
-
-
-console.log(cards)
-
+    getCards();
+  }, []);
 
   const containerRef = useRef(null);
 
@@ -72,23 +45,36 @@ console.log(cards)
       </button>
       <div
         ref={containerRef}
-        className="flex gap-6 overflow-x-auto py-2 no-scrollbar"
+        className="flex gap-6 py-2"
         style={{
+          overflowX: 'auto',
           scrollSnapType: 'x mandatory',
           scrollBehavior: 'smooth',
-          maxWidth: 'calc(280px * 3 + 32px * 2)',
+          maxWidth: 'calc(300px * 3 + 32px * 2)',
+          scrollbarWidth: 'none', /* For Firefox */
+          msOverflowStyle: 'none', /* For Internet Explorer and Edge */
         }}
       >
+        <style>
+          {`
+            .no-scrollbar::-webkit-scrollbar {
+              display: none; /* For Chrome, Safari, and Opera */
+            }
+          `}
+        </style>
         {cards.map((card) => (
-          <Link to={`/listing/${btoa(btoa(card.id))}`} key={card.id} className="bg-white w-[280px] rounded-xl shadow-lg flex-shrink-0">
+          <Link to={`/listing/${btoa(btoa(card.id))}`} key={card.id} className="bg-white w-[300px] rounded-xl shadow-lg flex-shrink-0">
             <img
               src={card.image}
               alt={card.name}
-              className="w-full h-48 object-cover"
+              className="w-full h-48 object-cover rounded-t-xl"
             />
             <div className="p-4">
               <h2 className="text-xl font-semibold mb-2">{card.name}</h2>
-              <p className="text-gray-700 hidden">{card.details}</p>
+              <p className="text-gray-700 hidden">{card.contact}</p>
+              <p>contact:27389202</p>
+              <p className="text-black font-semibold">Amount Requested:$5000</p>
+              
               <div className='flex text-black font-bold gap-1 items-center'>
                 <button>Learn more</button>
                 <FaChevronRight size={15} />

@@ -9,10 +9,18 @@ import { useEffect } from 'react'
 import axiosClient from "../../axiosClient";
 import { useStateContext } from "../../contexts/contextProvider";
 import { Link } from 'react-router-dom';
+import Modal from './Authmodal';
+import UnlockPopup from './Unlockpopup';
 
 const ListingDetails = () => {
   const{token,setUser,setAuth, auth} = useStateContext();
   const [loading, setLoading] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [isUnlockPopupOpen, setIsUnlockPopupOpen] = useState(false);
+
+
+
 
   const { id } = useParams();
   const navigate = useNavigate(); // Hook for navigation
@@ -42,8 +50,13 @@ const ListingDetails = () => {
   const [percentage, setPercentage] = useState('');
   const [equipmentAmount, setEquipmentAmount] = useState('');
   const [equipmentPercentage, setEquipmentPercentage] = useState('');
-  const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+  const [equipmentErrorMessage, setEquipmentErrorMessage] = useState('');
+
+
+  const openUnlockPopup = () => setIsUnlockPopupOpen(true);
+  const closeUnlockPopup = () => setIsUnlockPopupOpen(false);
 
   const unlockBySubs = (listingId, subscribId, plan) => {
     console.log(`Unlocking listing ${listingId} with plan ${plan}`);
@@ -82,29 +95,46 @@ const closeAuthModal = () => {
   const handleAmountChange = (e) => {
     const enteredAmount = e.target.value;
     setAmount(enteredAmount);
+  
     if (enteredAmount && amount_r > 0) {
-      const calculatedPercentage = ((enteredAmount / amount_r) * 100).toFixed(2);
-      if(calculatedPercentage > 100){
-       setPercentage(0);
+      const amount = parseFloat(enteredAmount);
+      if (amount > amount_r) {
+        setAmount('');
+        setPercentage(0);
+        setErrorMessage('Amount exceeds the investment required!');
+      } else {
+        const calculatedPercentage = ((amount / amount_r) * 100).toFixed(2);
+        setPercentage(calculatedPercentage);
+        setErrorMessage(''); 
       }
-      else
-       setPercentage(calculatedPercentage);
     } else {
       setPercentage('');
+      setErrorMessage(''); 
     }
   };
+  
 
   const handleEquipmentAmountChange = (e) => {
     const enteredAmount = e.target.value;
     setEquipmentAmount(enteredAmount);
+  
     if (enteredAmount && amount_r > 0) {
-      const calculatedPercentage = ((enteredAmount / amount_r) * 100).toFixed(2);
-      setEquipmentPercentage(calculatedPercentage);
+      const amount = parseFloat(enteredAmount);
+      if (amount > amount_r) {
+        setEquipmentAmount('');
+        setEquipmentPercentage(0);
+        setEquipmentErrorMessage('Amount exceeds the investment required!');
+      } else {
+        const calculatedPercentage = ((amount / amount_r) * 100).toFixed(2);
+        setEquipmentPercentage(calculatedPercentage);
+        setEquipmentErrorMessage(''); // Clear the error message
+      }
     } else {
       setEquipmentPercentage('');
+      setEquipmentErrorMessage(''); // Clear the error message
     }
   };
-
+  
 
   const [showAuthModal, setShowAuthModal] = useState(false); 
 
@@ -292,25 +322,29 @@ const closeAuthModal = () => {
               Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
             </p>
             <div className="flex gap-2">
-  <div className="flex w-full items-center gap-10">
-    {auth_user ? (
-      <a
-        onClick={openAuthModal} // Opens the AuthModal
-        className="bg-black hover:bg-green w-1/2 text-sm text-center rounded-full text-white py-[6px] cursor-pointer"
-      >
-        <FontAwesomeIcon icon={faLock} className="mr-2 text-sm" />
-        Unlock To Invest
-      </a>
-    ) : (
-      <a
-        onClick={() => makeSession(form.listing_id)}
-        className="bg-gray-700 w-1/2 text-center rounded-lg text-white py-2 cursor-pointer"
-      >
-        <FontAwesomeIcon icon={faLock} className="mr-2" />
-        Unlock To Invest
-      </a>
-    )}
-  </div>
+            <div className="flex w-full items-center gap-10">
+  {token ? (
+    <a
+    onClick={() => {
+      makeSession(form.listing_id);
+      openUnlockPopup();
+        }}
+      className="bg-gray-700 w-1/2 text-center rounded-lg text-white py-2 cursor-pointer"
+    >
+      <FontAwesomeIcon icon={faLock} className="mr-2" />
+      Unlock To Invest
+    </a>
+  ) : (
+    <a
+      onClick={() => setIsModalOpen(true)}
+      className="bg-black hover:bg-green w-1/2 text-sm text-center rounded-full text-white py-[6px] cursor-pointer"
+    >
+      <FontAwesomeIcon icon={faLock} className="mr-2 text-sm" />
+      Unlock To Invest
+    </a>
+  )}
+</div>
+
 </div>
 
             <p className="text-slate-700 text-sm flex gap-2 py-2 whitespace-nowrap items-center py-2 px-2">
@@ -389,6 +423,7 @@ const closeAuthModal = () => {
               >
                 Invest Now
               </button>
+              {errorMessage && <p className="error-message  text-red-600">{errorMessage}</p>}
             </div>
 
             {plan === 'gold' && (
@@ -408,12 +443,15 @@ const closeAuthModal = () => {
                     <p>Equipment Investment Percentage: <span className='font-bold'>{equipmentPercentage}%</span></p>
                   </div>
                 )}
+                <Link to="/invest">
+
                 <button
                   onClick={handleEquipmentInvestClick}
                   className='btn-primary text- px-4 py-2 rounded-lg mt-4'
                 >
                   Invest in Equipment
                 </button>
+                {equipmentErrorMessage && <p className="error-message text-red-600">{equipmentErrorMessage}</p>}                </Link>
               </div>
             )}
           </div>
@@ -421,8 +459,11 @@ const closeAuthModal = () => {
 
         </div>
       </div>
+      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+
       <Popup isOpen={isPopupOpen} onClose={closePopup} />
-    </>
+      <UnlockPopup isOpen={isUnlockPopupOpen} onClose={closeUnlockPopup} />
+          </>
   );
 };
 
