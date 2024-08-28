@@ -5,6 +5,10 @@ const Subscribepage = () => {
     const [selectedPackage, setSelectedPackage] = useState(null);
     const [showConfirmation, setShowConfirmation] = useState(false);
     const [showAlert, setShowAlert] = useState(false);
+    const [subscribed, setSubscribed] = useState(true); // Assuming user is subscribed
+    const [plan, setPlan] = useState('silver'); // Placeholder for plan, could be 'silver', 'gold', 'platinum', etc.
+    const [tokenLeft, setTokenLeft] = useState(5); // Placeholder for token count
+    const [expire, setExpire] = useState(5); // Placeholder for expiration in days
     const navigate = useNavigate();
 
     const handlePackageSelect = (pkg) => {
@@ -26,6 +30,14 @@ const Subscribepage = () => {
 
     const closeAlert = () => {
         setShowAlert(false);
+    };
+
+    const makeSession = (listingId) => {
+        // Your logic to handle session creation
+    };
+
+    const unlockBySubs = (listingId, subscriptionId, type) => {
+        // Your logic to handle unlocking by subscription
     };
 
     return (
@@ -136,20 +148,68 @@ const Subscribepage = () => {
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
                     <div className="bg-white rounded-lg p-8 max-w-md mx-auto shadow-lg">
                         <h2 className="text-xl font-semibold mb-4">Confirm Your Selection</h2>
-                        <p>Are you sure you want to proceed with the <strong>{selectedPackage}</strong> plan?</p>
-                        <div className="flex justify-end gap-4 mt-6">
-                            <button
-                                className="px-4 py-2 bg-gray-200 rounded-md hover:bg-gray-300"
-                                onClick={() => setShowConfirmation(false)}
-                            >
-                                Cancel
-                            </button>
-                            <button
-                                className="px-4 py-2 btn-primary text-white rounded-md hover:bg-green-600"
-                                onClick={confirmCheckout}
-                            >
-                                Confirm
-                            </button>
+                        <p>
+                            {plan === 'silver' || plan === 'silver-trial' ? (
+                                <>
+                                    <p>Your plan expires in <b>{expire}</b> days.</p>
+                                    <p className="text-dark small d-block">Are you sure you want to use one of your {tokenLeft} business information tokens?</p>
+                                </>
+                            ) : (
+                                <p>Please use <b>'Small fee'</b> option to unlock</p>
+                            )}
+                        </p>
+                        <div className="flex flex-col">
+                            {plan === 'silver' || plan === 'silver-trial' ? (
+                                <div className="flex gap-6">
+                                    {tokenLeft > 0 ? (
+                                        <button
+                                            onClick={() => {
+                                                makeSession('listing_id'); // Replace with actual listing ID
+                                                unlockBySubs('listing_id', 'subscription_id', 'token'); // Replace with actual IDs
+                                            }}
+                                            className="modal_ok_btn w-75 m-auto btn rounded mr-3 px-3"
+                                        >
+                                            Use token <small>({tokenLeft} left)</small>
+                                        </button>
+                                    ) : (
+                                        <button className="modal_ok_btn w-75 m-auto d-inline btn rounded mr-3 px-3">
+                                            <small><b>({tokenLeft} token left)</b></small>
+                                        </button>
+                                    )}
+                                    <button
+                                        className="close border border-dark w-100 d-inline btn rounded mr-3 px-3"
+                                        onClick={() => setShowConfirmation(false)}
+                                    >
+                                        <span className="text-dark">No</span>
+                                    </button>
+                                </div>
+                            ) : null}
+
+                            {plan === 'gold' || plan === 'gold-trial' ? (
+                                <div className="flex gap-6">
+                                    {tokenLeft > 0 ? (
+                                        <button
+                                            onClick={() => {
+                                                makeSession('listing_id'); // Replace with actual listing ID
+                                                unlockBySubs('listing_id', 'subscription_id', 'token'); // Replace with actual IDs
+                                            }}
+                                            className="modal_ok_btn w-75 m-auto btn rounded mr-3 px-3"
+                                        >
+                                            Use token <small>({tokenLeft} left)</small>
+                                        </button>
+                                    ) : (
+                                        <button className="modal_ok_btn w-75 m-auto d-inline btn rounded mr-3 px-3">
+                                            <small><b>({tokenLeft} token left)</b></small>
+                                        </button>
+                                    )}
+                                    <button
+                                        className="close border border-dark w-100 d-inline btn rounded mr-3 px-3"
+                                        onClick={() => setShowConfirmation(false)}
+                                    >
+                                        <span className="text-dark">No</span>
+                                    </button>
+                                </div>
+                            ) : null}
                         </div>
                     </div>
                 </div>

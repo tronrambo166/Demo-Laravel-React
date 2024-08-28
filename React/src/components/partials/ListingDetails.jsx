@@ -444,7 +444,52 @@ const closeAuthModal = () => {
               <div className="text-gray-500 text-sm">
                 {details.rating_count} Ratings
               </div>
+              <div className={`${form.conv && token ? "hidden" : "card mx-auto my-4 max-w-md p-6 rounded-lg shadow-lg bg-white"}`}>
+  <h4 className="text-2xl font-semibold border-b-2 border-gray-200 pb-4 mb-4">
+    Business Home Window
+  </h4>
+
+  {!token ? (
+    <div className="flex flex-col items-center">
+      <button
+        onClick={() => make_session(form.listing_id)}
+        data-target="#loginModal"
+        data-toggle="modal"
+        className="bg-blue-600 text-white py-2 px-4 rounded-lg shadow-md hover:bg-blue-700 transition duration-300"
+      >
+        Unlock To Invest
+      </button>
+      <p className="mt-4 text-gray-600 text-center">
+        Unlock this business to learn more about it and invest
+      </p>
+    </div>
+  ) : (
+    <div className="flex flex-col items-center">
+      {plan === 'platinum' || plan === 'gold' ? (
+        <button
+          onClick={() => unlockBySubs(form.listing_id, subscrib_id, 'platinum')}
+          className="bg-green text-white py-2 px-4 rounded-lg shadow-md hover:bg-green-700 transition duration-300"
+        >
+          Unlock To Invest
+        </button>
+      ) : (
+        <button
+          data-target="#investModal"
+          data-toggle="modal"
+          className="bg-yellow-600 text-white py-2 px-4 rounded-lg shadow-md hover:bg-yellow-700 transition duration-300"
+        >
+          Unlock To Invest
+        </button>
+      )}
+      <p className="mt-4 text-gray-600 text-center">
+        Unlock this business to learn more about it and invest
+      </p>
+    </div>
+  )}
+</div>
+
             </div>
+
           </div>
 
            {token  && (
