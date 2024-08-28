@@ -19,15 +19,15 @@ const UnlockPopup = ({ isOpen, onClose }) => {
           This business requests a small unlock fee of $99 to view their full business information.
         </p>
         <p className="text-gray-700 mb-6">Do you want to pay now?</p>
-        <div className="flex justify-end space-x-4">
-            <Link to="/checkout">
+        <div className="flex justify-center space-x-4">
+            <Link to="/checkout/:amount/:listing_id/:percen">
           <button
             onClick={() => {
               // Handle the payment action here
               console.log('Payment initiated');
               onClose();
             }}
-            className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition"
+            className="btn-primary text-white py-2 px-6 rounded hover:bg-blue-600 transition"
           >
             Ok
           </button>

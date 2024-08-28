@@ -50,7 +50,7 @@ const MilestonePage = () => {
               <div
                 className={`w-10 h-10 rounded-full flex items-center justify-center font-semibold ${
                   index === 2
-                    ? 'bg-blue-500 text-white' // Highlight Step 3 as active
+                    ? 'bg-green text-white' // Highlight Step 3 as active
                     : 'bg-gray-200 text-gray-700'
                 }`}
               >
@@ -95,7 +95,7 @@ const MilestonePage = () => {
               <td className="border border-gray-300 px-4 py-2">{milestone.title}</td>
               <td className="border border-gray-300 px-4 py-2">{milestone.amount}</td>
               <td className="border border-gray-300 px-4 py-2">
-                <a href={milestone.document} className="text-blue-500 hover:underline">Download Milestone Documentation</a>
+                <a href={milestone.document} className="text-black hover:underline">Download Milestone Documentation</a>
               </td>
               <td className="border border-gray-300 px-4 py-2">
                 <div className="flex space-x-2">
@@ -103,7 +103,7 @@ const MilestonePage = () => {
                     onClick={() => handleStatusChange(milestone.title, 'Paid')}
                     className={`px-3 py-1 rounded ${
                       milestone.status === 'Paid'
-                        ? 'bg-green-500 text-white'
+                        ? 'bg-green text-white'
                         : 'bg-gray-200 text-gray-700'
                     }`}
                   >
@@ -113,7 +113,7 @@ const MilestonePage = () => {
                     onClick={() => handleStatusChange(milestone.title, 'Done')}
                     className={`px-3 py-1 rounded ${
                       milestone.status === 'Done'
-                        ? 'bg-blue-500 text-white'
+                        ? 'bg-green text-white'
                         : 'bg-gray-200 text-gray-700'
                     }`}
                   >
@@ -185,7 +185,7 @@ const MilestonePage = () => {
                     onClick={() => handleStatusChange(milestone.title, 'Done')}
                     className={`px-3 py-1 rounded ${
                       milestone.status === 'Done'
-                        ? 'bg-blue-500 text-white'
+                        ? 'bg-green text-white'
                         : 'bg-gray-200 text-gray-700'
                     }`}
                   >

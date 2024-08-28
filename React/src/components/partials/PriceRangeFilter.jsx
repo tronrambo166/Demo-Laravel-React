@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { Range, getTrackBackground } from 'react-range';
 
-const PriceRangeFilter = () => {
+const PriceRangeFilter = ({ onChange }) => {
   const [values, setValues] = useState([0, 1000]);
 
   const handleRangeChange = (newValues) => {
     setValues(newValues);
+    onChange(newValues); // Pass the new values to the parent component
   };
 
   return (
@@ -27,7 +28,7 @@ const PriceRangeFilter = () => {
             style={{
               background: getTrackBackground({
                 values,
-                colors: ['#ccc', 'rgb(22, 163, 74)', '#ccc'], // Changed blue color to a new shade
+                colors: ['#ccc', 'rgb(22, 163, 74)', '#ccc'],
                 min: 0,
                 max: 1000,
               }),

@@ -3,13 +3,17 @@ import { Link } from 'react-router-dom'; // Import Link from react-router-dom
 import logo from '../../images/logo.png';
 import Modal from './Authmodal';
 
-
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  const handleModalOpen = (event) => {
+    event.preventDefault();
+    setIsModalOpen(true);
+  };
+
   return (
-  <nav className="bg-white  sm:px-8 dark:bg-dark-bg border-b-black/50" style={{ borderBottom: '1px solid #0000002b' }}>
+    <nav className="bg-white sm:px-8 dark:bg-dark-bg border-b-black/50" style={{ borderBottom: '1px solid #0000002b' }}>
       <div className="container mx-auto flex items-center justify-between p-4">
         <div className="flex flex-row-reverse items-center justify-between w-full md:w-auto">
           <div className="text-xl text-black dark:text-dark-text order-2 md:order-1">
@@ -28,9 +32,8 @@ const Navbar = () => {
         <div className="hidden md:flex flex-1 text-sm font-semibold justify-center md:gap-0 lg:gap-[50px] sm:gap-[50px] md:px-3 space-x-6">
           <Link to="/home" className="hover:text-green dark:hover:text-dark-green">Home</Link>
           <Link to="/services" className="hover:text-green dark:hover:text-dark-green">Services</Link>
-          <Link to="/" className="hover:text-green dark:hover:text-dark-green">Add Your Business</Link>
+          <a href="#" onClick={handleModalOpen} className="hover:text-green dark:hover:text-dark-green">Add Your Business</a>
           <Link to="/" className="hover:text-green dark:hover:text-dark-green">Create Investor Account</Link>
-
         </div>
 
         <div className="hidden md:block">
@@ -59,7 +62,7 @@ const Navbar = () => {
         <div className="flex flex-col py-6 px-4 justify-center mt-10 space-y-6">
           <Link to="/" className="hover:text-green dark:hover:text-dark-green">Home</Link>
           <Link to="/services" className="hover:text-green dark:hover:text-dark-green">Services</Link>
-          <Link to="/add-business" className="hover:text-green dark:hover:text-dark-green">Add Your Business</Link>
+          <a href="#" onClick={handleModalOpen} className="hover:text-green dark:hover:text-dark-green">Add Your Business</a>
           <Link to="/create-investor" className="hover:text-green dark:hover:text-dark-green">Create Investor Account</Link>
         </div>
         <div className="flex px-4 mt-6">

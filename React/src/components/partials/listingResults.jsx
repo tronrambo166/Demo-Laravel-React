@@ -258,7 +258,7 @@ const ListingResults = () => {
           ) : (
             results.map((row, index) => (
               <Link to={`/listing/${btoa(btoa(row.id))}`} key={row.id} > <div
-                className="border h-48 border-gray-300 rounded-lg shadow-md flex"
+                className="border my-4 h-48 border-gray-300 rounded-lg shadow-md flex"
                 key={index}
               >
                 {row.video ? (

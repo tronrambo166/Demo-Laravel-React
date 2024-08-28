@@ -39,7 +39,7 @@ const Navbar = () => {
         <div className="hidden md:flex flex-1 text-sm font-semibold justify-center md:gap-0 lg:gap-[50px] sm:gap-[50px] md:px-3 space-x-6">
           <Link to="/home" className="hover:text-green dark:hover:text-dark-green">Home</Link>
           <Link to="/services" className="hover:text-green dark:hover:text-dark-green">Services</Link>
-          <Link to="/" className="hover:text-green dark:hover:text-dark-green">Add Your Business</Link>
+          <Link to="/dashboard" className="hover:text-green dark:hover:text-dark-green">Add Your Business</Link>
           <Link to="/" className="hover:text-green dark:hover:text-dark-green">Create Investor Account</Link>
           <Link to="/dashboard" className="hover:text-green dark:hover:text-dark-green">Dashboard</Link>
 

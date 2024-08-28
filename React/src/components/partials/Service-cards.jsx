@@ -1,10 +1,9 @@
 import { useRef } from 'react';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
 
 const Servicecards = () => {
-  const navigate = useNavigate();
+  const containerRef = useRef(null);
 
   const cards = [
     { id: 1, image: 'https://via.placeholder.com/300', title: 'Mountain Adventure', description: 'Explore the majestic mountains with breathtaking views.' },
@@ -17,8 +16,6 @@ const Servicecards = () => {
     { id: 8, image: 'https://via.placeholder.com/300', title: 'Historical Sites', description: 'Explore ancient historical sites and learn their stories.' },
   ];
 
-  const containerRef = useRef(null);
-
   const scrollLeft = () => {
     containerRef.current.scrollBy({ left: -containerRef.current.offsetWidth / 3, behavior: 'smooth' });
   };
@@ -28,40 +25,45 @@ const Servicecards = () => {
   };
 
   return (
-    <div className="relative flex justify-center mb-[170px] pt-[20px]">
+    <div className="relative flex justify-center my-10 items-center group">
       <button
         onClick={scrollLeft}
-        className="absolute left-0 top-1/2 transform -translate-y-1/2 z-10 bg-white p-3 ml-4 rounded-full shadow-lg"
-        style={{ marginLeft: '10px' }}
+        className="absolute left-0 sm:left-4 md:left-6 transform -translate-y-1/2 z-10 bg-white p-3 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity"
+        style={{ top: '50%' }}
       >
         <FaChevronLeft size={24} />
       </button>
       <div
         ref={containerRef}
-        className="flex justify-start gap-6 overflow-x-auto py-2 px-[20px] no-scrollbar"
+        className="flex gap-6 py-2"
         style={{
+          overflowX: 'auto',
           scrollSnapType: 'x mandatory',
           scrollBehavior: 'smooth',
-          width: 'calc(280px * 3 + 32px * 2)', // Width to show exactly 3 cards including gap
+          maxWidth: 'calc(300px * 3 + 32px * 2)',
+          scrollbarWidth: 'none', /* For Firefox */
+          msOverflowStyle: 'none', /* For Internet Explorer and Edge */
         }}
       >
+        <style>
+          {`
+            .no-scrollbar::-webkit-scrollbar {
+              display: none; /* For Chrome, Safari, and Opera */
+            }
+          `}
+        </style>
         {cards.map((card) => (
-          <Link
-            to={`/service-details/${card.id}`}
-            key={card.id}
-            className="bg-white w-[280px] rounded-xl shadow-lg flex-shrink-0 cursor-pointer"
-            style={{ scrollSnapAlign: 'start' }}
-          >
+          <Link to={`/service-details/${card.id}`} key={card.id} className="bg-white w-[300px] rounded-xl shadow-lg flex-shrink-0">
             <img
               src={card.image}
               alt={card.title}
-              className="w-full h-48 object-cover"
+              className="w-full h-48 object-cover rounded-t-xl"
             />
             <div className="p-4">
               <h2 className="text-xl font-semibold mb-2">{card.title}</h2>
-              <h2>Contact</h2>
-              <h2>Amount requested</h2>
               <p className="text-gray-700 hidden">{card.description}</p>
+              <p>Contact: 27389202</p>
+              <p className="text-black font-semibold">Amount Requested: $5000</p>
               <div className='flex text-black font-bold gap-1 items-center'>
                 <button>Learn more</button>
                 <FaChevronRight size={15} />
@@ -72,8 +74,8 @@ const Servicecards = () => {
       </div>
       <button
         onClick={scrollRight}
-        className="absolute right-0 top-1/2 transform -translate-y-1/2 z-10 mr-4 bg-white p-3 rounded-full shadow-lg"
-        style={{ marginRight: '10px' }}
+        className="absolute right-0 sm:right-4 md:right-6 transform -translate-y-1/2 z-10 bg-white p-3 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity"
+        style={{ top: '50%' }}
       >
         <FaChevronRight size={24} />
       </button>
@@ -81,4 +83,4 @@ const Servicecards = () => {
   );
 };
 
-export default Servicecards;  
+export default Servicecards;
