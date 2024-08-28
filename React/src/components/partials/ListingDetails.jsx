@@ -45,6 +45,7 @@ const ListingDetails = () => {
   const [details, setDetails] = useState('');
   const [allowToReview, setAllow] = useState('');
   const [amount_r, setAmount_r] = useState('');
+  const [subscribeData, setSubscribeData] = useState('');
 
   const [amount, setAmount] = useState('');
   const [percentage, setPercentage] = useState('');
@@ -58,9 +59,6 @@ const ListingDetails = () => {
   const openUnlockPopup = () => setIsUnlockPopupOpen(true);
   const closeUnlockPopup = () => setIsUnlockPopupOpen(false);
 
-  const unlockBySubs = (listingId, subscribId, plan) => {
-    console.log(`Unlocking listing ${listingId} with plan ${plan}`);
-  };
 
   const makeSession = (listingId) => {
     console.log(`Making session for listing ${listingId}`);
@@ -209,7 +207,30 @@ const closeAuthModal = () => {
             console.log(err); 
           })
     };
+
+    const isSubscribed = () => { 
+        axiosClient.get('/isSubscribed/'+form.listing_id)
+          .then(({ data }) => {
+            //console.log(data)
+          if(data.count > 0){
+            setSubscribeData(data.data);
+
+          if(data.data.subscribed == 0)
+          $('#small_fee_div').removeClass('collapse');
+          }
+          else {
+            $('#small_fee_div').removeClass('collapse');
+            $('#small_fee').addClass('modal_ok_btn');
+          } 
+
+          })
+          .catch(err => {
+            console.log(err); 
+          })
+    };
+
       getDetails();
+      isSubscribed();
       getMilestones();
 
     }, [])
@@ -289,6 +310,44 @@ const closeAuthModal = () => {
 
       });
     }
+
+    const bidCommitsEQP = () => { 
+        axiosClient.get('/getMilestones/'+form.listing_id)
+          .then(({ data }) => {
+           setAllow(data.allowToReview);
+           setAmount_r(data.amount_required);
+            //console.log(amount_required)
+          })
+          .catch(err => {
+            console.log(err); 
+          })
+    }
+
+    const stripeSmallFee = () => { 
+        axiosClient.get('/getMilestones/'+form.listing_id)
+          .then(({ data }) => {
+           setAllow(data.allowToReview);
+           setAmount_r(data.amount_required);
+            //console.log(amount_required)
+          })
+          .catch(err => {
+            console.log(err); 
+          })
+    }
+
+    const unlockBySubs = (listingId, subscribId, plan) => {
+    console.log(`Unlocking listing ${listingId} with plan ${plan}`);
+    axiosClient.get('/getMilestones/'+form.listing_id)
+          .then(({ data }) => {
+           setAllow(data.allowToReview);
+           setAmount_r(data.amount_required);
+            //console.log(amount_required)
+          })
+          .catch(err => {
+            console.log(err); 
+          })
+  };
+
   //console.log(amount+'jj')
 
 //CORE METHODS END
