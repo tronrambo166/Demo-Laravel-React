@@ -12,26 +12,17 @@ import { Link } from 'react-router-dom';
 import Modal from './Authmodal';
 import UnlockPopup from './Unlockpopup';
 
-const ListingDetails = () => {
+const ListingDetails = ({ onClose }) => {
+
   const{token,setUser,setAuth, auth} = useStateContext();
   const [loading, setLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [isUnlockPopupOpen, setIsUnlockPopupOpen] = useState(false);
 
-
-
-
   const { id } = useParams();
   const navigate = useNavigate(); // Hook for navigation
   const form = {
-    name: '',
-    image: '',
-    location: 'Business Location',
-    rating: 4.5,
-    rating_count: 20,
-    amount_required: 5000,
-    investors_fee: 100,
     listing_id: atob(atob(id)),
     range: 'gold',
     conv:false
@@ -55,20 +46,40 @@ const ListingDetails = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const [equipmentErrorMessage, setEquipmentErrorMessage] = useState('');
 
+  //FOR SMALL POP UP
+  const [showSmallFee, setShowSmallFee] = useState(false);
+  const [showSubs, setShowSubs] = useState(false);
+
+  //if (!isOpen) return null;
+  const handleUnlockFee = () => {
+    setShowSmallFee(true);
+    setShowSubs(false);
+  };
+  const handleSubscribe = () => {
+    if (details.subscribed) {
+      setShowSubs(true);
+      setShowSmallFee(false);
+    } else {
+      navigate(`/subscribe/${form.listing_id}`);
+    }
+  };
+  const handleClose = () => {
+    setShowSmallFee(false);
+    setShowSubs(false);
+    onClose();
+  };
+
+  //FOR SMALL POP UP
+
 
   const openUnlockPopup = () => setIsUnlockPopupOpen(true);
   const closeUnlockPopup = () => setIsUnlockPopupOpen(false);
-
-
   const makeSession = (listingId) => {
     console.log(`Making session for listing ${listingId}`);
   };
-
-
   const openAuthModal = () => {
   setIsAuthModalOpen(true);
 };
-
 const closeAuthModal = () => {
   setIsAuthModalOpen(false);
 };
@@ -154,12 +165,14 @@ const closeAuthModal = () => {
       else {
         var amount = base64_encode(amount);
         var percent = base64_encode(percent) 
-        $.confirm({
+        var purpose = base64_encode('bids') 
+  
+          $.confirm({
           title: 'Are you sure?',
           content: 'Are you sure to bid?',
           buttons: {
             confirm: function () {
-              window.location.href = '/checkout/' + amount + '/' + form.listing_id + '/' + percent;
+              window.location.href = '/checkout/' + amount + '/' + form.listing_id + '/' + percent +'/'+ purpose;
             },
             cancel: function () {
               $.alert('Canceled!');
@@ -186,8 +199,9 @@ const closeAuthModal = () => {
             if(data.data[0]['rating_count'] == 0) data.data[0]['rating'] = 0;
 
             setDetails(data.data[0]);
+            setConv(true);
               
-           if(details.investors_fee == null)
+           if(data.data[0].investors_fee == null)
            setConv(true);
           })
           .catch(err => {
@@ -323,16 +337,24 @@ const closeAuthModal = () => {
           })
     }
 
-    const stripeSmallFee = () => { 
-        axiosClient.get('/getMilestones/'+form.listing_id)
-          .then(({ data }) => {
-           setAllow(data.allowToReview);
-           setAmount_r(data.amount_required);
-            //console.log(amount_required)
-          })
-          .catch(err => {
-            console.log(err); 
-          })
+    const stripeSmallFee = (business_id,amount) => { 
+        var amount = btoa(amount);
+        var business_id = btoa(business_id)
+        var purpose = btoa('small_fee');
+        $.confirm({
+          title: 'Are you sure?',
+          content: 'Are you sure?',
+          buttons: {
+            confirm: function () {
+              window.location.href = '/checkout/' + amount + '/' + business_id+'/null/'+purpose;
+            },
+            cancel: function () {
+              $.alert('Canceled!');
+            },
+          }
+        });
+
+sessionStorage.setItem("purpose", "One time unlock - Small fee");
     }
 
     const unlockBySubs = (listingId, subscribId, plan) => {
@@ -385,7 +407,7 @@ const closeAuthModal = () => {
   {token ? (
     <a
     onClick={() => {
-      makeSession(form.listing_id);
+      // makeSession(form.listing_id);
       openUnlockPopup();
         }}
       className="bg-gray-700 w-1/2 text-center rounded-lg text-white py-2 cursor-pointer"
@@ -444,55 +466,55 @@ const closeAuthModal = () => {
               <div className="text-gray-500 text-sm">
                 {details.rating_count} Ratings
               </div>
-              <div className={`${form.conv && token ? "hidden" : "card mx-auto my-4 max-w-md p-6 rounded-lg shadow-lg bg-white"}`}>
-  <h4 className="text-2xl font-semibold border-b-2 border-gray-200 pb-4 mb-4">
-    Business Home Window
-  </h4>
+              <div className={`${conv && token ? "hidden" : "card mx-auto my-4 max-w-md p-6 rounded-lg shadow-lg bg-white"}`}>
+              <h4 className="text-2xl font-semibold border-b-2 border-gray-200 pb-4 mb-4">
+                Business Home Window
+              </h4>
 
-  {!token ? (
-    <div className="flex flex-col items-center">
-      <button
-        onClick={() => make_session(form.listing_id)}
-        data-target="#loginModal"
-        data-toggle="modal"
-        className="bg-blue-600 text-white py-2 px-4 rounded-lg shadow-md hover:bg-blue-700 transition duration-300"
-      >
-        Unlock To Invest
-      </button>
-      <p className="mt-4 text-gray-600 text-center">
-        Unlock this business to learn more about it and invest
-      </p>
-    </div>
-  ) : (
-    <div className="flex flex-col items-center">
-      {plan === 'platinum' || plan === 'gold' ? (
-        <button
-          onClick={() => unlockBySubs(form.listing_id, subscrib_id, 'platinum')}
-          className="bg-green text-white py-2 px-4 rounded-lg shadow-md hover:bg-green-700 transition duration-300"
-        >
-          Unlock To Invest
-        </button>
-      ) : (
-        <button
-          data-target="#investModal"
-          data-toggle="modal"
-          className="bg-yellow-600 text-white py-2 px-4 rounded-lg shadow-md hover:bg-yellow-700 transition duration-300"
-        >
-          Unlock To Invest
-        </button>
-      )}
-      <p className="mt-4 text-gray-600 text-center">
-        Unlock this business to learn more about it and invest
-      </p>
-    </div>
-  )}
-</div>
+              {!token ? (
+                <div className="flex flex-col items-center">
+                  <button
+                    // onClick={() => make_session(form.listing_id)}
+                    data-target="#loginModal"
+                    data-toggle="modal"
+                    className="bg-blue-600 text-white py-2 px-4 rounded-lg shadow-md hover:bg-blue-700 transition duration-300"
+                  >
+                    Unlock To Invest
+                  </button>
+                  <p className="mt-4 text-gray-600 text-center">
+                    Unlock this business to learn more about it and invest
+                  </p>
+                </div>
+              ) : (
+                <div className="flex flex-col items-center">
+                  {plan === 'platinum' || plan === 'gold' ? (
+                    <button
+                      onClick={() => unlockBySubs(form.listing_id, subscrib_id, 'platinum')}
+                      className="bg-green text-white py-2 px-4 rounded-lg shadow-md hover:bg-green-700 transition duration-300"
+                    >
+                      Unlock To Invest
+                    </button>
+                  ) : (
+                    <button
+                      data-target="#investModal"
+                      data-toggle="modal"
+                      className="bg-yellow-600 text-white py-2 px-4 rounded-lg shadow-md hover:bg-yellow-700 transition duration-300"
+                    >
+                      Unlock To Invest
+                    </button>
+                  )}
+                  <p className="mt-4 text-gray-600 text-center">
+                    Unlock this business to learn more about it and invest
+                  </p>
+                </div>
+              )}
+            </div>
 
             </div>
 
           </div>
 
-           {token  && (
+           {token  && conv &&  (
           <div  className='bg-gray-100 py-4 flex flex-col gap-4 items-center px-6'>
             <button
               className='whitespace-nowrap border border-black px-4 py-2 rounded-lg w-[300px]'
@@ -563,8 +585,95 @@ const closeAuthModal = () => {
 
         </div>
       </div>
-      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
 
+      {/*Small_fee POPUP*/}
+
+      <div className="fixed inset-0 flex items-center justify-center z-50 bg-gray-800 bg-opacity-50">
+      <div className="bg-white rounded-lg shadow-lg p-6 max-w-sm w-full">
+        { !showSubs && (
+          <div className='flex gap-6 justify-center'>
+            <button
+              onClick={handleUnlockFee}
+              className="btn-primary rounded-md py-2 px-6 text-lg font-semibold mb-4"
+            >
+              Unlock Fee
+            </button>
+            <button
+              onClick={handleSubscribe}
+              className="text-lg border rounded-md border-black py-2 px-6 font-semibold mb-4"
+            >
+              {details.subscribed ? 'Subscription' : 'Subscribe'}
+            </button>
+          </div>
+        )}
+
+        
+          <>
+            <p className="text-gray-700 mb-6">
+              This business requests a small unlock fee of <b>${details.investors_fee}</b> to view their full business information.
+            </p>
+            <p className="text-gray-700 mb-6">Do you want to pay now?</p>
+            <div className="flex justify-center space-x-4">
+              {/*<Link to={`/checkout/${form.investors_fee}/${form.listing_id}/fee`}>*/}
+                <button
+                  onClick={() => {
+                    stripeSmallFee(form.listing_id, details.investors_fee);
+                    handleClose();
+                  }}
+                  className="btn-primary text-white py-2 px-6 rounded hover:bg-blue-600 transition"
+                >
+                  Ok
+                </button>
+             {/* </Link>*/}
+              <button
+                onClick={handleClose}
+                className="bg-gray-300 text-gray-700 py-2 px-4 rounded hover:bg-gray-400 transition"
+              >
+                Cancel
+              </button>
+            </div>
+          </>
+      
+
+        {showSubs && (
+          <div>
+            {tokenLeft > 0 && plan && (
+              <p className="text-warning mb-3 text-center">
+                Your <span>{plan}</span> expires in <b>{expire}</b> days.
+                <span className="text-dark small d-block">Are you sure you want to use one of your {tokenLeft} business information tokens?</span>
+              </p>
+            )}
+            {tokenLeft === 0 && (
+              <p className="text-dark mb-3 text-center">
+                Please use <b>'Small fee'</b> option to unlock
+              </p>
+            )}
+            <div className="flex flex-wrap gap-4 justify-center">
+              {['silver', 'silver-trial', 'gold', 'gold-trial', 'platinum', 'platinum-trial'].includes(plan) && (
+                <button
+                  onClick={handleUseToken}
+                  className="btn-primary text-white py-2 px-6 rounded hover:bg-blue-600 transition"
+                >
+                  Use token <small>({tokenLeft} left)</small>
+                </button>
+              )}
+              <button
+                onClick={handleClose}
+                className="bg-gray-300 text-gray-700 py-2 px-4 rounded hover:bg-gray-400 transition"
+              >
+                No
+              </button>
+            </div>
+            <p className="text-danger text-center">The business is not in your range!</p>
+          </div>
+        )}
+      </div>
+    </div>
+
+    {/*Small_fee POPUP*/}
+
+
+      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
       <Popup isOpen={isPopupOpen} onClose={closePopup} />
       <UnlockPopup isOpen={isUnlockPopupOpen} onClose={closeUnlockPopup} />
           </>

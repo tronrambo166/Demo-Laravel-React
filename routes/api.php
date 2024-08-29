@@ -45,9 +45,11 @@ Route::middleware('auth:sanctum')->group(function() {
 
     // PAYMENT  ROUTES
 
-    //Unlock small fee
+    
     Route::get('/stripe/{amount}/{business_id}', [checkoutController::class, 'goCheckout'])->name('stripe');
     Route::post('/stripe', [checkoutController::class, 'stripePost'])->name('stripe.post');
+    
+    //Unlock small fee
     Route::post('/stripe.post.coversation', [checkoutController::class, 'stripeConversation'])->name('stripe.post.coversation');
 
     //Subscribe***

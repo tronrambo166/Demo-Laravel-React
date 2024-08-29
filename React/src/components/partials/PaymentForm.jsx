@@ -58,13 +58,16 @@ const navigate = useNavigate();
   //Stripe Code
 
   const { listing_id } = useParams();
+  let { purpose } = useParams();
+  const purpos = base64_decode(purpose);
+
   let { amount } = useParams();
-  const amount_real = base64_decode(amount);
+  const amount_real = base64_decode(amount);   alert( purpos)
   const { percent } = useParams();
 
   const [showModal, setShowModal] = useState(false);
   const price = parseFloat(amount_real)+parseFloat(0.05*amount_real); // Fixed price value
-  const [purpose, setPurpose] = useState('');
+  //const [purpose, setPurpose] = useState('');
   //const stripeToken = useRef(null);
   function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
@@ -82,23 +85,43 @@ const navigate = useNavigate();
             //stripeToken: event.target.stripeToken.value
         } 
         //console.log(payload);
-         
-        axiosClient.post("/stripe.post.coversation", payload).then(({data})=>{
-        console.log(data);
-        if(data.status == 200){
-          alert('Bid placed, you will be notified if bid is accepted');
-          navigate('/');
-        }
-        if(data.status == 400) 
-          alert(data.message);
-            
-      }).catch(err => { console.log(err);
-          const response = err.response;
-          if(response && response.status === 422){
-              console.log(response.data.errors);
+      if(purpose == 'small_fee'){
+          axiosClient.post("/stripe.post.coversation", payload).then(({data})=>{
+          console.log(data);
+          if(data.status == 200){
+            alert('Bid placed, you will be notified if bid is accepted');
+            navigate('/');
           }
-          console.log(err);
-      });
+          if(data.status == 400) 
+            alert(data.message);
+              
+          }).catch(err => { console.log(err);
+            const response = err.response;
+            if(response && response.status === 422){
+                console.log(response.data.errors);
+            }console.log(err);
+            
+          });
+      }
+      else{
+          axiosClient.post("/bidCommits", payload).then(({data})=>{
+          console.log(data);
+          if(data.status == 200){
+            alert('Bid placed, you will be notified if bid is accepted');
+            navigate('/');
+          }
+          if(data.status == 400) 
+            alert(data.message);
+              
+          }).catch(err => { console.log(err);
+            const response = err.response;
+            if(response && response.status === 422){
+                console.log(response.data.errors);
+            }console.log(err);
+            
+          });
+      }
+
     //timeout  
     }, 500);
       //timeout

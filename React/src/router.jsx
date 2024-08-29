@@ -57,6 +57,7 @@ const router = createBrowserRouter([
 	{ path: '/',element: <DefaultLayout />,
 
 		children: [
+		{ path:'/login', element: <Login />},
 		{ path:'/', element: <Homepage />},
 		{ path:'/home', element: <Homepage />},
 		{ path:'/services', element: <Servicepage />},
@@ -66,10 +67,10 @@ const router = createBrowserRouter([
 		{ path:'dashboard', element: <Dashboard/>},
 		{ path:'/service-details/:id', element: <ServiceDetails/>},
 		{ path:'/business-milestones/:id', element: <MilestonesPage/>},
-		{ path:'/checkout/:amount/:listing_id/:percent', element: <PaymentForm/>},
+		{ path:'/checkout/:amount/:listing_id/:percent/:purpose', element: <PaymentForm/>},
 		{ path:'/serviceresults', element: <ServiceResults/>},
 		{ path:'/subscribe', element: <Subscribepage/>},
-		{ path:'/checkout', element: <PaymentForm/>},
+		//{ path:'/checkout', element: <PaymentForm/>},
 		{ path:'/invest', element: <Investequip/>},
 
 
