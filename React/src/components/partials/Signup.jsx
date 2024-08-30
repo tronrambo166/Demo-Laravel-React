@@ -34,48 +34,48 @@ const RegisterForm = () => {
   };
 
   return (
-    <form className="flex px-4 h-[400px] flex-col">
+    <form className="flex flex-col px-4 py-4">
       {step === 1 && (
         <>
-          <div className="title w-full h-auto mx-auto text-center">
+          <div className="text-center mb-4">
             <h1 className='text-lg'>Registration</h1>
             <h2 className="text-md font-semibold">Step 1 of 2</h2>
           </div>
-          <div className="sec1 pt-2 flex gap-4">
-            <label className='text-sm text-[#666666]'>
+          <div className="flex gap-4">
+            <label className='text-sm text-[#666666] w-1/2'>
               First Name
               <input 
                 type="text" 
                 name="firstName" 
                 value={formData.firstName} 
                 onChange={handleChange} 
-                className="border p-2 my-1 rounded-[12px] w-full" 
+                className="border p-2 rounded-[12px] w-full" 
               />
             </label>
-            <label className="text-sm text-[#666666]">
+            <label className="text-sm text-[#666666] w-1/2">
               Middle Name
               <input 
                 type="text" 
                 name="middleName" 
                 value={formData.middleName} 
                 onChange={handleChange} 
-                className="border p-2 my-1 rounded-[12px] w-full" 
+                className="border p-2 rounded-[12px] w-full" 
               />
             </label>
           </div>
-          <label className='text-sm text-[#666666] pt-2'>
+          <label className='text-sm text-[#666666] mt-2'>
             Last Name
             <input 
               type="text" 
               name="lastName" 
               value={formData.lastName} 
               onChange={handleChange} 
-              className="border p-2 my-1 rounded-xl w-full" 
+              className="border p-2 rounded-xl w-full" 
             />
           </label>
-          <label className="block py-2">
-            What's your gender? <span className='text-sm text-[#666666]'> (optional)</span>
-            <div className="flex items-center gap-[30px] mt-1">
+          <label className="block mt-2">
+            Gender (optional)
+            <div className="flex items-center gap-3 mt-1">
               <label className="inline-flex items-center">
                 <input 
                   type="radio" 
@@ -111,9 +111,8 @@ const RegisterForm = () => {
               </label>
             </div>
           </label>
-
-          <label className='text-sm py-2 text-[#666666]'>
-            What's your date of birth?
+          <label className='text-sm mt-2'>
+            Date of Birth
             <div className="flex space-x-2">
               <input 
                 type="number" 
@@ -141,101 +140,74 @@ const RegisterForm = () => {
               />
             </div>
           </label>
-
           <button 
             type="button" 
             onClick={handleNextStep} 
-            className="bg-green my-4 text-white px-4 py-2 rounded-full mt-2"
+            className="bg-green hover:bg-green-700 mt-4 text-white px-4 py-2 rounded-full"
           >
             Next
           </button>
-          <div className="flex items-center">
-            <div className="border-t border-b border-[#666666]/50 w-24 mr-4"></div>
-            <p className="mx-4 text-black">or continue with</p>
-            <div className="border-t border-b border-[#666666]/50 w-24 ml-4"></div>
-          </div>
-          <div className="flex w-full mx-auto justify-center mt-4 gap-4">
-            <button className="text-blue-600 p-3 rounded-full">
-              <FaFacebook size={24} />
-            </button>
-            <button className="text-black shadow-lg">
-              <FaGoogle size={22} />
-            </button>
-          </div>
         </>
       )}
 
       {step === 2 && (
         <>
-          <div className='py-4 flex flex-col gap-4'>
-            <div className="title w-full h-auto mx-auto text-center">
+          <div className='py-2 flex flex-col gap-4'>
+            <div className="text-center mb-4">
               <h1 className='text-lg font-semibold'>Registration</h1>
               <h2 className="text-md font-semibold">Step 2 of 2</h2>
             </div>
-            <label className='text-[#666666] text-sm py-2'>
+            <label className='text-sm'>
               Email
               <input 
                 type="email" 
                 name="email" 
                 value={formData.email} 
                 onChange={handleChange} 
-                className="border text my-1 p-2 rounded w-full" 
+                className="border p-2 rounded w-full" 
               />
             </label>
-            <label className='text-[#666666] text-sm py-2'>
+            <label className='text-sm'>
               Password
               <input 
                 type="password" 
                 name="password" 
                 value={formData.password} 
                 onChange={handleChange} 
-                className="border p-2 my-1 rounded w-full" 
+                className="border p-2 rounded w-full" 
               />
             </label>
-            <label className='text-[#666666] text-sm py-2'>
+            <label className='text-sm'>
               Confirm Password
               <input 
                 type="password" 
                 name="confirmPassword" 
                 value={formData.confirmPassword} 
                 onChange={handleChange} 
-                className="border p-2 my-1 rounded w-full" 
+                className="border p-2 rounded w-full" 
               />
             </label>
-            <p className='text-black text-md'>By creating an account, you agree to the Terms of use and Privacy Policy.</p>
-            <div className="flex justify-between w-70 my-2 border border-black rounded-xl p-3">
-              <div className="flex items-center gap-3">
-                <input type="radio" className="form-radio text-green-500 checked:bg-green-500" />
-                <p className="font-light">I'm not a robot</p>
+            <p className='text-xs'>By creating an account, you agree to the Terms of use and Privacy Policy.</p>
+            <div className="flex justify-between items-center border border-black rounded-xl p-2">
+              <div className="flex items-center gap-2">
+                <input type="radio" className="form-radio text-green-500" />
+                <p className="text-sm">I'm not a robot</p>
               </div>
-              <img src={googlerecaptcha} alt="" />
+              <img src={googlerecaptcha} alt="Google Recaptcha" className="w-20 h-8" />
             </div>
-            <div className="flex gap-3">
+            <div className="flex gap-2">
               <button 
                 type="button" 
                 onClick={handlePreviousStep} 
-                className="bg-gray-300 hover:bg-gray-500 my-4 w-full text-white px-4 py-2 rounded-full mt-2"
+                className="bg-gray-300 hover:bg-gray-500 w-full text-white px-4 py-2 rounded-full"
               >
                 Previous
               </button>
               <button 
                 type="button" 
-                className="btn-primary my-4 w-full text-white px-4 py-2 rounded-full mt-2"
+                className="bg-green hover:bg-green-700 w-full text-white px-4 py-2 rounded-full"
               >
                 Register
-              </button>
-            </div>
-            <div className="flex items-center">
-              <div className="border-t border-b border-[#666666]/50 w-24 mr-4"></div>
-              <p className="mx-4 text-black">or continue with</p>
-              <div className="border-t border-b border-[#666666]/50 w-24 ml-4"></div>
-            </div>
-            <div className="flex w-full mx-auto justify-center gap-4">
-              <button className="text-blue-600 p-3 rounded-full">
-                <FaFacebook size={24} />
-              </button>
-              <button className="text-black shadow-lg">
-                <FaGoogle size={22} />
               </button>
             </div>
           </div>
