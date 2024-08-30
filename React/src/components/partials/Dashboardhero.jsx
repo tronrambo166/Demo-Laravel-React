@@ -42,7 +42,7 @@ const Dashboardhero = () => {
             </div>
             </div>
             <div className='flex text-[13px] gap-3   text-uppercase items-center'>
-            <Link to="/dashboard/home">
+            <Link to="">
 
                 <div className='flex items-center gap-1'>
                     <FaWrench/>
@@ -50,7 +50,7 @@ const Dashboardhero = () => {
 
                 </div>
                 </Link>
-                <Link to="/dashboard/addbusiness">
+                <Link to="/dashboard/add-business">
 
                 <div className='flex items-center gap-1'>
                     <FaCopy/>
@@ -58,7 +58,7 @@ const Dashboardhero = () => {
 
                 </div>
                 </Link>
-                <Link to="/dashboard/addservice">
+                <Link to="/dashboard/add-service">
 
                 <div className='flex items-center gap-1'>
                     <FaWrench/>

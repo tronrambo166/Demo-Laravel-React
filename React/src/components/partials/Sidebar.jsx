@@ -5,7 +5,7 @@ import calendarIcon from '../../images/calendar.svg';
 import addIcon from '../../images/add.png';
 import chartIcon from '../../images/chart.png';
 import btmIcon from '../../images/btmicon.png';
-import { FaHome, FaWrench, FaChevronLeft, FaChevronRight } from 'react-icons/fa'; // Import icons for open and close
+import { FaHome, FaWrench, FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 import doc from "../../images/doc.png";
 import sharp from "../../images/sharp.png";
 
@@ -18,18 +18,18 @@ const Sidebar = () => {
 
   const handleResize = () => {
     if (window.innerWidth >= 768) {
-      setIsOpen(true); // Expand sidebar on large screens
+      setIsOpen(true);
     } else {
-      setIsOpen(false); // Collapse sidebar on small screens
+      setIsOpen(false);
     }
   };
 
   useEffect(() => {
-    handleResize(); // Set initial sidebar state based on window size
-    window.addEventListener('resize', handleResize); // Add resize event listener
+    handleResize();
+    window.addEventListener('resize', handleResize);
 
     return () => {
-      window.removeEventListener('resize', handleResize); // Cleanup event listener
+      window.removeEventListener('resize', handleResize);
     };
   }, []);
 
@@ -61,7 +61,7 @@ const Sidebar = () => {
           <li className="nav-item py-2">
             <NavLink
               className={`navLink flex items-center gap-4 py-2 px-4 rounded hover:bg-gray-200 text-[12px] ${!isOpen && 'justify-center'}`}
-              to="/dashboard/mybusinesses"
+              to="/dashboard/my-businesses"
             >
               <img src={doc} alt="My Businesses" className={`w-4 h-4 ${!isOpen && 'mx-auto'}`} />
               {isOpen && <span className="text-gray-400">My Businesses</span>}
@@ -71,7 +71,7 @@ const Sidebar = () => {
           <li className="nav-item py-2">
             <NavLink
               className={`navLink flex items-center gap-4 py-2 px-4 rounded hover:bg-gray-200 text-[12px] ${!isOpen && 'justify-center'}`}
-              to="/dashboard/milestone"
+              to="/dashboard/milestones"
             >
               <img src={sharp} alt="Service Milestones" className={`w-4 h-4 ${!isOpen && 'mx-auto'}`} />
               {isOpen && <span className="text-gray-400">Milestones</span>}
@@ -81,7 +81,7 @@ const Sidebar = () => {
           <li className="nav-item py-2">
             <NavLink
               className={`navLink flex items-center gap-4 py-2 px-4 rounded hover:bg-gray-200 text-[12px] ${!isOpen && 'justify-center'}`}
-              to="/dashboard/addmilestone"
+              to="/dashboard/add-milestone"
             >
               <img src={addIcon} alt="Add Service Milestone" className={`w-[17px] h-4 ${!isOpen && 'mx-auto'}`} />
               {isOpen && <span className="text-gray-400">Add Business Milestone</span>}
@@ -91,7 +91,7 @@ const Sidebar = () => {
           <li className="nav-item py-2">
             <NavLink
               className={`navLink flex items-center gap-4 py-2 px-4 rounded hover:bg-gray-200 text-[12px] ${!isOpen && 'justify-center'}`}
-              to="/dashboard/bids"
+              to="/dashboard/investment-bids"
             >
               <img src={chartIcon} alt="Business Bids" className={`w-4 h-4 ${!isOpen && 'mx-auto'}`} />
               {isOpen && <span className="text-gray-400">Business Bids</span>}
@@ -104,7 +104,7 @@ const Sidebar = () => {
             <li className="nav-item py-2">
               <NavLink
                 className={`navLink flex items-center gap-4 py-2 px-4 rounded hover:bg-gray-200 text-[12px] ${!isOpen && 'justify-center'}`}
-                to="/dashboard/servicetable"
+                to="/dashboard/services-table"
               >
                 <FaWrench className={`text-green w-4 h-4 ${!isOpen && 'mx-auto'}`} />
                 {isOpen && <span className="text-gray-400">My Services</span>}
@@ -114,7 +114,7 @@ const Sidebar = () => {
             <li className="nav-item py-2">
               <NavLink
                 className={`navLink flex items-center gap-4 py-2 px-4 rounded hover:bg-gray-200 text-[12px] ${!isOpen && 'justify-center'}`}
-                to="/dashboard/addservice"
+                to="/dashboard/add-service"
               >
                 <img src={sharp} alt="Add Service" className={`w-4 h-4 ${!isOpen && 'mx-auto'}`} />
                 {isOpen && <span className="text-gray-400">Add Service</span>}
@@ -124,7 +124,7 @@ const Sidebar = () => {
             <li className="nav-item py-2">
               <NavLink
                 className={`navLink flex items-center gap-4 py-2 px-4 rounded hover:bg-gray-200 text-[12px] ${!isOpen && 'justify-center'}`}
-                to="/dashboard/servicemilestone"
+                to="/dashboard/service-milestone"
               >
                 <img src={addIcon} alt="Milestone" className={`w-[17px] h-4 ${!isOpen && 'mx-auto'}`} />
                 {isOpen && <span className="text-gray-400">Milestone</span>}
@@ -134,7 +134,7 @@ const Sidebar = () => {
             <li className="nav-item py-2">
               <NavLink
                 className={`navLink flex items-center gap-4 py-2 px-4 rounded hover:bg-gray-200 text-[12px] ${!isOpen && 'justify-center'}`}
-                to="/dashboard/addservice"
+                to="/dashboard/add-service"
               >
                 <img src={calendarIcon} alt="Add Service Milestone" className={`w-4 h-4 ${!isOpen && 'mx-auto'}`} />
                 {isOpen && <span className="text-gray-400">Add Service Milestone</span>}
@@ -144,7 +144,7 @@ const Sidebar = () => {
             <li className="nav-item py-2">
               <NavLink
                 className={`navLink flex items-center gap-4 py-2 px-4 rounded hover:bg-gray-200 text-[12px] ${!isOpen && 'justify-center'}`}
-                to="/dashboard/servicebookings"
+                to="/dashboard/service-bookings"
               >
                 <img src={chartIcon} alt="Service Booking" className={`w-4 h-4 ${!isOpen && 'mx-auto'}`} />
                 {isOpen && <span className="text-gray-400">Service Booking</span>}
