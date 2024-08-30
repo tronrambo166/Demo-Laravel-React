@@ -1,27 +1,29 @@
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLock, faStar, faStarHalfAlt, faExclamationCircle, faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons';
 import { useState } from 'react';
+import { useEffect } from 'react'
+import axiosClient from "../../axiosClient";
+import { Link } from 'react-router-dom';
+import { useStateContext } from "../../contexts/contextProvider";
+import {decode as base64_decode, encode as base64_encode} from 'base-64';
 import Navbar from './Navbar';
 
 const ServiceDetails = () => {
+  const{token,setUser,setAuth, auth} = useStateContext();
   const { id } = useParams();
+  const { business_bid_id } = '';//useParams();
   const [notes, setNotes] = useState('');
   const [rebookRes, setRebookRes] = useState('');
-  const [detailsRes, setDetailsRes] = useState('');
+  const [details, setDetails] = useState('');
   const [milestonesRes, setMilestonesRes] = useState('');
   const [cartRes, setCartRes] = useState('');
   const [ratingRes, setRatingRes] = useState('');
+  const [booked, setBooked] = useState('');
 
+  const navigate = useNavigate(); 
   const form = {
-    name: 'Service Name',
-    image: 'https://via.placeholder.com/500',
-    location: 'Service Location',
-    rating: 4.5,
-    rating_count: 20,
-    amount_required: 3300,
-    service_id: id,
-    range: 'silver',
+    service_id: atob(atob(id))
   };
 
   const auth_user = true;
@@ -53,68 +55,94 @@ const ServiceDetails = () => {
     return stars;
   };
 
-    // begin rebook
-    // this is from the rebook () in serviceDetails.vue
-    const rebook = () =>{
-      axiosClient.get('/rebook_service/'+ 'test_id')
-      .then(({ data }) => {
-        setReebokRes(data.data);         
-       })
-       .catch(err => {
-         console.log(err); 
-       })
-    };
-    rebook();    
+    
 
     //end rebook
 
-    // begin getDetails
-    // this is from the getDetails () in serviceDetails.vue
-    const getDetails = () =>{
-      axiosClient.get('/ServiceResults/'+ 'test_id')
+    //CORE METHODS
+  useEffect(()=> {
+    const getDetails = () => { 
+        axiosClient.get('/ServiceResults/'+form.service_id)
+          .then(({ data }) => {
+
+            data.data[0]['rating'] = parseFloat(data.data[0]['rating']) / parseFloat(data.data[0]['rating_count']);
+            data.data[0]['rating'] = data.data[0]['rating'].toFixed(2);
+            if(data.data[0]['rating_count'] == 0) data.data[0]['rating'] = 0;
+            setDetails(data.data[0]);
+            console.log(details)
+          })
+          .catch(err => {
+            console.log(err); //setLoading(false)
+          })
+    };
+
+    const getMilestones = () =>{
+      axiosClient.get('/getMilestonesS/'+ form.service_id)
       .then(({ data }) => {
-        setDetailsRes(data.data);        
+        setMilestonesRes(data.data); 
+        console.log(data);        
        })
        .catch(err => {
          console.log(err); 
        })
     };
-    getDetails();    
+    getMilestones();  
 
-    //end getDetails
+    getDetails();
+  }, []);
+
 
     // begin getMilestones
     // this is from the getMilestones () in serviceDetails.vue
-    const getMilestones = () =>{
-      axiosClient.get('/getMilestonesS/'+ 'test_id')
-      .then(({ data }) => {
-        setMilestonesRes(data.data);        
-       })
-       .catch(err => {
-         console.log(err); 
-       })
-    };
-    getMilestones();    
+      
 
     //end getMilestones
 
     // begin addToCart
     // this is from the addToCart () in serviceDetails.vue
-    const addToCart = () =>{
-      axiosClient.get('/addToCart/'+ 'test_id'+ '-' + 'qty')
-      .then(({ data }) => {
-        setCartRes(data.data);        
-       })
-       .catch(err => {
-         console.log(err); 
-       })
+    const book = (e) =>{
+        e.preventDefault();
+        const payload = {
+            date: $('#date').val(),
+            note: notes,
+            service_id: form.service_id,
+            business_bid_id: business_bid_id
+        } 
+        console.log(payload);
+        axiosClient.post("/serviceBook",payload).then(({data})=>{
+            console.log(data);
+            if (data.success) {
+            $.alert({
+              title: 'Alert!',
+              content: data.success,
+            });
+            setBooked(true);
+          }
+          else
+            $.alert({
+              title: 'Alert!',
+              content: data.failed,
+               type: 'red',
+                buttons: {
+                tryAgain: {
+                text: 'Close',
+                btnClass: 'btn-red',
+                action: function(){
+                }
+            }}  
+            });
+            
+      }).catch(err => { console.log(err);
+          const response = err.response;
+          if(response && response.status === 422){
+              console.log(response.data.errors);
+          }
+          console.log(err);
+
+      });
     };
-    addToCart();    
+  
 
-    //end addToCart
-
-    // begin rating
-    // this is from the rating () in serviceDetails.vue
     const rating = () =>{
       axiosClient.get('/ratingService/'+ 'test_id'+ '/' + 'rating' + 'text')
       .then(({ data }) => {
@@ -124,7 +152,19 @@ const ServiceDetails = () => {
          console.log(err); 
        })
     };
-    rating();    
+  
+
+     // begin rebook
+    const rebook = () =>{
+      axiosClient.get('/rebook_service/'+ 'test_id')
+      .then(({ data }) => {
+        setReebokRes(data.data);         
+       })
+       .catch(err => {
+         console.log(err); 
+       })
+    };
+     
 
     //end rating
 
@@ -135,30 +175,31 @@ const ServiceDetails = () => {
           <div className="relative">
             <img
               className="w-full max-h-[250px] shadow-sm rounded-lg"
-              src={form.image}
+              src={'../'+details.image}
               alt="Service"
             />
             <div className="absolute bottom-0 left-0 w-full bg-gray-800 bg-opacity-60 rounded-b-lg text-white text-center py-2">
               <p className="flex items-center justify-center">
                 <FontAwesomeIcon icon={faMapMarkerAlt} className="mr-2" />
-                {form.location}
+                {details.location}
               </p>
             </div>
           </div>
           <div className="w-full py-3 flex flex-col text-right">
             <div className="text-black font-bold mb-2">
-              Amount Requested: <span className="font-semibold text-green-700">${form.amount_required}</span>
+              Amount Requested: <span className="font-semibold text-green-700">${details.price}</span>
             </div>
             <div className="flex items-center justify-end text-right mb-2">
-              {renderStars(form.rating)}
+              {renderStars(details.rating)} ({details.rating})
             </div>
             <div className="text-gray-500 text-sm">
-              {form.rating_count} Ratings
+              {details.rating_count} Ratings
             </div>
+
             <div className="my-4">
               <div className="mb-4">
                 <label className="block text-sm font-semibold mb-1">Desired start date:</label>
-                <input
+                <input id="date"
                   type="date"
                   className="w-full border-gray-300 border rounded-lg p-2"
                   placeholder="mm/dd/yyyy"
@@ -174,27 +215,34 @@ const ServiceDetails = () => {
                 />
               </div>
               <div>
-                <button className='btn-primary my-3 rounded-xl py-2 px-6 text-white font-semibold'>Book Now</button>
+               { !token? ( 
+                <button className=""> Book Now </button>
+               ): 
+               ( <button onClick={book} className="btn-primary font-semibold w-[125px] h-[50px] whitespace-nowrap rounded-2xl mx-auto lg:mx-0"> Book Now </button> )} 
               </div>
             </div>
+
           </div>
         </div>
+
         <div className="md:w-1/3 px-6">
           <h2 className="text-black text-sm sm:text-xs md:text-sm lg:text-base font-bold">More business information</h2>
-          <p className="py-3 text-lg font-semibold text-black">{form.name}</p>
+          <p className="py-3 text-lg font-semibold text-black">{details.name}</p>
           <p className="py-3 text-[13px]">
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic quasi delectus dolores, quos aperiam ut illum deleniti quaerat quod, ex, expedita atque officiis molestias ipsam natus saepe ipsum dolorum quisquam reprehenderit? Quae magni architecto dignissimos nesciunt numquam libero vero autem magnam distinctio quod iste, fuga voluptatibus voluptas corporis sit eos temporibus et nemo! Aspernatur nam, accusamus cumque quidem ducimus iusto!
           </p>
           <div className='flex items-center mt-2 gap-6 text-sm'>
+            <Link to={`/service-milestones/${btoa(btoa(details.id))}`} key={details.id}>
             <button className='border rounded-md py-1 px-2'>Service Milestone Breakdown</button>
-            <button className='border py-1 rounded-md px-6'>Contact us</button>
+            </Link>
+            <button className='border py-1 rounded-md px-6'>Contact me</button>
           </div>
           <div className="my-4 text-left">
             <h3 className="font-bold my-3">Reviews</h3>
             <div>
-              <img className="inline" src="https://via.placeholder.com/30" alt="User" width="30" />
+              <img className="inline rounded-[50%]" src="https://via.placeholder.com/30" alt="User" width="30" />
               <p className="inline text-sm">
-                <b className="text-green-700">Person</b> Lorem60
+                <b className="text-green-700"> Person </b> Lorem60
               </p>
             </div>
           </div>

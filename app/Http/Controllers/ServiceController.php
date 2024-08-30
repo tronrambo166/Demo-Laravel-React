@@ -29,7 +29,7 @@ class ServiceController extends Controller
 
 public function __construct()
     {
-        $this->middleware('business');
+        //$this->middleware('business');
     }
 
 public function auth_id(){
@@ -553,7 +553,7 @@ $business = Services::where('shop_id',Auth::id())->get();
 return view('services.add_milestones',compact('business','milestones'));
 }
 
-public function getMilestones($id){ 
+public function getMilestones($id){
 
   //Booking check
   $booking = serviceBook::where('service_id',$id)

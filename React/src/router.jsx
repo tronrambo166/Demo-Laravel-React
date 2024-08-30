@@ -28,24 +28,12 @@ import AddBusiness from './components/partials/Addbusiness';
 import PaymentForm from './components/partials/PaymentForm';
 import ServiceDetails from './components/partials/ServiceDetails';
 import MilestonesPage from './components/partials/Milestonepage';
+import MilestonesPageS from './components/partials/MilestonepageS';
 import ServiceResults from './components/partials/Serviceresults';
 import Subscribepage from './components/partials/Subscribepage';
 import Investequip from './components/partials/Investequip';
-//import home from '../components/pages/home'
-// import services from '../components/pages/services'
-// import applyShow from '../components/pages/applyShow'
-// import looking_investor from '../components/pages/looking_investor'
-// import become_provider from '../components/pages/become_provider'
-// import listingResults from '../components/pages/listingResults'
-// import listingDetails from '../components/pages/listingDetails'
-// import serviceResults from '../components/pages/serviceResults'
-// import serviceDetails from '../components/pages/serviceDetails'
-// import invest_eqp from '../components/pages/invest_eqp'
+
 // import donate_eqp from '../components/pages/donate_eqp'
-// import cart from '../components/pages/cart'
-// import subscribe from '../components/pages/subscribe'
-// import project_dash from '../components/pages/project_dash'
-// import project_dash_service from '../components/pages/project_dash_service'
 // import category from '../components/pages/category'
 // import investEQUIP from '../components/pages/investEQUIP'
 // import projectManagers from '../components/pages/projectManagers'
@@ -67,8 +55,9 @@ const router = createBrowserRouter([
 		{ path:'dashboard', element: <Dashboard/>},
 		{ path:'/service-details/:id', element: <ServiceDetails/>},
 		{ path:'/business-milestones/:id', element: <MilestonesPage/>},
+		{ path:'/service-milestones/:id', element: <MilestonesPageS/>},
 		{ path:'/checkout/:amount/:listing_id/:percent/:purpose', element: <PaymentForm/>},
-		{ path:'/serviceresults', element: <ServiceResults/>},
+		{ path:'/serviceResults/:resIds/:loc',name: 'serviceResults', element: <ServiceResults/>},
 		{ path:'/subscribe', element: <Subscribepage/>},
 		//{ path:'/checkout', element: <PaymentForm/>},
 		{ path:'/invest', element: <Investequip/>},
@@ -84,26 +73,13 @@ const router = createBrowserRouter([
 
 	]},
 
-	//Jitume Routes
-	
-	
-	// { path:'/applyShow', element: applyShow},
-	// { path:'/looking_investor', element: looking_investor},
-	// { path:'/become_provider', element: become_provider},
-	// { path:'/listingResults/:results/:loc',name: 'listingResults', element: listingResults},
-	// { path:'/listingDetails/:id', element: listingDetails},
-	// { path:'/invest_eqp/:id', element: invest_eqp},
+	//Jitume Routes	
 	// { path:'/donate_eqp/:id', element: donate_eqp},
-	// { path:'/subscribe/:id', element: subscribe},
 	// { path:'/invest/:listing_id/:id', element: invest_eqp},
 
-	// { path:'/serviceResults/:results/:loc',name: 'serviceResults', element: serviceResults},
-	// { path:'/serviceDetails/:id', element: serviceDetails},
 	// { path:'/AssetServiceDetails/:id/:business_bid_id', element: serviceDetails},
-	// { path:'/business-milestone/:id', element: project_dash},
-	// { path:'/service-milestone/:id', element: project_dash_service},
+
 	// { path:'/category/:name', element: category},
-	// { path:'/investEQUIP/:amount/:id/:percent', element: investEQUIP},
 	// { path:'/projectManagers/:bid_id', element: projectManagers},
 	// { path:'/projectManagerCancel/:bid_id', element: projectManagerCancel},
 	// { path:'/equipmentRelease/:b_owner_id/:manager_id', element: equipmentRelease},

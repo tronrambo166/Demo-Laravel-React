@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\BusinessController;
+use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\PagesController;
 use App\Http\Controllers\checkoutController;
 //P R O T E C T E D    R O U T E S

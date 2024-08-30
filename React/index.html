@@ -21,7 +21,10 @@
         function address(place,lat2,lng2) {
             document.getElementById('searchbox').value = place;
             //$("#result_list").html('');
+            if($("#result_list").length != 0)
             document.getElementById("result_list").style.display = 'none';
+            else
+            document.getElementById("result_list2").style.display = 'none';
 
               const lat = document.getElementById('lat');
               const lng = document.getElementById('lng');

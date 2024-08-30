@@ -1,18 +1,106 @@
+import { useParams, useNavigate } from 'react-router-dom';
+import { useRef } from 'react';
+import { useState } from 'react';
+import { useEffect } from 'react';
+import axiosClient from "../../axiosClient";
+
 import Footer from "../partials/footer";
 import Navbar from "../partials/Navbar";
 import Servicecards from "../partials/Service-cards";
 import banner from "../../images/banner.png";
 import Localservicesection from "./Localservicesection";
 import { Link } from "react-router-dom";
+import {decode as base64_decode, encode as base64_encode} from 'base-64';
 
 const Servicepage = () => {
   const handleInputChange = (event) => {
     // Handle input changes
   };
 
-  const search = () => {
-    // Handle search functionality
-  };
+  const locationInputRef = useRef(null);
+  const categoryRef = useRef(null);
+  const nameRef = useRef(null);
+  const latRef = useRef(null);
+  const lngRef = useRef(null);
+
+  const navigate = useNavigate();
+  const [results, setResults] = useState('');
+  const [rangeResults, setRangeResults] = useState('');
+
+    const Search = (e) =>{
+    e.preventDefault();
+        let ids = '';
+        const payload = {
+            location: locationInputRef.current.value,
+            category: categoryRef.current.value,
+            name: nameRef.current.value,
+            lat: $('#lat').val(),
+            lng: $('#lng').val(),
+        } 
+        console.log(payload);
+        axiosClient.post("/search",payload).then(({data})=>{
+            console.log(data);
+            Object.entries(data.results).forEach(entry => {
+            const [index, row] = entry;
+            ids = ids + row.id + ',';
+          }); //console.log(ids);
+          if (!ids) ids = 0;
+
+          sessionStorage.setItem('queryLat', payload.lat);
+          sessionStorage.setItem('queryLng', payload.lng);
+          navigate('/serviceResults/'
+              +base64_encode(ids)+ '/'+ data.loc
+            ); 
+            
+      }).catch(err => { console.log(err);
+          const response = err.response;
+          if(response && response.status === 422){
+              console.log(response.data.errors);
+          }
+          console.log(err);
+
+      });
+  }
+
+  const getPlaces = (e) => { 
+    e.preventDefault();
+    $("#result_list2").html('');
+    const searchText = locationInputRef.current.value;
+
+        $.ajax({
+                url: 'https://photon.komoot.io/api/?q=' + encodeURIComponent(searchText),
+                method: 'get',
+                dataType: 'json',
+                success: function(response) {
+                  var i;  console.log(response.features);
+                
+                    for (i = 0; i < 10; i++) { //console.log(response.features[i].name);
+                        var name = response.features[i].properties.name;
+                        var city = response.features[i].properties.city;
+                        if(city == null || city == 'undefined')
+                        city = '';
+                        var country = response.features[i].properties.country;
+                        var lng = response.features[i].geometry.coordinates[0];
+                        var lat = response.features[i].geometry.coordinates[1];
+
+                        $("#result_list2").show();
+                            if(i<10)
+
+                            if(city == '')
+                            $("#result_list2").append(' <div onclick="address(\'' + name + ','  + country + '\', \'' + lat + '\', \'' + lng + '\');" style="" data-id="' + name + '" class="address  py-1 px-1 my-0 border-top bg-white single_comms">  <p class="h6 small text-dark d-inline" ><i class="fa fa-map-marker mr-1 text-dark" aria-hidden="true"></i> ' + name + '</p> <p  class="d-inline text-dark"><small>, ' + country + '</small> </p> </div>');
+                            else
+                            $("#result_list2").append(' <div onclick="address(\'' + name + ','+ city + ','  + country + '\', \'' + lat + '\', \'' + lng + '\');" style="" data-id="' + name + '" class="address  py-1 px-1 my-0 border-top bg-white single_comms">  <p class="small h6 text-dark d-inline" ><i class="fa fa-map-marker mr-1 text-dark" aria-hidden="true"></i> ' + name + '</p> <p  class="d-inline text-dark"><small>, ' + city + ',' + country + '</small> </p> </div>');
+
+
+                        }
+                        //document.getElementById('result_list2').style.overflowY="scroll";                      
+                },
+                error: function(error) {
+                    console.log(error);
+                }
+
+            });
+      }
 
   return (
     <div>
@@ -25,10 +113,7 @@ const Servicepage = () => {
             <form
               id="form"
               className="bg-white w-[517px] h-auto p-6 rounded-[28px] lg:ml-[75px] relative z-10"
-              onSubmit={(e) => {
-                e.preventDefault();
-                search();
-              }}
+              
               method="post"
             >
               <h2 className="text-[32px] font-semibold mb-4">
@@ -41,7 +126,7 @@ const Servicepage = () => {
                   <label htmlFor="listing_name" className="sr-only">
                     Listing Name:
                   </label>
-                  <input
+                  <input ref={nameRef}
                     id="listing_name"
                     className="bar bg-gray-100 form-control w-full sm:w-[453px] px-4 py-2 rounded-md"
                     type="text"
@@ -56,9 +141,10 @@ const Servicepage = () => {
                       Location:
                     </label>
                     <div className="relative">
-                      <input
+                      <input ref={locationInputRef} 
                         id="searchbox"
-                        onKeyUp={(e) => suggest(e.target.value)}
+                         onKeyUp={getPlaces}
+                         id="searchbox"
                         className="py-2 px-4 w-[220px] border border-gray-300 rounded-full focus:outline-none focus:ring-0 focus:border-transparent"
                         type="text"
                         name="search"
@@ -79,19 +165,20 @@ const Servicepage = () => {
                       >
                         {/* Suggestions will be dynamically added here */}
                       </ul>
-                      <div
-                        id="result_list"
-                        className="absolute w-[250px] bg-white border-gray-300 border-t-0 rounded-b-md shadow-lg z-10 top-full"
-                      >
-                        {/* Search results will be dynamically added here */}
+                      <ul id="suggestion-list" className="absolute w-[250px] bg-white  border-t-0 rounded-b-md shadow-lg z-10 top-full">
+                      </ul>
+                      <div id="result_list2" className="absolute w-[250px] bg-white  border-gray-300 border-t-0 rounded-b-md shadow-lg z-10 top-full">
+
                       </div>
+                      <input  type="text" name="lat" id="lat" hidden value=""/>
+                      <input  type="text" name="lng" id="lng" hidden value=""/>
                     </div>
                   </div>
                   <div className="mb-4 relative">
                     <label htmlFor="category" className="sr-only">
                       Category:
                     </label>
-                    <select
+                    <select ref={categoryRef} 
                       id="category"
                       name="category"
                       className="py-2 form-control w-full sm:w-[212.5px] px-4 rounded-md bg-gray-100"
@@ -124,7 +211,7 @@ const Servicepage = () => {
                   </div>
                 </div>
                 <Link to="/serviceresults">
-                <button
+                <button onClick = {Search}
                   className="bg-[#198754] rounded-[14px] text-white py-2 px-4 mt-4 mb-4 w-full sm:w-[125px]"
                   type="submit"
                 >

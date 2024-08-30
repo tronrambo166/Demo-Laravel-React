@@ -465,18 +465,22 @@ $ids = explode(',',$ids);
 foreach($ids as $id){ 
     if($id!='' && $id != 'no-results'){
     $listing = Services::where('id',$id)->first();
+
+    if($listing){
     $listing->price = number_format($listing->price);
 
     $listing->lat = (float)$listing->lat;
     $listing->lng = (float)$listing->lng;
+
 
 //Booking check
 $booking = serviceBook::where('service_id',$id)
 ->where('booker_id', Auth::id())->first();
 if($booking) $listing->booked = 1; else $listing->booked = 0;
 
-    if($listing) $count++;
+    $count++;
     $results[] = $listing;
+}
 }
 }
 

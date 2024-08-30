@@ -1,52 +1,18 @@
 import { useState, useRef } from "react";
 import { useEffect } from 'react';
 import Select from "react-select";
+import { useParams, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLocationDot, faSearch, faPhone } from "@fortawesome/free-solid-svg-icons";
 import Footer from "./footer";
 import PriceRangeFilter from "./PriceRangeFilter";
 import Navbar from "./Navbar";
+import axiosClient from "../../axiosClient";
+import { Link } from 'react-router-dom';
+import { useStateContext } from "../../contexts/contextProvider";
+import {decode as base64_decode, encode as base64_encode} from 'base-64';
 
-// Dummy data
-const dummyResults = [
-  {
-    id: 1,
-    listing_name: "Sample Listing 1",
-    location: "Location 1",
-    category: "Agriculture",
-    average_price: 100,
-    rating: 4.5,
-    image: "https://via.placeholder.com/300",
-  },
-  {
-    id: 2,
-    listing_name: "Sample Listing 2",
-    location: "Location 2",
-    category: "Technology/Communications",
-    average_price: 150,
-    rating: 4.0,
-    video: "https://www.w3schools.com/html/mov_bbb.mp4", // Sample video URL
-  },
-  {
-    id: 3,
-    listing_name: "Sample Listing 3",
-    location: "Location 3",
-    category: "Arts/Culture",
-    average_price: 200,
-    rating: 5.0,
-    image: "https://via.placeholder.com/300",
-  },
-  {
-    id: 4,
-    listing_name: "Sample Listing 4",
-    location: "Location 4",
-    category: "Finance/Accounting",
-    average_price: 300,
-    rating: 3.5,
-    image: "https://via.placeholder.com/300",
-  },
-];
-
+const ServiceResults = () => {
 const categories = [
   { value: "Agriculture", label: "Agriculture" },
   { value: "Arts/Culture", label: "Arts/Culture" },
@@ -66,55 +32,38 @@ const categories = [
   { value: "Technology/Communications", label: "Technology/Communications" },
 ];
 
-const ServiceResults = () => {
+  const { resIds }  = useParams();
+  const { loc } = useParams();
+
   const [selectedCategory, setSelectedCategory] = useState(null);
-  const [results, setResults] = useState(dummyResults);
+  const [results, setResults] = useState('');
   const locationInputRef = useRef(null);
+  const count = results.length;
+  let res = [];
 
   const [cartRes, setCartRes] = useState('');
 
-
-  const search = () => {
-    let filteredResults = dummyResults;
-
-    if (selectedCategory) {
-      filteredResults = filteredResults.filter(
-        (result) => result.category === selectedCategory.value
-      );
-    }
-
-    setResults(filteredResults);
-  };
-
-  const openInNewTab = (url) => {
-    window.open(url, "_blank");
-  };
-
-  const count = results.length;
-
   //KEVIN
-
   useEffect(()=> {
+    const getResults = () => { 
+        axiosClient.get('/ServiceResults/'+base64_decode(resIds))
+          .then(({ data }) => {
+           setResults(data.data);
+           res = data.data;
+           //console.log(data);
+            //var x = navigator.geolocation;
+            //x.getCurrentPosition(success, failure);
+              
+          })
+          .catch(err => {
+            console.log(err); 
+          })
+      };
+      getResults();    
 
-    // begin setRes
-    // this is from the setRes () in serviceResults.vue
-    const setRes = () =>{
-      axiosClient.get('/ServiceResults/'+ 'test_id')
-      .then(({ data }) => {
-        setResults(data.data);        
-       })
-       .catch(err => {
-         console.log(err); 
-       })
-    };
-    setRes();    
+  },[])
 
-    //end setRes
-
-    // begin setRange
-    // this is from the range () in serviceResults.vue
-
-    const setRange = () =>{
+  const setRange = () =>{
       axiosClient.get('/priceFilter/'+ '/' + '/'+ 'test_id')
       .then(({ data }) => {
         setRangeResults(data.data);
@@ -124,34 +73,20 @@ const ServiceResults = () => {
          console.log(err); 
        })
     };
-    setRange();    
-    //end set Range
 
-    // begin cart
-    // this is from the cart () in serviceResults.vue
+  const search = () => {
+    // let filteredResults = dummyResults;
+    // if (selectedCategory) {
+    //   filteredResults = filteredResults.filter(
+    //     (result) => result.category === selectedCategory.value
+    //   );
+    // }
+    // setResults(filteredResults);
+  };
 
-    const cart = () =>{
-      axiosClient.get('/cart/')
-      .then(({ data }) => {
-        setCartRes(data.data);
-         //console.log(amount_required)
-       })
-       .catch(err => {
-         console.log(err); 
-       })
-    };
-    cart();    
-    //end cart
-
-
-
-
-
-  },[])
-
-    
-
-  //KEVIN
+  const openInNewTab = (url) => {
+    window.open(url, "_blank");
+  };
 
   return (
     <div className="container mx-auto px-4">
@@ -211,19 +146,20 @@ const ServiceResults = () => {
             <p className="text-center text-gray-500">No results found.</p>
           ) : (
             results.map((row, index) => (
+              <Link to={`/service-details/${btoa(btoa(row.id))}`} key={row.id} >
               <div
                 className="border h-48 border-gray-300 rounded-lg shadow-md flex"
                 key={index}
               >
                 {row.video ? (
-                  <video
-                    src={row.video}
+                  <img
+                    src={'../../' + row.image}
+                    alt={row.listing_name}
                     className="w-1/3 h-48 object-cover rounded-l-lg"
-                    controls
                   />
                 ) : (
                   <img
-                    src={row.image}
+                    src={'../../' + row.image}
                     alt={row.listing_name}
                     className="w-1/3 h-48 object-cover rounded-l-lg"
                   />
@@ -264,6 +200,7 @@ const ServiceResults = () => {
                   </div>
                 </div>
               </div>
+              </Link>
             ))
           )}
         </div>

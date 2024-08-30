@@ -1,21 +1,30 @@
-import { useRef } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
+import axiosClient from "../../axiosClient";
 import { Link } from 'react-router-dom';
 
 const Servicecards = () => {
+
+  const [cards, setCards] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const getCards = () => {
+      setLoading(true);
+      axiosClient.get('/latServices')
+        .then(({ data }) => {
+          setLoading(false);
+          setCards(data.data);
+        })
+        .catch(err => {
+          console.log(err);
+          setLoading(false);
+        });
+    };
+    getCards();
+  }, []);
+
   const containerRef = useRef(null);
-
-  const cards = [
-    { id: 1, image: 'https://via.placeholder.com/300', title: 'Mountain Adventure', description: 'Explore the majestic mountains with breathtaking views.' },
-    { id: 2, image: 'https://via.placeholder.com/300', title: 'Beach Paradise', description: 'Relax on the sandy beaches with crystal clear waters.' },
-    { id: 3, image: 'https://via.placeholder.com/300', title: 'City Lights', description: 'Experience the vibrant city life with endless entertainment.' },
-    { id: 4, image: 'https://via.placeholder.com/300', title: 'Desert Safari', description: 'Embark on a thrilling journey through the vast deserts.' },
-    { id: 5, image: 'https://via.placeholder.com/300', title: 'Forest Retreat', description: 'Enjoy a peaceful escape into the lush forests.' },
-    { id: 6, image: 'https://via.placeholder.com/300', title: 'River Cruise', description: 'Sail down the serene rivers and enjoy the views.' },
-    { id: 7, image: 'https://via.placeholder.com/300', title: 'Tropical Island', description: 'Discover the beauty of tropical islands and clear blue waters.' },
-    { id: 8, image: 'https://via.placeholder.com/300', title: 'Historical Sites', description: 'Explore ancient historical sites and learn their stories.' },
-  ];
-
   const scrollLeft = () => {
     containerRef.current.scrollBy({ left: -containerRef.current.offsetWidth / 3, behavior: 'smooth' });
   };
@@ -53,17 +62,17 @@ const Servicecards = () => {
           `}
         </style>
         {cards.map((card) => (
-          <Link to={`/service-details/${card.id}`} key={card.id} className="bg-white w-[300px] rounded-xl shadow-lg flex-shrink-0">
+          <Link to={`/service-details/${btoa(btoa(card.id))}`} key={card.id} className="bg-white w-[300px] rounded-xl shadow-lg flex-shrink-0">
             <img
               src={card.image}
-              alt={card.title}
+              alt={card.name}
               className="w-full h-48 object-cover rounded-t-xl"
             />
             <div className="p-4">
-              <h2 className="text-xl font-semibold mb-2">{card.title}</h2>
-              <p className="text-gray-700 hidden">{card.description}</p>
-              <p>Contact: 27389202</p>
-              <p className="text-black font-semibold">Amount Requested: $5000</p>
+              <h2 className="text-xl font-semibold mb-2">{card.name}</h2>
+              <p className="text-gray-700 hidden">{card.category}</p>
+              {/*<p>Contact: {card.contact}</p>*/}
+              <p className="text-black font-semibold">Price: ${card.price}</p>
               <div className='flex text-black font-bold gap-1 items-center'>
                 <button>Learn more</button>
                 <FaChevronRight size={15} />
