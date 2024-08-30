@@ -21,6 +21,7 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::get('invest/{listing_id}/{id}/{value}/{amount}/{type}', [PagesController::class, 'invest'])->name('equipments');
     Route::get('download_business/{id}', [PagesController::class, 'download_business'])->name('download_business');
     Route::get('download_statement/{id}', [PagesController::class, 'download_statement'])->name('download_statement'); 
+    Route::get('searchResults/{ids}', [PagesController::class,'searchResults'])->name('searchResults');
     // --- MIDDLEWARE 
     //Route::group(['middleware'=>['auth']], function(){ 
     // <--milestones-->

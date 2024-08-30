@@ -57,21 +57,16 @@ const navigate = useNavigate();
 });
   //Stripe Code
 
-  const { listing_id } = useParams();
+  const { listing_id } = useParams(); 
   let { purpose } = useParams();
   const purpos = base64_decode(purpose);
 
   let { amount } = useParams();
-  const amount_real = base64_decode(amount);   alert( purpos)
+  const amount_real = base64_decode(amount);
   const { percent } = useParams();
 
   const [showModal, setShowModal] = useState(false);
   const price = parseFloat(amount_real)+parseFloat(0.05*amount_real); // Fixed price value
-  //const [purpose, setPurpose] = useState('');
-  //const stripeToken = useRef(null);
-  function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -79,18 +74,20 @@ const navigate = useNavigate();
       setTimeout(() => {
         const payload = {
             listing: listing_id,
+            percent: atob(percent),
             package: $('#package').val(),
             amount: $('#amount').val(),
+            amountOriginal: amount_real,
             stripeToken: $('#stripeToken').val(),
             //stripeToken: event.target.stripeToken.value
         } 
         //console.log(payload);
-      if(purpose == 'small_fee'){
+      if(purpos == 'small_fee'){
           axiosClient.post("/stripe.post.coversation", payload).then(({data})=>{
           console.log(data);
           if(data.status == 200){
-            alert('Bid placed, you will be notified if bid is accepted');
-            navigate('/');
+            alert('Success!');
+            navigate('/listing/'+ btoa(listing_id));
           }
           if(data.status == 400) 
             alert(data.message);
@@ -276,7 +273,7 @@ const navigate = useNavigate();
 
           <div className="flex flex-col gap-3 mb-4">
             <label className="font-bold">Purpose</label>
-            <p id="purpose">{purpose}</p>
+            <p id="purpose">{purpos}</p>
           </div>
 
           <h2 className="py-2 text-2xl font-semibold">Total: ${price}</h2>

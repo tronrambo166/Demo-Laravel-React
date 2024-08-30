@@ -333,19 +333,11 @@ return response()->json(['results'=>$listings, 'loc' => $loc, 'success' => "Succ
 }
 
 public function searchResults($ids){
-
-//TEMP
-// $json = file_get_contents("js/airports.json");
-// $array = json_decode($json, true);
-// $i=0;
-//TEMP
-
 $results = array();
 $ids = explode(',',$ids); 
 foreach($ids as $id){ 
 
      //if(strlen($id) > 3) $id = dechex($id); return $id;
-
     if($id!=''){
     $conv = Conversation::where('investor_id',Auth::id())->
     where('listing_id',$id)->where('active',1)->first();
@@ -376,7 +368,7 @@ foreach($ids as $id){
 }
 }
 if($conv!=null)$conv = true;else $conv=false;
-return response()->json([ 'data' => $results, 'conv'=>$conv, 'count'=>count($results)] );
+return response()->json([ 'data' => $results, 'count'=>count($results)] );
 }
 
 

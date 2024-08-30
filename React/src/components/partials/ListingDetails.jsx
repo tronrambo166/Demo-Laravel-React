@@ -198,11 +198,10 @@ const closeAuthModal = () => {
             data.data[0]['rating'] = data.data[0]['rating'].toFixed(2);
             if(data.data[0]['rating_count'] == 0) data.data[0]['rating'] = 0;
 
-            setDetails(data.data[0]);
-            setConv(true);
-              
+           setDetails(data.data[0]);  
            if(data.data[0].investors_fee == null)
            setConv(true);
+           //console.log(data)
           })
           .catch(err => {
             console.log(err); //setLoading(false)
@@ -225,10 +224,11 @@ const closeAuthModal = () => {
     const isSubscribed = () => { 
         axiosClient.get('/isSubscribed/'+form.listing_id)
           .then(({ data }) => {
-            //console.log(data)
-          if(data.count > 0){
-            setSubscribeData(data.data);
+            console.log(data)
+            setConv(data.conv);
 
+          if(data.count > 0){
+            setSubscribeData(data.data);           
           if(data.data.subscribed == 0)
           $('#small_fee_div').removeClass('collapse');
           }
@@ -608,7 +608,8 @@ sessionStorage.setItem("purpose", "One time unlock - Small fee");
         )}
 
         
-          <>
+          {!conv && ( 
+            <>
             <p className="text-gray-700 mb-6">
               This business requests a small unlock fee of <b>${details.investors_fee}</b> to view their full business information.
             </p>
@@ -633,6 +634,7 @@ sessionStorage.setItem("purpose", "One time unlock - Small fee");
               </button>
             </div>
           </>
+          )}
       
 
         {showSubs && (

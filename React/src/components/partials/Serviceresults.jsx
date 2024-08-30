@@ -51,8 +51,8 @@ const categories = [
            setResults(data.data);
            res = data.data;
            //console.log(data);
-            //var x = navigator.geolocation;
-            //x.getCurrentPosition(success, failure);
+            var x = navigator.geolocation;
+            x.getCurrentPosition(success, failure);
               
           })
           .catch(err => {
@@ -87,6 +87,87 @@ const categories = [
   const openInNewTab = (url) => {
     window.open(url, "_blank");
   };
+
+  //MAP -- MAP
+
+        const success = (position) => {
+        if((loc == true || loc == "true") && res.length !=0){
+            var myLat = sessionStorage.getItem('queryLat');// this.queryLat;
+            var myLong = sessionStorage.getItem('queryLng');// this.queryLng;
+        }
+
+        else{
+             var myLat = position.coords.latitude;
+             var myLong = position.coords.longitude;
+        } 
+
+        
+
+        var coords = ([myLat,myLong]);
+        var mapOptions = {
+        zoom:8,
+        center:coords,
+        //center:new google.maps.LatLng(51.508742,-0.120850),
+        }
+
+        //MAP CONTAINER
+        let map = new L.map('map' , mapOptions);
+        let layer = new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
+        map.addLayer(layer);
+        
+        
+        Object.entries(res).map(([key, value]) => {
+            //INFO
+                const contentString = '<a class="info_map py-0 font-weight-bold  text-center" target="_blank" href="/service-details/'+btoa(btoa(value.id))+'">'
+                +value.name+'</a>';
+
+            //INFO
+              const investment_needed = (value.investment_needed/1000)+"K";
+              //this.addMarker({lat:value.lat, lng:value.lng},map,value.name,investment_needed,infowindow);
+              var coord = ([value.lat,value.lng]);
+              addMarker(coord,map,contentString);
+            })
+        
+
+            addMarkerHome(coords,map);
+        }
+
+        const addMarker = (coords,map,contentString) => {
+        let customIcon = {
+         iconUrl:'../../images/map/other_business.png',
+         iconSize:[32,32]
+        }; let myIcon = L.icon(customIcon);
+
+        let iconOptions = {
+         title:'Spurs',
+         draggable:true,
+         icon:myIcon
+        }
+
+        var marker = new L.Marker(coords, iconOptions);
+        marker.addTo(map);
+        marker.bindPopup(contentString).openPopup();
+        }
+
+        const addMarkerHome = (coords,map) => {
+        let customIcon = {
+         iconUrl:'../../images/map/myloc.png',
+         iconSize:[32,32]
+        }; let myIcon = L.icon(customIcon);
+
+        let iconOptions = {
+         title:'Spurs',
+         draggable:true,
+         icon:myIcon
+        }
+
+        var marker = new L.Marker(coords, iconOptions);
+        marker.addTo(map);
+
+        }
+
+        const failure = () => {}
+        //MAP -- MAP
 
   return (
     <div className="container mx-auto px-4">
@@ -166,7 +247,7 @@ const categories = [
                 )}
                 <div className="p-4 flex flex-col">
                   <p className="mb-1 text-lg whitespace-nowrap font-semibold">
-                    {row.listing_name}
+                    {row.name}
                   </p>
                   <div className="inline-block py-2">
                     <p className="mb-1 rounded-full bg-black py-1 px-2 text-sm text-white inline-block">
@@ -193,7 +274,7 @@ const categories = [
                       </div>
                       <div>
                         <p className="pl-[70px] text-[15px] font-bold">
-                          ${row.average_price}
+                          ${row.price}
                         </p>
                       </div>
                     </div>
@@ -207,7 +288,11 @@ const categories = [
 
         <div className="h-[500px] border border-gray-300 rounded-lg flex items-center justify-center">
           {/* Placeholder for the map */}
-          <p className="text-center text-gray-500">Map goes here</p>
+          
+          <div class="m-auto map_style">
+                     <div id="map" style={{ height: '95%' }}></div> 
+                </div>
+                
         </div>
       </div>
 

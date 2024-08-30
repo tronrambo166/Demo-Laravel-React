@@ -1093,6 +1093,12 @@ public function assetEquip_download($id, $type){
     $results = array();
     $investor_id = Auth::id();
     $count = 0;
+
+    $conv = Conversation::where('investor_id',Auth::id())->
+    where('listing_id',$listing_id)->where('active',1)->first();
+    if($conv!=null)$conv = true;else $conv=false;
+
+
     $subs = BusinessSubscriptions::where('investor_id',$investor_id)
     ->where('active',1)->orderBy('id','DESC')->first();
 
@@ -1113,7 +1119,7 @@ public function assetEquip_download($id, $type){
     catch(\Exception $e){
       $count = 0;
       $results['subscribed'] = 0;
-      return response()->json([ 'data' => $results, 'count' => $count, 'reviews' => $reviews] );
+      return response()->json([ 'data' => $results, 'conv'=>$conv, 'count' => $count, 'reviews' => $reviews] );
     }
 
       $expire_date = date('Y-m-d',$stripe_sub->current_period_end);
@@ -1144,7 +1150,7 @@ public function assetEquip_download($id, $type){
 
     }
 
-    return response()->json([ 'data' => $results, 'count' => $count, 'reviews' => $reviews] );
+    return response()->json([ 'data' => $results, 'conv'=>$conv, 'count' => $count, 'reviews' => $reviews] );
 }
 
 

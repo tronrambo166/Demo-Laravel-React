@@ -60,7 +60,7 @@ class checkoutController extends Controller
      */
 
      public function stripeConversation(Request $request)
-    {   //return $request->all();
+    {   
         $listing_id=$request->listing;
         $package=$request->package;
 
@@ -720,7 +720,7 @@ public function bidCommitsForm($amount,$business_id,$percent)
 }
 
 public function bidCommits(Request $request){
- //return config('services.stripe.secret_key');
+ //return $request->all();
    if(Auth::check())
         $investor_id = Auth::id();
     else {
@@ -734,8 +734,8 @@ public function bidCommits(Request $request){
  try{
     //Stripe
         $curr='USD'; //$request->currency;
-        $amount= Session::get('bid_new_price');//$request->price; 
-        $amountReal= Session::get('bid_original_price'); //$request->amountReal;
+        $amount= $request->amount; 
+        $amountReal= $request->amountOriginal; //$request->amountReal;
 
         $transferAmount=round($amountReal,2);
         $amount = round($amount,2);
@@ -785,6 +785,7 @@ $percent = $request->percent;
     ->where('status','In Progress')->first();
     $this_bids = BusinessBids::where('business_id',$business_id)->get();
     foreach($this_bids as $b)
+    if($b->amount)
     $total_bid_amount = $total_bid_amount+($b->amount);
 
     if($total_bid_amount >= $mile1->amount){
@@ -802,13 +803,12 @@ $percent = $request->percent;
 }
 
 catch(\Exception $e){
-  Session::put('Stripe_failed',$e->getMessage());
-    return redirect()->back();
+  return response()->json(['failed' =>  $e->getMessage()]);
 }
 
 if($bids){
     Session::put('Stripe_pay','Bid placed! you will get a notification if your bid is accepted!');
-    return redirect("/");
+    return response()->json(['success' =>  'success']);
     //return redirect("/#/listingDetails/".$business_id);
          }
 
