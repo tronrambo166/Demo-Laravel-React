@@ -19,7 +19,15 @@ const ListingDetails = ({ onClose }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [isUnlockPopupOpen, setIsUnlockPopupOpen] = useState(false);
+  const [isVisible, setIsVisible] = useState(true);
 
+  const handleClose = () => {
+    setIsVisible(false);
+  };
+
+  const handleOpen = () => {
+    setIsVisible(true);
+  };
   const { id } = useParams();
   const navigate = useNavigate(); // Hook for navigation
   const form = {
@@ -37,6 +45,9 @@ const ListingDetails = ({ onClose }) => {
   const [allowToReview, setAllow] = useState('');
   const [amount_r, setAmount_r] = useState('');
   const [subscribeData, setSubscribeData] = useState('');
+  const [isOpen, setIsOpen] = useState(true); // Popup is initially open
+
+ 
 
   const [amount, setAmount] = useState('');
   const [percentage, setPercentage] = useState('');
@@ -63,11 +74,7 @@ const ListingDetails = ({ onClose }) => {
       navigate(`/subscribe/${form.listing_id}`);
     }
   };
-  const handleClose = () => {
-    setShowSmallFee(false);
-    setShowSubs(false);
-    onClose();
-  };
+  
 
   //FOR SMALL POP UP
 
@@ -418,26 +425,25 @@ sessionStorage.setItem("purpose", "One time unlock - Small fee");
             </p>
             <div className="flex gap-2">
             <div className="flex w-full items-center gap-10">
-  {token ? (
-    <a
-    onClick={() => {
-      // makeSession(form.listing_id);
-      openUnlockPopup();
-        }}
-      className="bg-gray-700 w-1/2 text-center rounded-lg text-white py-2 cursor-pointer"
-    >
-      <FontAwesomeIcon icon={faLock} className="mr-2" />
-      Unlock To Invest
-    </a>
-  ) : (
-    <a
-      onClick={() => setIsModalOpen(true)}
-      className="bg-black hover:bg-green w-1/2 text-sm text-center rounded-full text-white py-[6px] cursor-pointer"
-    >
-      <FontAwesomeIcon icon={faLock} className="mr-2 text-sm" />
-      Unlock To Invest
-    </a>
-  )}
+            {token ? (
+  <a
+  onClick={handleOpen}
+
+    className="bg-green w-1/2 text-center rounded-lg text-white py-2 cursor-pointer"
+  >
+    <FontAwesomeIcon icon={faLock} className="mr-2" />
+    Unlock To Invest
+  </a>
+) : (
+  <a
+    onClick={() => setIsModalOpen(true)} // Opens the modal
+    className="bg-black hover:bg-gray-700 w-1/2 text-sm text-center rounded-full text-white py-[6px] cursor-pointer"
+  >
+    <FontAwesomeIcon icon={faLock} className="mr-2 text-sm" />
+    Unlock To Invest
+  </a>
+)}
+
 </div>
 
 </div>
@@ -599,11 +605,10 @@ sessionStorage.setItem("purpose", "One time unlock - Small fee");
         </div>
       </div>
 
-      {/*Small_fee POPUP*/}
-
-      <div className="fixed inset-0 flex items-center justify-center z-50 bg-gray-800 bg-opacity-50">
+      <div className={`fixed inset-0 flex items-center justify-center z-50 bg-gray-800 bg-opacity-50 ${!isVisible ? 'hidden' : ''}`}>
       <div className="bg-white rounded-lg shadow-lg p-6 max-w-sm w-full">
-        { !showSubs && (
+        {/* Conditionally render content */}
+        {!showSubs && (
           <div className='flex gap-6 justify-center'>
             <button
               onClick={handleUnlockFee}
@@ -620,35 +625,32 @@ sessionStorage.setItem("purpose", "One time unlock - Small fee");
           </div>
         )}
 
-        
-          {!conv && ( 
-            <>
+        {!conv && (
+          <>
             <p className="text-gray-700 mb-6">
               This business requests a small unlock fee of <b>${details.investors_fee}</b> to view their full business information.
             </p>
             <p className="text-gray-700 mb-6">Do you want to pay now?</p>
             <div className="flex justify-center space-x-4">
-              {/*<Link to={`/checkout/${form.investors_fee}/${form.listing_id}/fee`}>*/}
-                <button
-                  onClick={() => {
-                    stripeSmallFee(form.listing_id, details.investors_fee);
-                    handleClose();
-                  }}
-                  className="btn-primary text-white py-2 px-6 rounded hover:bg-blue-600 transition"
-                >
-                  Ok
-                </button>
-             {/* </Link>*/}
+              <button
+                onClick={() => {
+                  stripeSmallFee(form.listing_id, details.investors_fee);
+                  handleClose();
+                }}
+                className="btn-primary text-white py-2 px-6 rounded hover:bg-blue-600 transition"
+              >
+                Ok
+              </button>
               <button
                 onClick={handleClose}
-                className="bg-gray-300 text-gray-700 py-2 px-4 rounded hover:bg-gray-400 transition"
+                className="bg-green text-gray-700 py-2 px-4 rounded hover:bg-gray-400 transition"
               >
                 Cancel
               </button>
             </div>
           </>
-          )}
-      
+        )}
+     
 
         {showSubs && (
           <div>

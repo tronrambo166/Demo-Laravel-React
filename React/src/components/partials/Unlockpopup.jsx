@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
-const UnlockPopup = ({ isOpen, onClose, form, subscribed, tokenLeft, expire, plan }) => {
+const UnlockPopup = ({ isOpen, onClose = () => {}, form, subscribed, tokenLeft, expire, plan }) => {
   const [showSmallFee, setShowSmallFee] = useState(false);
   const [showSubs, setShowSubs] = useState(false);
   const navigate = useNavigate();
@@ -23,12 +23,10 @@ const UnlockPopup = ({ isOpen, onClose, form, subscribed, tokenLeft, expire, pla
   };
 
   const handlePayment = () => {
-    // Handle payment logic here
     console.log('Payment initiated');
   };
 
   const handleUseToken = () => {
-    // Handle token usage here
     console.log('Token used');
   };
 
@@ -41,8 +39,8 @@ const UnlockPopup = ({ isOpen, onClose, form, subscribed, tokenLeft, expire, pla
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50 bg-gray-800 bg-opacity-50">
       <div className="bg-white rounded-lg shadow-lg p-6 max-w-sm w-full">
-        { !showSubs && (
-          <div className='flex gap-6 justify-center'>
+        {!showSubs && (
+          <div className="flex gap-6 justify-center">
             <button
               onClick={handleUnlockFee}
               className="btn-primary rounded-md py-2 px-6 text-lg font-semibold mb-4"
@@ -58,10 +56,10 @@ const UnlockPopup = ({ isOpen, onClose, form, subscribed, tokenLeft, expire, pla
           </div>
         )}
 
-        
+        {showSmallFee && (
           <>
             <p className="text-gray-700 mb-6">
-              This business requests a small unlock fee of <b>${details.investors_fee}</b> to view their full business information.
+              This business requests a small unlock fee of <b>${form.investors_fee}</b> to view their full business information.
             </p>
             <p className="text-gray-700 mb-6">Do you want to pay now?</p>
             <div className="flex justify-center space-x-4">
@@ -84,7 +82,7 @@ const UnlockPopup = ({ isOpen, onClose, form, subscribed, tokenLeft, expire, pla
               </button>
             </div>
           </>
-      
+        )}
 
         {showSubs && (
           <div>

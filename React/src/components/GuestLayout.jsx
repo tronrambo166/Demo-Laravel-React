@@ -13,6 +13,7 @@ import ListingResults from './partials/listingResults';
 import ListingDetails from './partials/ListingDetails';
 import PaymentForm from './partials/PaymentForm';
 import ServiceDetails from './partials/ServiceDetails';
+import UserRegistrationForm from './partials/Investorreg';
 
 export default function GuestLayout() {
 	const{token} = useStateContext();
@@ -25,6 +26,7 @@ export default function GuestLayout() {
 
               <main>
 	          <Outlet />
+			  <UserRegistrationForm/>
 	          </main>
 
               <Footer />
