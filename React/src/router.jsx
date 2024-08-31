@@ -19,6 +19,7 @@ import AddBusiness from './components/partials/Addbusiness';
 import PaymentForm from './components/partials/PaymentForm';
 import ServiceDetails from './components/partials/ServiceDetails';
 import MilestonesPage from './components/partials/Milestonepage';
+import MilestonesPageS from './components/partials/MilestonePageS';
 import ServiceResults from './components/partials/Serviceresults';
 import Subscribepage from './components/partials/Subscribepage';
 import Mile from './components/partials/mile';
@@ -64,6 +65,7 @@ const router = createBrowserRouter([
       },
       { path: '/service-details/:id', element: <ServiceDetails /> },
       { path: '/business-milestones/:id', element: <MilestonesPage /> },
+      { path: '/service-milestones/:id', element: <MilestonesPageS /> },
       { path: '/checkout/:amount/:listing_id/:percent/:purpose', element: <PaymentForm /> },
       { path: '/serviceresults/:resIds/:loc', name: 'serviceresults', element: <ServiceResults /> },
       { path: '/subscribe', element: <Subscribepage /> },
