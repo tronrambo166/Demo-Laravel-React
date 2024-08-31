@@ -30,9 +30,9 @@ const Homesearch = () => {
             lat: $('#lat').val(),
             lng: $('#lng').val(),
         } 
-        console.log(payload);
+        //console.log(payload);
         axiosClient.post("/search",payload).then(({data})=>{
-            console.log(data);
+            console.log(data+'h');
             Object.entries(data.results).forEach(entry => {
             const [index, row] = entry;
             ids = ids + row.id + ',';

@@ -42,6 +42,8 @@ const categories = [
   let res = [];
 
   const [cartRes, setCartRes] = useState('');
+  var max = 1000000;
+  var min = 0;
 
   //KEVIN
   useEffect(()=> {
@@ -59,20 +61,59 @@ const categories = [
             console.log(err); 
           })
       };
-      getResults();    
+      getResults();   
+
+
+     var slider = document.getElementById('slider');
+     if(slider && slider.noUiSlider)
+     slider.noUiSlider.destroy();
+
+      const amountSlider = () => { 
+          noUiSlider.create(slider, {
+                start: [0, 1000000],
+                connect: true,
+                range: {
+                    'min': parseFloat(min),
+                    'max': parseFloat(max),
+                },
+
+                step: 10000,
+                margin: 600,
+                pips: {
+                    //mode: 'steps',
+                    stepped: true,
+                    density: 6
+                }
+            });
+            var skipValues = [
+                document.getElementById('price_low'),
+                document.getElementById('price_high')
+            ];
+            slider.noUiSlider.on('update', function (values, handle) {
+                skipValues[handle].innerHTML = '$' + values[handle];
+                //console.log(values[1] - values[0]);
+
+                  // setTimeout(() => {
+                    axiosClient.get('priceFilterS/' + values[0] + '/' + values[1] + '/' + base64_decode(resIds)).then((data) => {
+                     //console.log(data)
+                     setResults('');
+                     setResults(data.data.data);
+                    
+
+                    for (const [key, value] of Object.entries(data.data)) {
+                    
+                    value.id = btoa(value.id);
+                    value.id = btoa(value.id);
+                }
+                    // t.queryLat = data.data.data[0].lat;
+                    // t.queryLng = data.data.data[0].lng;  
+                }).catch((error) => { })
+                // }, 1000)
+              });
+          }
+            amountSlider(); 
 
   },[])
-
-  const setRange = () =>{
-      axiosClient.get('/priceFilter/'+ '/' + '/'+ 'test_id')
-      .then(({ data }) => {
-        setRangeResults(data.data);
-         //console.log(amount_required)
-       })
-       .catch(err => {
-         console.log(err); 
-       })
-    };
 
   const search = () => {
     // let filteredResults = dummyResults;
@@ -213,8 +254,21 @@ const categories = [
           <FontAwesomeIcon icon={faSearch} />
         </button>
       </div>
-      <div className="flex">
-        <PriceRangeFilter />
+
+      <div className="">
+      <div id="turnover_slider" className=" w-[50%]" >
+        <label className="text-gray-700 font-semibold mb-2">Price Range</label>
+        <div id="slider" class=""> </div>
+            <div className="row mt-3">
+                <div className="col-6  mt-1">
+                    <span id="price_low" className="py-0 btn-light" name="min"> </span>
+                </div>
+                <div className="col-6 mt-1 pr-0">
+                    <span id="price_high" className="float-right py-0 btn-light" name="min"> </span>
+                </div>
+            </div>
+        </div>
+        {/*<PriceRangeFilter />*/}
       </div>
 
       <h5 className="py-3 text-gray-700 font-semibold mt-6">

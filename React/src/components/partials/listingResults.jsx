@@ -11,6 +11,10 @@ import { Link } from 'react-router-dom';
 import { useStateContext } from "../../contexts/contextProvider";
 import {decode as base64_decode, encode as base64_encode} from 'base-64';
 
+// import noUiSlider from 'nouislider';
+// import 'nouislider/dist/nouislider.css';
+
+
 // Dummy data
 const ListingResults = () => {
   const categories = [
@@ -37,9 +41,17 @@ const ListingResults = () => {
 
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [results, setResults] = useState('');
+  const [priceRange, setPriceRange] = useState([0, 1000]); // Initial range
   const locationInputRef = useRef(null);
-  const count = results.length;
+  const sliderRef = useRef(null);
+  const mapRef = useRef(null);
+
+  var count = results.length;
   let res = [];
+  var max = 1000000;
+  var min = 0;
+  var max2 = 1000000;
+  var min2 = 0;
 
   const openInNewTab = (url) => {
     window.open(url, "_blank");
@@ -68,18 +80,6 @@ const ListingResults = () => {
         alert('slider is moving');
       }
 
-    //   const setRange = () =>{
-    //   axiosClient.get('/priceFilter/'+ '/' + '/'+ 'test_id')
-    //   .then(({ data }) => {
-    //     setRangeResults(data.data);
-    //      //console.log(amount_required)
-    //    })
-    //    .catch(err => {
-    //      console.log(err); 
-    //    })
-    // };
-    // setRange();    
-    //end set Range
 
     // begin set range amount
     //this is from the rangeAmount () in listingDetails.vue
@@ -98,21 +98,119 @@ const ListingResults = () => {
     //end rangeAmount
 
     //begin setRes
-  // const setRes= () => { 
-  //       axiosClient.get('/searchResults/'+'test_id')
-  //         .then(({ data }) => {
-  //          setResults(data.data);
-  //           //console.log(amount_required)
-  //         })
-  //         .catch(err => {
-  //           console.log(err); 
-  //         })
-  //   };
-  //     setRes();
+
 
   
  
    //x.getCurrentPosition(success, failure);
+   var slider = document.getElementById('slider');
+   var slider2 = document.getElementById('slider2');
+
+   if((slider && slider.noUiSlider) || (slider2 && slider2.noUiSlider))
+   {
+            slider.noUiSlider.destroy();
+            slider2.noUiSlider.destroy();
+   }
+
+    const rangeSlider = () => { 
+            //var slider = document.getElementById('slider');
+            noUiSlider.create(slider, {
+                start: [0, 1000000],
+                connect: true,
+                range: {
+                    'min': parseFloat(min),
+                    'max': parseFloat(max),
+                },
+
+                step: 10000,
+                margin: 600,
+                pips: {
+                    //mode: 'steps',
+                    stepped: true,
+                    density: 6
+                }
+            });
+            var skipValues = [
+                document.getElementById('price_low'),
+                document.getElementById('price_high')
+            ];
+            slider.noUiSlider.on('update', function (values, handle) {
+                skipValues[handle].innerHTML = '$' + values[handle];
+                //console.log(values[1] - values[0]);
+
+                  // setTimeout(() => {
+                    axiosClient.get('priceFilter/' + values[0] + '/' + values[1] + '/' + base64_decode(resIds)).then((data) => {
+                    //count = data.data.length;
+                    setResults('');
+                    setResults(data.data.data);
+
+                    console.log(data.data.data)
+
+                    for (const [key, value] of Object.entries(data.data)) {
+                    
+                    value.id = btoa(value.id);
+                    value.id = btoa(value.id);
+                }
+                    // t.queryLat = data.data.data[0].lat;
+                    // t.queryLng = data.data.data[0].lng;  
+                }).catch((error) => { })
+                // }, 1000)
+              });
+
+
+    }
+
+    const amountSlider = () => { 
+
+       noUiSlider.create(slider2, {
+                start: [0, 1000000],
+                connect: true,
+                range: {
+                    'min': parseFloat(min2),
+                    'max': parseFloat(max2),
+                },
+
+                step: 10000,
+                margin: 600,
+                pips: {
+                    //mode: 'steps',
+                    stepped: true,
+                    density: 6
+                }
+            });
+            var skipValues = [
+                document.getElementById('price_low2'),
+                document.getElementById('price_high2')
+            ];
+            slider2.noUiSlider.on('update', function (values, handle) {
+                skipValues[handle].innerHTML = '$' + values[handle];
+                //console.log(values[1] - values[0]);
+
+                  // setTimeout(() => {
+                    axiosClient.get('priceFilter_amount/' + values[0] + '/' + values[1] + '/' + base64_decode(resIds)).then((data) => {
+                    //count = data.data.length;
+                    setResults('');
+                    setResults(data.data.data);
+                    console.log(data.data.data)
+
+                    for (const [key, value] of Object.entries(data.data)) {
+                    
+                    value.id = btoa(value.id);
+                    value.id = btoa(value.id);
+                }
+                    // t.queryLat = data.data.data[0].lat;
+                    // t.queryLng = data.data.data[0].lng;  
+                }).catch((error) => { })
+                // }, 1000)
+              });
+
+    }
+
+    rangeSlider();
+    amountSlider();
+    
+
+
     }, [] )
 
 
@@ -242,10 +340,42 @@ const ListingResults = () => {
           <FontAwesomeIcon icon={faSearch} />
         </button>
       </div>
-      <div className="flex">
-        <PriceRangeFilter />
-        <PriceRangeFilter />
+
+      {/* Price Range Slider */}
+      <div className=" w-[100%] flex-col my-6">
+
+        <div id="turnover_slider" className=" w-[50%]" >
+        <label className="text-gray-700 font-semibold mb-2">Turnover Range</label>
+        <div id="slider" class=""> </div>
+            <div className="row mt-3">
+                <div className="col-6  mt-1">
+                    <span id="price_low" className="py-0 btn-light" name="min"> </span>
+                </div>
+                <div className="col-6 mt-1 pr-0">
+                    <span id="price_high" className="float-right py-0 btn-light" name="min"> </span>
+                </div>
+            </div>
+        </div>
+
+        <div id="amount_slider" className=" w-[50%] mt-[4]"  >
+        <label className="text-gray-700 font-semibold mb-2">Amount Range</label>
+        <div id="slider2" class=""> </div>
+            <div className="row mt-3">
+                <div className="col-6  mt-1">
+                    <span id="price_low2" className="py-0 btn-light" name="min"> </span>
+                </div>
+                <div className="col-6 mt-1 pr-0">
+                    <span id="price_high2" className="float-right py-0 btn-light" name="min"> </span>
+                </div>
+            </div>
+        </div>
+
       </div>
+      {/* Price Range Slider */}
+
+        {/*<PriceRangeFilter />
+        <PriceRangeFilter />*/}
+
 
       <h5 className="py-3 text-gray-700 font-semibold mt-6">
         <b>{count} Results Found</b>

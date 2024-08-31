@@ -105,3 +105,64 @@ font-size: 14px
         width: 100%;
 /*        background: #f0fff2*/
     }
+
+    .success_session {
+        position: absolute;
+        background: green;
+        right: 0px;
+        color: white;
+        border-radius: 4px;
+        padding: 5px 20px;
+    }
+
+    .success_message {
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 1040;
+        width: 100vw;
+        height: 100vh;
+        background-color: rgba(0, 0, 0, 0.4);
+        backdrop-filter: blur(15px);
+    }
+
+    .pointer {
+        cursor: pointer;
+    }
+
+    .popup_success {
+        border-radius: 4px;
+        width: 80%;
+        margin: auto;
+        background: white;
+    }
+
+    .noUi-target {
+        height: 8px;
+        background: #998787bd !important;
+
+    }
+
+    .noUi-base {
+
+    }
+
+    .noUi-connect{
+        background: #aee3df !important;
+    }
+
+    .noUi-horizontal .noUi-handle {
+        width: 14px;
+        height: 16px;
+        right: -12px;
+        top: -6px;
+        border-radius: 50%;
+        background: black;
+        box-shadow: none !important;
+    }
+
+    #price_high,
+    #price_low {
+        font-size: 13px;
+        margin: auto;
+    }

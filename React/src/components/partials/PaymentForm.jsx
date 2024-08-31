@@ -95,26 +95,27 @@ const navigate = useNavigate();
           }).catch(err => { console.log(err);
             const response = err.response;
             if(response && response.status === 422){
-                console.log(response.data.errors);
-            }console.log(err);
+              console.log(response.data.errors);
+            }//console.log(response);
             
           });
       }
       else{
           axiosClient.post("/bidCommits", payload).then(({data})=>{
-          console.log(data);
+          
           if(data.status == 200){
-            alert('Bid placed, you will be notified if bid is accepted');
+            alert('Bid placed, you will be notified if bid is accepted!');
             navigate('/');
           }
           if(data.status == 400) 
             alert(data.message);
               
-          }).catch(err => { console.log(err);
+          }).catch(err => { 
+            console.log(err);
             const response = err.response;
             if(response && response.status === 422){
                 console.log(response.data.errors);
-            }console.log(err);
+            }
             
           });
       }

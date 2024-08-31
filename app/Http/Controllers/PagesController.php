@@ -587,25 +587,32 @@ public function priceFilter($min, $max, $ids){
 }
 
 
-public function priceFilterS($min, $max, $ids){
+public function priceFilterS($min, $max, $ids){  //return $ids;
 
     $results = array();
-    $ids = explode(',',$ids); 
+    $ids = explode(',',$ids);
+
+    try {
     foreach($ids as $id){ 
-    if($id!=''){ 
+    if($id!=''){
     $listing = Services::where('id',$id)->first();
-    $range = $listing->price;
-    $db_price = $range;  
+        if($listing){
+        $range = $listing->price;
+        $db_price = $range;  
 
-    $listing->lat = (float)$listing->lat;
-    $listing->lng = (float)$listing->lng;
+        $listing->lat = (float)$listing->lat;
+        $listing->lng = (float)$listing->lng;
 
-    $listing->price = number_format($listing->price);
-    if((int)$min <= $db_price && (int)$max >= $db_price)
-        //return response()->json([ 'data' => (int)$min .'<='. $db_min .'//'.(int)$max .'>='. $db_max]);
-    $results[] = $listing;
+        $listing->price = number_format($listing->price);
+        if((int)$min <= $db_price && (int)$max >= $db_price)
+        $results[] = $listing; 
+    }
 }
-}
+} 
+} 
+catch (Exception $e) {
+       return response()->json($e->getMessage());
+} 
 
     return response()->json([ 'data' => $results]);
 }

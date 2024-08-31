@@ -754,61 +754,60 @@ public function bidCommits(Request $request){
 
         }
 
-catch(\Exception $e){
-  return response()->json(['failed' =>  $e->getMessage()]);
-}
+    catch(\Exception $e){
+      return response()->json(['message' =>  $e->getMessage(),'status' => 400 ]);
+    }
 
 
     $business_id = $request->listing;
     $Business = listing::where('id',$business_id)->first();
     $owner = User::where('id', $Business->user_id)->first();
 
-$business_id = $request->listing;
-$percent = $request->percent;
+    $business_id = $request->listing;
+    $percent = $request->percent;
 
- try{
-    $type = 'Monetery';
-    $bids = BusinessBids::create([
-      'date' => date('Y-m-d'),
-      'investor_id' => $investor_id,
-      'business_id' => $business_id,
-      'owner_id' => $Business->user_id,
-      'type' => $type,
-      'amount' => $transferAmount,
-      'representation' => $percent,
-      'stripe_charge_id' => $charge->id
-    ]);
+     try{
+        $type = 'Monetery';
+        $bids = BusinessBids::create([
+          'date' => date('Y-m-d'),
+          'investor_id' => $investor_id,
+          'business_id' => $business_id,
+          'owner_id' => $Business->user_id,
+          'type' => $type,
+          'amount' => $transferAmount,
+          'representation' => $percent,
+          'stripe_charge_id' => $charge->id
+        ]);
 
-// Milestone Fulfill check
-    $total_bid_amount = 0;
-    $mile1 = Milestones::where('listing_id',$business_id)
-    ->where('status','In Progress')->first();
-    $this_bids = BusinessBids::where('business_id',$business_id)->get();
-    foreach($this_bids as $b)
-    if($b->amount)
-    $total_bid_amount = $total_bid_amount+($b->amount);
+    // Milestone Fulfill check
+        $total_bid_amount = 0;
+        $mile1 = Milestones::where('listing_id',$business_id)
+        ->where('status','In Progress')->first();
+        $this_bids = BusinessBids::where('business_id',$business_id)->get();
+        foreach($this_bids as $b)
+        if($b->amount)
+        $total_bid_amount = $total_bid_amount+($b->amount);
 
-    if($total_bid_amount >= $mile1->amount){
-        $list = listing::where('id',$business_id)->first();
-        $owner = User::where('id',$list->user_id)->first();
-        $info=[ 'business_name'=>$list->name ];
-        $user['to'] = $owner->email; //'tottenham266@gmail.com'; //
-         Mail::send('bids.mile_fulfill', $info, function($msg) use ($user){
-             $msg->to($user['to']);
-             $msg->subject('Fulfills a milestone!');
-         });
+        if($total_bid_amount >= $mile1->amount){
+            $list = listing::where('id',$business_id)->first();
+            $owner = User::where('id',$list->user_id)->first();
+            $info=[ 'business_name'=>$list->name ];
+            $user['to'] = $owner->email; //'tottenham266@gmail.com'; //
+             // Mail::send('bids.mile_fulfill', $info, function($msg) use ($user){
+             //     $msg->to($user['to']);
+             //     $msg->subject('Fulfills a milestone!');
+             // });
      }
 // Milestone Fulfill check
 
 }
 
 catch(\Exception $e){
-  return response()->json(['failed' =>  $e->getMessage()]);
+  return response()->json(['message' =>  $e->getMessage(), 'status' => 400]);
 }
 
 if($bids){
-    Session::put('Stripe_pay','Bid placed! you will get a notification if your bid is accepted!');
-    return response()->json(['success' =>  'success']);
+    return response()->json(['message' =>  'Stripe_pay','Bid placed! you will get a notification if your bid is accepted!', 'status' => 200]);
     //return redirect("/#/listingDetails/".$business_id);
          }
 
