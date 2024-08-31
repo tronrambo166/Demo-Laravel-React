@@ -183,10 +183,7 @@ const closeAuthModal = () => {
       //navigate('/checkout'); 
   };
 
-  const handleEquipmentInvestClick = () => {
-    console.log(`Investing ${equipmentAmount} in equipment.`);
-  };
-
+ 
 
 //CORE METHODS
   useEffect(()=> {
@@ -325,17 +322,34 @@ const closeAuthModal = () => {
       });
     }
 
-    const bidCommitsEQP = () => { 
-        axiosClient.get('/getMilestones/'+form.listing_id)
-          .then(({ data }) => {
-           setAllow(data.allowToReview);
-           setAmount_r(data.amount_required);
-            //console.log(amount_required)
-          })
-          .catch(err => {
-            console.log(err); 
-          })
-    }
+
+    const handleEquipmentInvest = () => {
+      var amount = btoa(equipmentAmount);
+      var percent = btoa(equipmentPercentage);
+      var id = btoa(form.listing_id);
+
+      if (amount == '' || amount == 0)
+        $.alert({
+          title: 'Alert!',
+          content: 'Please enter a bid to invest!',
+        });
+      else {
+        let t = this;
+        $.confirm({
+          title: 'Are you sure?',
+          content: 'Are you sure to bid?',
+          buttons: {
+            confirm: function () {
+              navigate(`/investEquip/${amount}/${id}/${percent}`);
+            },
+            cancel: function () {
+              $.alert('Canceled!');
+            },
+          }
+        });
+      }
+    };
+
 
     const stripeSmallFee = (business_id,amount) => { 
         var amount = btoa(amount);
@@ -569,15 +583,14 @@ sessionStorage.setItem("purpose", "One time unlock - Small fee");
                     <p>Equipment Investment Percentage: <span className='font-bold'>{equipmentPercentage}%</span></p>
                   </div>
                 )}
-                <Link to="/invest">
 
                 <button
-                  onClick={handleEquipmentInvestClick}
+                  onClick={handleEquipmentInvest}
                   className='btn-primary text- px-4 py-2 rounded-lg mt-4'
                 >
                   Invest in Equipment
                 </button>
-                {equipmentErrorMessage && <p className="error-message text-red-600">{equipmentErrorMessage}</p>}                </Link>
+                {equipmentErrorMessage && <p className="error-message text-red-600">{equipmentErrorMessage}</p>} 
               </div>
             )}
           </div>

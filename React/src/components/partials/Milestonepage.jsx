@@ -13,7 +13,7 @@ const MilestonePage = () => {
     const getMilestones = () => {
       axiosClient.get('/getMilestones/' + listing_id)
         .then(({ data }) => {
-          if (Array.isArray(data.data)) {
+          if (Array.isArray(data.data)) { console.log(data.data);
             setMiles(data.data);
             if (data.data.length === 0) {
               setHasmile(true);
@@ -99,26 +99,14 @@ const MilestonePage = () => {
               </td>
               <td className="border border-gray-300 px-4 py-2">
                 <div className="flex space-x-2">
-                  <button
-                    onClick={() => handleStatusChange(milestone.title, 'Paid')}
-                    className={`px-3 py-1 rounded ${
-                      milestone.status === 'Paid'
-                        ? 'bg-green text-white'
-                        : 'bg-gray-200 text-gray-700'
-                    }`}
-                  >
-                    Paid
-                  </button>
+
                   <button
                     onClick={() => handleStatusChange(milestone.title, 'Done')}
-                    className={`px-3 py-1 rounded ${
-                      milestone.status === 'Done'
-                        ? 'bg-green text-white'
-                        : 'bg-gray-200 text-gray-700'
-                    }`}
+                    className="px-3 py-1 rounded bg-green text-white"
                   >
-                    Done
+                    {milestone.status}
                   </button>
+
                 </div>
                 {milestone.status === 'In Progress' && (
                   <div className="text-red-500 mt-2">{milestone.due}</div>
@@ -136,29 +124,14 @@ const MilestonePage = () => {
               <td className="border border-gray-300 px-4 py-2">
                 <div className="flex space-x-2">
                   <button
-                    onClick={() => handleStatusChange(milestone.title, 'Paid')}
-                    className={`px-3 py-1 rounded ${
-                      milestone.status === 'Paid'
-                        ? 'bg-green-500 text-white'
-                        : 'bg-gray-200 text-gray-700'
-                    }`}
-                  >
-                    Paid
-                  </button>
-                  <button
                     onClick={() => handleStatusChange(milestone.title, 'Done')}
-                    className={`px-3 py-1 rounded ${
-                      milestone.status === 'Done'
-                        ? 'bg-blue-500 text-white'
-                        : 'bg-gray-200 text-gray-700'
-                    }`}
+                    className="px-3 py-1 rounded bg-grey text-dark"
                   >
-                    Done
+                    {milestone.status}
                   </button>
+
                 </div>
-                {milestone.status === 'Done' && (
-                  <div className="text-green-500 mt-2">Completed</div>
-                )}
+   
               </td>
             </tr>
           ))}

@@ -1,5 +1,51 @@
 import { FaUpload } from 'react-icons/fa';
+import { useParams, useNavigate } from 'react-router-dom';
+import {decode as base64_decode, encode as base64_encode} from 'base-64';
+import { useState } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faLock, faStar, faStarHalfAlt, faExclamationCircle, faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons';
+import Navbar from './Navbar';
+import AuthModal from './Authmodal'; 
+import { useEffect } from 'react'
+import axiosClient from "../../axiosClient";
+import { useStateContext } from "../../contexts/contextProvider";
+import { Link } from 'react-router-dom';
+import Modal from './Authmodal';
+import UnlockPopup from './Unlockpopup';
+
 const Investequip = () => {
+
+     const { amount } = useParams();
+     const { id } = useParams();
+     const { percent } = useParams();
+     const form = {
+        amount: atob(amount),
+        listing_id: atob(id),
+        percent: atob(percent),  
+        photos:[],
+        legal_doc:'',
+        serial:'',
+        optional_doc:'',
+     }
+
+    const bidCommitsEQP = () => {
+    const response = this.form.post('bidCommitsEQP');
+    console.log(response.data);
+    if(response.data.success){
+        $.alert({
+          title: 'Alert!',
+          content: response.data.success,
+        });
+        $('#ok').css('display','none');
+    }
+    else
+    $.alert({
+          title: 'Alert!',
+          content: response.data.failed,
+        });
+
+    }    
+
     return (
         <div className='mx-auto w-[700px] h-[500px] my-6 border shadow-md p-3'>
             <div className='flex justify-between my-3 gap-[150px] py-3'>
