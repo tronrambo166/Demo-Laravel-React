@@ -146,11 +146,24 @@ const Homesearch = () => {
         <div className="relative w-full md:flex-1">
           <select className='border border-[#666666]/30 w-full text-md rounded-xl py-2 px-4 focus:outline-none appearance-none'
           ref={categoryRef} >
-            <option className='text-slate-400' value=""  >Select a category</option>
-            <option value="food">Food</option>
-            <option value="retail">Retail</option>
-            <option value="services">Services</option>
-            <option value="technology">Technology</option>
+            <option className='text-slate-400' value="">Select a category</option>
+    <option value="Agriculture">Agriculture</option>
+    <option value="Arts/Culture">Arts/Culture</option>
+    <option value="Auto">Auto</option>
+    <option value="Domestic (Home Help etc)">Domestic (Home Help etc)</option>
+    <option value="Fashion">Fashion</option>
+    <option value="Finance/Accounting">Finance/Accounting</option>
+    <option value="Food">Food</option>
+    <option value="Legal">Legal</option>
+    <option value="Media/Internet">Media/Internet</option>
+    <option value="Other">Other</option>
+    <option value="Pets">Pets</option>
+    <option value="Real Estate">Real Estate</option>
+    <option value="Retail">Retail</option>
+    <option value="Security">Security</option>
+    <option value="Sports/Gaming">Sports/Gaming</option>
+    <option value="Technology/Communications">Technology/Communications</option>
+    <option value="Services">Services</option>
           </select>
           <FontAwesomeIcon
             icon={faChevronDown}

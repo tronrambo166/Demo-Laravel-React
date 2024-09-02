@@ -29,6 +29,8 @@ import UserForm from './views/userForm';
 import Register from './views/register';
 import Login from './views/login';
 import ServiceTable from './components/partials/servicestable';
+import CategoryPage from './components/partials/Categorypage';
+import InvestorRegistration from './components/partials/Investreg';
 
 const router = createBrowserRouter([
   {
@@ -68,8 +70,12 @@ const router = createBrowserRouter([
       { path: '/service-milestones/:id', element: <MilestonesPageS /> },
       { path: '/checkout/:amount/:listing_id/:percent/:purpose', element: <PaymentForm /> },
       { path: '/serviceresults/:resIds/:loc', name: 'serviceresults', element: <ServiceResults /> },
-      { path: '/subscribe', element: <Subscribepage /> },
+      { path: '/subscribe/:id', element: <Subscribepage /> },
       { path: '/checkout', element: <PaymentForm /> },
+      { path: '/categorypage', element: <CategoryPage/> },
+      { path: '/createinvestor', element: <InvestorRegistration/> },
+
+
       { path: '/mile', element: <Mile /> },
       { path: '/investEquip/:amount/:id/:percent', element: <Invest /> },
       { path: '/register', element: <Register /> },

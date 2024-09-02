@@ -71,7 +71,7 @@ const ListingDetails = ({ onClose }) => {
       setShowSubs(true);
       setShowSmallFee(false);
     } else {
-      navigate(`/subscribe/${form.listing_id}`);
+      navigate(`/subscribe/${btoa(btoa( form.listing_id))}`);
     }
   };
   
