@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+//import { useParams } from 'react-router-dom';
 
 const Subscribepage = () => {
     const [selectedPackage, setSelectedPackage] = useState(null);
@@ -11,37 +12,101 @@ const Subscribepage = () => {
     const [expire, setExpire] = useState(5);
     const [frequency, setFrequency] = useState('monthly');
     const navigate = useNavigate();
+    const { id } = useParams();
+
+    const [amount, setAmount] = useState('silver');
+    const [range, setRange] = useState('all');
+    const [days, setDays] = useState('');
+    const form = {
+        business_id: atob(atob(id))
+    };
 
     const packagePrices = {
         silver: {
-            monthly: '$9.99',
-            annual: '$95.99',
+            monthly: '9.99',
+            annual: '95.99',
         },
         gold: {
-            monthly: '$29.99',
-            annual: '$287.99',
+            monthly: '29.99',
+            annual: '287.99',
         },
         platinum: {
-            monthly: '$69.99',
-            annual: '$671.99',
+            monthly: '69.99',
+            annual: '671.99',
         },
     };
 
     const handlePackageSelect = (pkg) => {
         setSelectedPackage(pkg);
+        if(pkg == '9.99'){
+            setPlan('silver');
+            setDays(30);
+        }
+        if(pkg == '29.99'){
+            setPlan('gold');
+            setDays(30);
+        }
+        if(pkg == '69.99'){
+            setPlan('platinum');
+            setDays(30);
+        }
+        if(pkg == '95.99'){
+            setPlan('silver');
+            setDays(365);
+        }
+        if(pkg == '287.99'){
+            setPlan('gold');
+            setDays(365);
+        }
+        if(pkg == '671.99'){
+            setPlan('platinum');
+            setDays(365);
+        }
+
+        if(pkg == 'platinum-trial' || 'gold-trial' || 'silver-trial'){
+            setPlan(pkg);
+            setDays(7);
+        }
+        setAmount(pkg);
+
     };
 
     const handleFrequencyChange = (freq) => {
         setFrequency(freq);
     };
 
-    const handleCheckout = () => {
-        if (selectedPackage) {
-            setShowConfirmation(true);
-        } else {
-            setShowAlert(true);
-        }
-    };
+   
+    const Checkout = () => {
+    //alert(amount+plan+days)
+
+    if(plan == 'gold' && range == 'all')
+        alert('Please select a range!');
+
+    else {
+        if (selectedPackage){
+        const range_e = btoa(form.range);
+        const amount_e = btoa(amount);
+        const business_id_e = btoa(form.business_id);
+        const plan_e = btoa(plan);
+        const days_e = btoa(days);
+        $.confirm({
+          title: 'Are you sure?',
+          content: 'Are you sure to pay?',
+          buttons: {
+            confirm: function () {
+              window.location.href = 'http://127.0.0.1:8000/stripeSubscribe/' + amount_e+'/'+plan_e+'/'+days_e+'/'+range_e;
+             //navigate('/stripeSubscribe/' + amount_e+'/'+plan_e+'/'+days_e+'/'+range_e);
+            },
+            cancel: function () {
+              $.alert('Canceled!');
+            },
+          }
+        });
+    }
+    else setShowAlert(true);
+    }
+
+    }
 
     const confirmCheckout = () => {
         setShowConfirmation(false);
@@ -94,13 +159,13 @@ const Subscribepage = () => {
                             <div
                                 className={`border rounded-xl p-4 text-center shadow-sm w-full sm:w-[300px] cursor-pointer 
                                 ${selectedPackage === 'silver' ? 'bg-green-100 border-green' : ''}`}
-                                onClick={() => handlePackageSelect('silver')}
+                                onClick={() => handlePackageSelect(packagePrices.silver[frequency])}
                             >
                                 <h1>{packagePrices.silver[frequency]}</h1>
                                 <p className="whitespace-nowrap">
                                     10 free "Start conversations" per<br /> month from any range.
                                 </p>
-                                <button 
+                                <button onClick={() => handlePackageSelect('silver-trial')}
                                     className={`w-full sm:w-[250px] border rounded-md py-2 my-2 
                                     ${frequency === 'annual' ? 'bg-gray-400 text-gray-700 cursor-not-allowed' : 'bg-green hover:bg-green-700 text-white'}`}
                                     disabled={frequency === 'annual'}
@@ -115,13 +180,13 @@ const Subscribepage = () => {
                             <div
                                 className={`border text-center p-4 rounded-md shadow-sm w-full sm:w-[300px] cursor-pointer 
                                 ${selectedPackage === 'gold' ? 'bg-green-100 border-green' : ''}`}
-                                onClick={() => handlePackageSelect('gold')}
+                                onClick={() => handlePackageSelect(packagePrices.gold[frequency])}
                             >
                                 <h1>{packagePrices.gold[frequency]}</h1>
                                 <p className="whitespace-nowrap">
                                     Silver + access to all data from one<br /> chosen range.
                                 </p>
-                                <button 
+                                <button onClick={() => handlePackageSelect('gold-trial')}
                                     className={`w-full sm:w-[250px] border rounded-md py-2 my-2 
                                     ${frequency === 'annual' ? 'bg-gray-400 text-gray-700 cursor-not-allowed' : 'bg-green hover:bg-green-700 text-white'}`}
                                     disabled={frequency === 'annual'}
@@ -136,13 +201,13 @@ const Subscribepage = () => {
                             <div
                                 className={`border text-center p-4 rounded-md shadow-sm w-full sm:w-[300px] cursor-pointer 
                                 ${selectedPackage === 'platinum' ? 'bg-green-100 border-green' : ''}`}
-                                onClick={() => handlePackageSelect('platinum')}
+                                onClick={() => handlePackageSelect(packagePrices.platinum[frequency])}
                             >
                                 <h1>{packagePrices.platinum[frequency]}</h1>
                                 <p className="whitespace-nowrap">
                                     Silver access + Gold access to all data.
                                 </p>
-                                <button 
+                                <button onClick={() => handlePackageSelect('platinum-trial')}
                                     className={`w-full sm:w-[250px] border rounded-md py-2 my-2 
                                     ${frequency === 'annual' ? 'bg-gray-400 text-gray-700 cursor-not-allowed' : 'bg-green hover:bg-green-700 text-white'}`}
                                     disabled={frequency === 'annual'}
@@ -166,7 +231,7 @@ const Subscribepage = () => {
                             <div className="mt-6 lg:mt-0 flex flex-col gap-4 items-center">
                                 <button
                                     className="btn-primary px-6 py-2 rounded-full text-white"
-                                    onClick={handleCheckout}
+                                    onClick={Checkout}
                                 >
                                     Checkout
                                 </button>
