@@ -19,5 +19,5 @@ Route::get('/', function () {
 
 });
 Route::get('/stripeSubscribe/{amount}/{plan}/{days}/{range}', [checkoutController::class, 'stripeSubscribeGet'])->name('stripeSubscribe');
-Route::get('latBusiness', [PagesController::class,'latBusiness'])->name('latBusiness');
-Route::get('/users', [UserController::class, 'index']);
+Route::get('/stripeSubscribeSuccess', [checkoutController::class, 'stripeSubscribeSuccess'])->name('stripeSubscribeSuccess');
+Route::get('/connect/{id}', [checkoutController::class, 'connect'])->name('connect.stripe');

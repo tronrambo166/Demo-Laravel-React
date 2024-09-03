@@ -149,6 +149,7 @@ class checkoutController extends Controller
       else if($plan == 'platinum-trial'){ $trial_price = 69.99; $payLink = 'https://buy.stripe.com/test_00g9DGeZr15V88w5km'; }
 
       else $trial_price = $price;
+
       if($price == 0)
         return view('checkoutSubscribe.stripe',compact('price','plan','payLink','trial_price','base_price'));
     //If trial
@@ -160,9 +161,10 @@ class checkoutController extends Controller
       if($plan == 'silver' && $days == 365) $price_id = 'price_1O7bXyJkjwNxIm6zpTcQdjYg';
       if($plan == 'gold' && $days == 365) $price_id = 'price_1O7bdzJkjwNxIm6zwGCyyLpg';
       if($plan == 'platinum' && $days == 365) $price_id = 'price_1O7bhfJkjwNxIm6zMLsZZTGP';
-
+//
       $session = $this->Client->checkout->sessions->create([
-              'success_url' => 'https://test.jitume.com/stripeSubscribeSuccess?session_id={CHECKOUT_SESSION_ID}',
+              //'/', https://test.jitume.com
+              'success_url' => 'http://127.0.0.1:8000/stripeSubscribeSuccess?session_id={CHECKOUT_SESSION_ID}',
               'cancel_url' => 'https://example.com/canceled.html',
               'mode' => 'subscription',
               'line_items' => [[
@@ -193,6 +195,7 @@ class checkoutController extends Controller
             $sub = $this->Client->subscriptions->retrieve(
               $stripe_sub_id, []
         );
+          
         $transferAmount=0;
         $original_amount = ($sub->items->data[0]->plan->amount)/100;
         if($original_amount == 69.99) $plan = 'platinum-trial';
@@ -202,6 +205,7 @@ class checkoutController extends Controller
        }
 
        else{
+        $original_amount = ($checkout->amount_total)/100;
         $transferAmount=($checkout->amount_total)/100;
         $plan_range=explode('_',$checkout->client_reference_id);
         $plan = $plan_range[0];
@@ -246,12 +250,13 @@ class checkoutController extends Controller
         else
         $message = 'Your '.ucwords($plan).' plan expires in 30 days';
        Session::put('Stripe_pay','Success! '.$message);
-       return redirect("/");
+       return redirect("http://127.0.0.1:5173/");
 
         }
       catch(\Exception $e){
-      Session::put('Stripe_failed',$e->getMessage());
-      return redirect("/");
+        Session::put('Stripe_failed',$e->getMessage());
+        return $e;
+        //return response()->json(['message' => $e->getMessage()]);
     }
 
     //Stripe
@@ -817,7 +822,7 @@ if($bids){
 
 
 // Onboarding / Connect to stripe 
- public function connect($id) {
+ public function connect($id) { 
     $seller = User::where('id',$id)->first();
     if(!$seller->completed_onboarding){
         $token = hexdec(uniqid());
@@ -846,13 +851,15 @@ $account_links = $this->Client->accountLinks->create([
               'refresh_url' => route('connect.stripe',['id'=>$id]),
               'return_url' => route('return.stripe',['token'=>$token]),
               'type' => 'account_onboarding',
-            ]);
-    return redirect($account_links->url);
+            ]); 
+
+    redirect()->to($account_links->url)->send();
+    //echo "<script>window.location.href='$account_links->url'</script>";
 
     }
     catch(\Exception $e){
     Session::put('loginFailed', $e->getMessage());
-    return redirect()->back();
+    return response()->json(['message' =>  $e->getMessage(), 'status' => 400]);
     }
     }
 
@@ -865,7 +872,7 @@ $account_links = $this->Client->accountLinks->create([
               Session::put('failed',$e->getMessage());
               DB::table('users')->where('id',$seller->id)
               ->update(['completed_onboarding'=>0]);
-              return redirect()->back();
+              return response()->json(['message' =>  $e->getMessage(), 'status' => 400]);
 }
     
 //echo '<pre>'; print_r($account_links); echo '<pre>';

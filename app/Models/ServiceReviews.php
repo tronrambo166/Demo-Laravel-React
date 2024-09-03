@@ -8,4 +8,5 @@ use Illuminate\Database\Eloquent\Model;
 class ServiceReviews extends Model
 {
     use HasFactory;
+    protected $guarded = [];
 }

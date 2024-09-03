@@ -9,4 +9,5 @@ class Milestones extends Model
 {
     use HasFactory;
     protected $guarded = [];
+    protected $guarded = [];
 }

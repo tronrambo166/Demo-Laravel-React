@@ -1,8 +1,29 @@
 import { FaUser, FaCog, FaBell,FaWrench,FaEnvelope,FaCopy,FaDollarSign,FaHome } from 'react-icons/fa';
-import  profile from "../../images/profile.png"
+import  profile from "../../../images/profile.png"
 import { Link } from 'react-router-dom';
+import { useEffect, useState } from 'react'
+import axiosClient from "../../axiosClient";
 // import doc from "../images/doc.png"
 const Dashboardhero = () => {
+
+    const {user, setUser} = useState();
+    let { id } = '';
+
+    useEffect(()=> {
+     const getUser = () => { 
+        axiosClient.get('/checkAuth')
+          .then(({ data }) => {
+            //setUser(data)
+            //id = data.user.id;
+            //console.log(id);
+          })
+          .catch(err => {
+            console.log(err); 
+          })
+    };
+    getUser();
+}, [])
+
   return (
     <>
       <div id='dashbg' className='relative w-[950px] rounded-xl mb-[20px] mx-2 h-[200px] mt-4 p-4'>
@@ -73,7 +94,7 @@ const Dashboardhero = () => {
                 </div>
 </Link>
 
-<Link to="/dashboard/account">
+<Link to={`./account/48`} >
 
                 <div className='flex items-center gap-1'>
                     <FaDollarSign/>

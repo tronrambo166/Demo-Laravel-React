@@ -79,7 +79,7 @@ Route::middleware('auth:sanctum')->group(function() {
     //Stripe-Connect
     Route::get('/connect/{id}', [checkoutController::class, 'connect'])->name('connect.stripe');
     Route::get('/saveStripe/{token}', [checkoutController::class, 'saveStripe'])->name('return.stripe');
-
+    Route::get('/checkAuth', [AuthController::class,'checkAuth']);
 
 });
 //P R O T E C T E D    R O U T E S
@@ -214,4 +214,4 @@ Route::post('registerI', [PagesController::class, 'registerI'])->name('registerI
 // Route::post('/create', [UserController::class, 'store']);
 // Route::put('/update/{id}', [UserController::class, 'update']);
 // Route::get('/delete/{id}', [UserController::class, 'destroy']);
-// Route::get('/checkAuth', [AuthController::class,'checkAuth']);
+ //Route::get('/checkAuth', [AuthController::class,'checkAuth']);

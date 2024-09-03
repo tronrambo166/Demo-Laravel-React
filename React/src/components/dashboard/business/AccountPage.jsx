@@ -1,5 +1,25 @@
+import { FaUser, FaCog, FaBell,FaWrench,FaEnvelope,FaCopy,FaDollarSign,FaHome } from 'react-icons/fa';
+//import  profile from "../../images/profile.png";
+import { Link } from 'react-router-dom';
+import { useEffect, useState } from 'react'
+import axiosClient from "../../../axiosClient";
+import { useParams, useNavigate } from 'react-router-dom';
 
 function AccountPage() {
+ 
+ const { user_id } = useParams();
+ //const user_id = atob(atob(id));
+  const connectToStripe = () => { 
+    window.location.href = 'http://127.0.0.1:8000/connect/'+ user_id;
+        // axiosClient.get('/connect/'+ user_id)
+        //   .then(({ data }) => {
+        //     console.log(data)
+        //   })
+        //   .catch(err => {
+        //     console.log(err); 
+        //   })
+    };
+
   return (
     <div className="container mx-auto p-6">
       <div className="max-w-md mx-auto bg-white rounded-lg shadow-lg p-6">
@@ -45,11 +65,21 @@ function AccountPage() {
           </div>
 
           <div className="mt-6">
-            <button
+           {/* <button
               className="btn-primary py-2 px-6 rounded-lg text-white focus:outline-none"
             >
               View Stripe Account
+            </button>*/}
+
+            <button onClick={connectToStripe}
+              className="btn-primary py-2 px-6 rounded-lg text-white focus:outline-none"
+            
+            >
+              Connect to Stripe
             </button>
+
+            <p class="text-center bg-light p-2 "> You must onboard to Jitume Stripe platform to receive business milestone payments.</p>
+
           </div>
         </div>
       </div>

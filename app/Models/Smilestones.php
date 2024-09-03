@@ -8,4 +8,5 @@ use Illuminate\Database\Eloquent\Model;
 class Smilestones extends Model
 {
     use HasFactory;
+    protected $guarded = [];
 }

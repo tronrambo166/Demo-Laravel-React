@@ -4,6 +4,8 @@ import Homepage from './components/pages/Homepage';
 import Servicepage from './components/pages/Servicepage';
 import ListingResults from './components/partials/listingResults';
 import ListingDetails from './components/partials/ListingDetails';
+
+//Dashborad Components
 import Dashboard from './components/pages/Dashboard';
 import MyBusinesses from './components/partials/MyBusinesses';
 import Dashhome from './components/partials/Dashhome';
@@ -14,7 +16,7 @@ import AddService from './components/partials/Addservice';
 import ServiceMilestone from './components/partials/ServiceMilestone';
 import ServiceBookings from './components/partials/Servicebookings';
 import Messages from './components/partials/Messages';
-import AccountPage from './components/partials/AccountPage';
+import AccountPage from './components/dashboard/business/AccountPage';
 import AddBusiness from './components/partials/Addbusiness';
 import PaymentForm from './components/partials/PaymentForm';
 import ServiceDetails from './components/partials/ServiceDetails';
@@ -56,7 +58,7 @@ const router = createBrowserRouter([
           { path: 'service-milestone', element: <ServiceMilestone /> },
           { path: 'service-bookings', element: <ServiceBookings /> },
           { path: 'messages', element: <Messages /> },
-          { path: 'account', element: <AccountPage /> },
+          { path: 'account/:user_id', element: <AccountPage /> },
           { path: 'add-business', element: <AddBusiness /> },
           { path: 'payment-form', element: <PaymentForm /> },
 		  { path: 'services-table', element: <ServiceTable/> },

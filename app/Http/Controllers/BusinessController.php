@@ -1121,7 +1121,7 @@ public function assetEquip_download($id, $type){
       $results['subscribed'] = 0;
       return response()->json([ 'data' => $results, 'conv'=>$conv, 'count' => $count, 'reviews' => $reviews] );
     }
-
+      $conv = true;
       $expire_date = date('Y-m-d',$stripe_sub->current_period_end);
       //Get Stripe Subscription
       $count = 1;

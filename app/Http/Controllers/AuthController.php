@@ -12,7 +12,8 @@ class AuthController extends Controller
 {
     public function checkAuth() {
          return response()->json([
-            'auth' => Auth::check()
+            'user' => Auth::user()
+            //'auth' => Auth::check()
         ]);
     }
     

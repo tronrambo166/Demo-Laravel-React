@@ -14,7 +14,7 @@ const Subscribepage = () => {
     const navigate = useNavigate();
     const { id } = useParams();
 
-    const [amount, setAmount] = useState('silver');
+    const [amount, setAmount] = useState('0');
     const [range, setRange] = useState('all');
     const [days, setDays] = useState('');
     const form = {
@@ -38,6 +38,8 @@ const Subscribepage = () => {
 
     const handlePackageSelect = (pkg) => {
         setSelectedPackage(pkg);
+        setAmount(pkg);
+
         if(pkg == '9.99'){
             setPlan('silver');
             setDays(30);
@@ -63,11 +65,11 @@ const Subscribepage = () => {
             setDays(365);
         }
 
-        if(pkg == 'platinum-trial' || 'gold-trial' || 'silver-trial'){
+        if(pkg == 'platinum-trial' || pkg == 'gold-trial' || pkg == 'silver-trial'){
             setPlan(pkg);
             setDays(7);
-        }
-        setAmount(pkg);
+            setAmount(0);
+        }     
 
     };
 
@@ -165,14 +167,16 @@ const Subscribepage = () => {
                                 <p className="whitespace-nowrap">
                                     10 free "Start conversations" per<br /> month from any range.
                                 </p>
-                                <button onClick={() => handlePackageSelect('silver-trial')}
+                                
+                            </div>
+
+                            <button onClick={() => handlePackageSelect('silver-trial')}
                                     className={`w-full sm:w-[250px] border rounded-md py-2 my-2 
                                     ${frequency === 'annual' ? 'bg-gray-400 text-gray-700 cursor-not-allowed' : 'bg-green hover:bg-green-700 text-white'}`}
                                     disabled={frequency === 'annual'}
                                 >
                                     Try free for 7 days
                                 </button>
-                            </div>
                         </div>
 
                         <div className="flex flex-col items-center w-full sm:w-1/3">
@@ -186,14 +190,15 @@ const Subscribepage = () => {
                                 <p className="whitespace-nowrap">
                                     Silver + access to all data from one<br /> chosen range.
                                 </p>
-                                <button onClick={() => handlePackageSelect('gold-trial')}
+                                
+                            </div>
+                            <button onClick={() => handlePackageSelect('gold-trial')}
                                     className={`w-full sm:w-[250px] border rounded-md py-2 my-2 
                                     ${frequency === 'annual' ? 'bg-gray-400 text-gray-700 cursor-not-allowed' : 'bg-green hover:bg-green-700 text-white'}`}
                                     disabled={frequency === 'annual'}
                                 >
                                     Try free for 7 days
                                 </button>
-                            </div>
                         </div>
 
                         <div className="flex flex-col items-center w-full sm:w-1/3">
@@ -207,14 +212,15 @@ const Subscribepage = () => {
                                 <p className="whitespace-nowrap">
                                     Silver access + Gold access to all data.
                                 </p>
-                                <button onClick={() => handlePackageSelect('platinum-trial')}
+                               
+                            </div>
+                             <button onClick={() => handlePackageSelect('platinum-trial')}
                                     className={`w-full sm:w-[250px] border rounded-md py-2 my-2 
                                     ${frequency === 'annual' ? 'bg-gray-400 text-gray-700 cursor-not-allowed' : 'bg-green hover:bg-green-700 text-white'}`}
                                     disabled={frequency === 'annual'}
                                 >
                                     Try free for 7 days
                                 </button>
-                            </div>
                         </div>
                     </div>
 
