@@ -1,4 +1,32 @@
-const ServiceTable = () => {
+import { Link } from 'react-router-dom';
+import { useEffect, useState } from 'react'
+import axiosClient from "../../axiosClient";
+// import doc from "../images/doc.png"
+
+  const ServiceTable = () => {
+
+    const [user, setUser] = useState();
+    const [business, setBusiness] = useState('')
+    const [service, setService] = useState('');
+
+    useEffect(()=> {
+     const getBusinessAndServices = () => { 
+      setTimeout(() => {
+        axiosClient.get('/business/dashhome')
+          .then(({ data }) => {
+            setBusiness(data.business)
+            setService(data.service)
+            
+          })
+          .catch(err => {
+            console.log(err); 
+          })
+        }, 500);
+    };
+    getBusinessAndServices();
+    }, [])
+    console.log(business)
+
   // Example data for the table
   const data = [
     { name: 'Service 1', category: 'Category A', details: 'Details about Service 1', required: true, amount: '$100', contact: '123-456-7890' },
@@ -22,7 +50,7 @@ const ServiceTable = () => {
             </tr>
           </thead>
           <tbody className="bg-white divide-y">
-            {data.map((item, index) => (
+            {Object.keys(data).map((item, index) => (
               <tr key={index}>
                 <td className="px-6 py-4 flex items-center">
                   <img 
@@ -46,7 +74,49 @@ const ServiceTable = () => {
           </tbody>
         </table>
       </div>
+
+      <h1 className="text-[#2D3748] font-semibold text-2xl mb-4">My Businesses</h1>
+      <div className="overflow-x-auto">
+        <table className="min-w-full divide-y divide-gray-600 text-black">
+          <thead className="bg-white">
+            <tr className="text-gray-400">
+              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Name</th>
+              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Category</th>
+              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Details</th>
+              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Amount</th>
+              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Action</th>
+            </tr>
+          </thead>
+          <tbody className="bg-white divide-y">
+             {business.map((item, index) => (
+              <tr key={index}>
+                <td className="px-6 py-4 flex items-center">
+                  <img 
+                    className="w-[50px] h-[50px] rounded-lg" 
+                    src="https://plus.unsplash.com/premium_photo-1680859126164-ac4fd8f56625?q=80&w=2071&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" 
+                    alt="Service" 
+                  />
+                  <div className="ml-4">
+                    <div className="text-sm font-medium">{item.name}</div>
+                    <div className="text-sm">{item.contact}</div>
+                  </div>
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm">{item.category}</td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm">{item.details}</td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm">{item.amount}</td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm">
+                  <button className="text-green rounded-xl border py-2 px-5">View milestones</button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
     </div>
+
+
+
   );
 }
 

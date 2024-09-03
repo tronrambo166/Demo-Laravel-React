@@ -99,37 +99,34 @@ return view('business.applyForShow');
 }
 
 public function home(){
-if(Session::has('c_to_action') && Session::get('c_to_action') == true){
-  Session::forget('c_to_action');
-  return redirect('business/bBQhdsfE_WWe4Q-_f7ieh7Hdhf2E_');
-}
+// if(Session::has('c_to_action') && Session::get('c_to_action') == true){
+//   Session::forget('c_to_action');
+//   return redirect('business/bBQhdsfE_WWe4Q-_f7ieh7Hdhf2E_');
+// }
 
-else if(Session::has('c_to_actionS') && Session::get('c_to_actionS') == true){
-  Session::forget('c_to_actionS');
-  return redirect('business/bBQhdsfE_WWe4Q-_f7ieh7Hdhf2F_');
-}
-else if(Session::has('c_to_action_Service') && Session::get('c_to_action_Service') == true){
-  Session::forget('c_to_action_Service');
-  return redirect('/');
-}
+// else if(Session::has('c_to_actionS') && Session::get('c_to_actionS') == true){
+//   Session::forget('c_to_actionS');
+//   return redirect('business/bBQhdsfE_WWe4Q-_f7ieh7Hdhf2F_');
+// }
+// else if(Session::has('c_to_action_Service') && Session::get('c_to_action_Service') == true){
+//   Session::forget('c_to_action_Service');
+//   return redirect('/');
+// }
+$user_email = Auth::user()->email;
+$user_name = Auth::user()->fname.' '.Auth::user()->lname;
 
 $investor ='';
 $business = listing::where('user_id',Auth::id())->get();
 $services = Services::where('shop_id',Auth::id())->get();
 $investor_ck = User::where('id',Auth::id())->first();
 
-if($investor_ck == null){
-if(Session::has('investor_email')){   
-$mail = Session::get('investor_email');
-$investor_ck = User::where('email',$mail)->first();
+// if($investor_ck == null){
+// if(Session::has('investor_email')){   
+// $mail = Session::get('investor_email');
+
 if ($investor_ck->investor == 1) $investor = true;
 else $investor = false;
 
-} }
-else{
-if ($investor_ck->investor == 1) $investor = true;
-else $investor = false;
-} 
 
 //Investments
 $results = []; $t_share = 0;
@@ -152,9 +149,7 @@ foreach($convs as $conv){
 //Investments
 // return view('business.index',compact('business','investor','results','services'));
 
-$user_email = Auth::user()->email;
-$user_name = Auth::user()->fname.' '.Auth::user()->lname;
-return view('business.index',compact('business','investor','results','services','user_email','user_name'));
+return response()->json(['business'=>$business,'investor'=>$investor,'results'=>$results,'services'=>$services,'user_email'=>$user_email,'user_name'=>$user_name]);
 }
 
 

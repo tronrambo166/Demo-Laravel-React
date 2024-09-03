@@ -81,11 +81,8 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::get('/saveStripe/{token}', [checkoutController::class, 'saveStripe'])->name('return.stripe');
     Route::get('/checkAuth', [AuthController::class,'checkAuth']);
 
-});
-//P R O T E C T E D    R O U T E S
 
-
-// B U S I N E S S    P R O T E C T E D
+    // B U S I N E S S    P R O T E C T E D
 Route::prefix('/business')->group(function(){
 Route::get('bBQhdsfE_WWe4Q-_f7ieh7Hdhf2E_', [BusinessController::class, 'add_listing'])->name('add-listing');
 Route::post('create-listing', [BusinessController::class, 'save_listing'])->name('create-listing');
@@ -138,7 +135,7 @@ Route::get('getBookers/{s_id}', [ServiceController::class, 'getBookers'])->name(
 Route::get('bBQhdsfE_WWe4Q-_f7ieh7Hdhf7F_', [ServiceController::class, 'service_messages'])->name('service-messages');
 
 
-Route::get('/', [BusinessController::class, 'home'])->name('services/index');
+Route::get('/dashhome', [BusinessController::class, 'home'])->name('services/index');
 Route::get('bBQhdsfE_WWe4Q-_f7ieh7Hdhf8F_', [ServiceController::class, 'listings'])->name('services');
 //Route::post('add_eqp', [ServiceController::class, 'add_eqp'])->name('add_eqp');
 Route::post('up_service', [ServiceController::class, 'up_listing'])->name('up_service');
@@ -151,6 +148,12 @@ Route::post('embed_service_videos', [ServiceController::class, 'embed_service_vi
 });
 
 // B U S I N E S S    P R O T E C T E D   ENDS
+
+});
+//P R O T E C T E D    R O U T E S
+
+
+
 
 
 Route::get('latBusiness', [PagesController::class,'latBusiness'])->name('latBusiness');

@@ -6,7 +6,7 @@ const Dashhome = () => {
     <div>
         <ServiceTable/>
 
-        <Table/>
+{/*        <Table/>*/}
     </div>
   )
 }
