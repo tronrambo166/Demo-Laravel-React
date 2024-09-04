@@ -97,7 +97,7 @@ Route::get('bBQhdsfE_WWe4Q-_f7ieh7Hdhf5E_', [BusinessController::class, 'my_bids
 Route::get('remove_bids/{id}', [BusinessController::class, 'remove_bids'])->name('remove_bids');
 
 Route::get('assetEquip/download/{id}/{type}', [BusinessController::class, 'assetEquip_download'])->name('assetEquip/download');
-Route::get('bBQhdsfE_WWe4Q-_f7ieh7Hdhf9F_', [BusinessController::class, 'account'])->name('account');
+Route::get('account', [BusinessController::class, 'account'])->name('account');
 
 // --- MILESTONE
 Route::get('bBQhdsfE_WWe4Q-_f7ieh7Hdhf6E_', [BusinessController::class, 'add_milestones'])->name('add_milestones');
@@ -122,14 +122,14 @@ Route::post('create-service', [ServiceController::class, 'save_listing'])->name(
 // --- MILESTONE
 Route::get('bBQhdsfE_WWe4Q-_f7ieh7Hdhf3F_', [ServiceController::class, 'add_milestones'])->name('add_s_milestones');
 Route::get('bBQhdsfE_WWe4Q-_f7ieh7Hdhf4F_-{id}', [ServiceController::class, 'milestones'])->name('s_milestones');
-Route::post('findMilestones', [ServiceController::class, 'findMilestones'])->name('findMilestones');
+Route::get('findMilestones/{s_id}/{booker_id}', [ServiceController::class, 'findMilestones'])->name('findMilestones');
 
 Route::post('save_s_milestone', [ServiceController::class, 'save_milestone'])->name('save_s_milestone');
 Route::post('up_milestones', [ServiceController::class, 'up_milestone'])->name('up_s_milestones');
 Route::get('delete_s_milestone/{id}', [ServiceController::class, 'delete_milestone'])->name('delete_s_milestone');
 Route::post('mile_s_status', [ServiceController::class, 'mile_status'])->name('mile_s_status');
 // --- MILESTONE
-Route::get('bBQhdsfE_WWe4Q-_f7ieh7Hdhf5F_', [ServiceController::class, 'service_booking'])->name('service_booking');
+Route::get('service_booking', [ServiceController::class, 'service_booking'])->name('service_booking');
 Route::get('bBQhdsfE_WWe4Q-_f7ieh7Hdhf6F_', [ServiceController::class, 'my_booking'])->name('my_booking');
 Route::get('bBQhdsfE_WWe4Q-_f7ieh7Hdhf6F__', [ServiceController::class, 'booker_milestones'])->name('booker-milestones');
 Route::get('getBookers/{s_id}', [ServiceController::class, 'getBookers'])->name('getBookers');

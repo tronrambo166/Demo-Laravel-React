@@ -650,10 +650,10 @@ return response()->json(['milestones' => $milestones, 'business'=>$business, 'bu
 }
 
 
-public function findMilestones(Request $request){
+public function findMilestones($service_id, $booker_id){
 
-  $service_id = $request->service_id;
-  $booker_id = $request->booker_id;
+  // $service_id = $request->service_id;
+  // $booker_id = $request->booker_id;
   //Optional
   $service = Services::where('id',$service_id)->first();
   if($service)
@@ -670,7 +670,8 @@ public function findMilestones(Request $request){
   ->where('booker_id', $booker_id)->get();
  
   $business = Services::where('shop_id',Auth::id())->get();
-  return view('services.milestones',compact('milestones','business','s_name', 'booker_name'));
+  //return view('services.milestones',compact('milestones','business','s_name', 'booker_name'));
+  return response()->json(['milestones' => $milestones, 'business'=>$business, 's_name' => $s_name, 'booker_name' => $booker_name ]);
 }
 
 
@@ -705,7 +706,10 @@ public function getBookers($s_id){
   ->where('status', 'Confirmed')->get();
   foreach($book as $b){
     $booker = User::where('id',$b->booker_id)->first();
+    if($booker){
+    $booker->name = $booker->fname. ' ' .$booker->lname;
     $results[] = $booker;
+  }
   }
 return response()->json(['data' => $results]);
 }
@@ -951,7 +955,7 @@ foreach($booking as $book)
 $remove_new = serviceBook::where('service_owner_id',Auth::id())
 ->update(['new'=>0]);
 
-return view('services.service_booking',compact('results'));
+return response()->json(['results' => $results]);
 }
 
 public function serviceBook(Request $request){ 

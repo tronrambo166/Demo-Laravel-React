@@ -8,7 +8,8 @@ import { useParams, useNavigate } from 'react-router-dom';
 function AccountPage() {
  
  const { user_id } = useParams();
- //const user_id = atob(atob(id));
+
+
   const connectToStripe = () => { 
     window.location.href = 'http://127.0.0.1:8000/connect/'+ user_id;
         // axiosClient.get('/connect/'+ user_id)
@@ -19,6 +20,28 @@ function AccountPage() {
         //     console.log(err); 
         //   })
     };
+
+ const [setDetails, details] = useState([]);
+ const [setBal, bal] = useState('');
+ const [setBalP, balP] = useState('');
+ const [setC, C] = useState('');
+
+    useEffect(() => {
+    const getAccount = (id) => {
+        axiosClient.get('/business/account')
+          .then(({ data }) => {
+            console.log(data.balanceA);
+            setBal(data.balanceA);
+            setBalP(data.balanceA);
+            setC(data.connected);
+            setDetails(data.user)
+          })
+          .catch(err => {
+            console.log(err);
+          });
+    };
+    getAccount();
+  }, []);
 
   return (
     <div className="container mx-auto p-6">
@@ -48,11 +71,11 @@ function AccountPage() {
         
         <div className="border-t border-gray-200 pt-6">
           <div className="flex justify-between mb-4">
-            <span className="text-gray-600">First Name:</span>
+            <span className="text-gray-600">First Name:{details.fname}</span>
             <span className="font-semibold text-gray-800">Daniel</span>
           </div>
           <div className="flex justify-between mb-4">
-            <span className="text-gray-600">Last Name:</span>
+            <span className="text-gray-600">Last Name:{details.lname}</span>
             <span className="font-semibold text-gray-800">Levy</span>
           </div>
           <div className="flex justify-between mb-4">

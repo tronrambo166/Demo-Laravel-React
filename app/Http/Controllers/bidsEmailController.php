@@ -35,7 +35,7 @@ public function __construct(StripeClient $client)
 
 public function bidsAccepted(Request $request)
 {
-
+ return $request->all();
     try {
         $bid_ids = $request->bid_ids;
         return $bid_ids;

@@ -15,7 +15,7 @@ function ServiceMilestone() {
         axiosClient.get('/business/bBQhdsfE_WWe4Q-_f7ieh7Hdhf4F_-'+id)
           .then(({ data }) => {
             setBusiness(data.business)
-            console.log(data)
+            //console.log(data)
           })
           .catch(err => {
             console.log(err);
@@ -31,7 +31,9 @@ console.log()
   // ]);
 
   const [selectedService, setSelectedService] = useState('All');
+  const [customers, setCustomers] = useState([]);
   const [selectedCustomer, setSelectedCustomer] = useState('All');
+  const [S_id, setS_id] = useState('');
 
   const handleStatusChange = (e, id) => {
     const updatedMilestones = milestones.map((milestone) =>
@@ -52,12 +54,36 @@ console.log()
     console.log(`Set action for milestone ${id}`);
   };
 
-  const getBookers = (id) => {
-alert(id)  
-};
+  const getBookers = (e) => {
+  setS_id(e.target.value);
+
+    axiosClient.get('/business/getBookers/'+S_id)
+        .then(({ data }) => {
+          console.log(data);
+          setCustomers(data.data || null);
+          //setBusinessName(data.business_name)
+          //setMilestones(data.milestones || null);
+        })
+        .catch(err => {
+          console.log(err);
+        });
+  };
 
   const handleCustomerChange = (e) => {
     setSelectedCustomer(e.target.value);
+    console.log(S_id+selectedCustomer);
+
+     axiosClient.get('/business/findMilestones/'+S_id+'/'+selectedCustomer)
+        .then(({ data }) => {
+          console.log(data);
+          setMilestones(data.milestones);
+          
+        })
+        .catch(err => {
+          console.log(err);
+        });
+        console.log(milestones)
+
   };
 
   // Filter milestones based on selected service and customer
@@ -73,24 +99,29 @@ alert(id)
       {/* Dropdowns for selecting service and customer */}
       <div className="mb-4 flex gap-2">
         <select
-          value={selectedService}
-          // onChange={handleServiceChange}
+          value={S_id}
+          onChange={getBookers}
           className="border rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
         >
-          <option value="All">Select Service</option>
-          <option value="Web Development">Web Development</option>
-          <option value="App Design">App Design</option>
-          {/* Add more options as needed */}
+         
+    {business.map((business) => (
+      <option key={business.id} value={business.id}>
+        {business.name}
+      </option>
+    ))}
         </select>
 
         <select
           value={selectedCustomer}
-          onChange={getBookers}
+          onChange={handleCustomerChange}
           className="border rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
         >
           <option value="All">Select Customer</option>
-          <option value="John Doe">John Doe</option>
-          <option value="Jane Smith">Jane Smith</option>
+          {customers.map((customer) => (
+      <option key={customer.id} value={customer.id}>
+        {customer.name}
+      </option>
+    ))}
           {/* Add more options as needed */}
         </select>
         <button           onClick={handleFindCustomer}
@@ -110,9 +141,9 @@ alert(id)
             </tr>
           </thead>
           <tbody>
-            {filteredMilestones.map((milestone) => (
+            {milestones.map((milestone) => (
               <tr key={milestone.id} className="text-gray-600 hover:bg-gray-50 transition-colors">
-                <td className="py-3 px-4 border-b">{milestone.name}</td>
+                <td className="py-3 px-4 border-b">{milestone.title}</td>
                 <td className="py-3 px-4 border-b">{milestone.service}</td>
                 <td className="py-3 px-4 border-b">{milestone.customer}</td>
                 <td className="py-3 px-4 border-b">${milestone.amount}</td>

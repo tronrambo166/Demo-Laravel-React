@@ -45,6 +45,17 @@ function InvestmentBids() {
     });
   };
 
+//StackOverflow
+//   const handleChange = event => {
+//     const { checked, value } = event.currentTarget;
+
+//     setSelected(
+//       prev => checked
+//         ? [...prev, value]
+//         : prev.filter(val => val !== value)
+//     );
+// };
+
   useEffect(() => {
     const getMilestones = (id) => {
       id = 'all'

@@ -1,10 +1,8 @@
-import { useState } from 'react';
+import  { useState,useEffect } from 'react';
+import axiosClient from "../../axiosClient";
 
 function ServiceBookings() {
-  const [bookings, setBookings] = useState([
-    { id: 1, date: "2024-02-23 17:10:27", serviceName: "Spurs", customer: "Test", startDate: "2024-02-22", location: "Tottenham Hotspur Stadium, High Road, London, UK", notes: "" },
-    { id: 2, date: "2023-10-21 05:23:48", serviceName: "Spurs", customer: "Hi there.", startDate: "2023-10-22", location: "Tottenham Hotspur Stadium, High Road, London, UK", notes: "" },
-  ]);
+  const [bookings, setBookings] = useState([]);
 
   const [selectedBookings, setSelectedBookings] = useState(new Set());
   const [selectedCustomer, setSelectedCustomer] = useState(null);
@@ -31,6 +29,21 @@ function ServiceBookings() {
     console.log("Confirming bookings:", Array.from(selectedBookings));
   };
 
+  useEffect(() => {
+    const getMilestones = (id) => {
+      id = 'all'
+        axiosClient.get('/business/service_booking')
+          .then(({ data }) => {
+            setBookings(data.results)
+            console.log(bookings)
+          })
+          .catch(err => {
+            console.log(err);
+          });
+    };
+    getMilestones();
+  }, []);
+
   return (
     <div className="container mx-auto p-6">
       <h3 className="text-left text-2xl font-semibold mb-6">Service Bookings</h3>
@@ -39,7 +52,6 @@ function ServiceBookings() {
           <thead className="bg-gray-100 border-b border-gray-200">
             <tr className='text-gray-700'>
               <th className="text-left py-3 px-4 uppercase font-semibold text-sm">Check</th>
-              <th className="text-left py-3 px-4 uppercase font-semibold text-sm">Date</th>
               <th className="text-left py-3 px-4 uppercase font-semibold text-sm">Service Name</th>
               <th className="text-left py-3 px-4 uppercase font-semibold text-sm">Customer</th>
               <th className="text-left py-3 px-4 uppercase font-semibold text-sm">Notes</th>
@@ -58,16 +70,15 @@ function ServiceBookings() {
                     className="form-checkbox h-4 w-4 text-blue-500"
                   />
                 </td>
-                <td className="py-3 px-4 border-b">{booking.date}</td>
-                <td className="py-3 px-4 border-b">{booking.serviceName}</td>
+                <td className="py-3 px-4 border-b">{booking.service}</td>
                 <td
-                  onClick={() => handleCustomerClick(booking.customer)}
+                  onClick={() => handleCustomerClick(booking.customer_name)}
                   className="py-3 px-4 border-b text-blue-600 cursor-pointer hover:underline"
                 >
-                  {booking.customer}
+                  {booking.customer_name}
                 </td>
-                <td className="py-3 px-4 border-b">{booking.notes}</td>
-                <td className="py-3 px-4 border-b">{booking.startDate}</td>
+                <td className="py-3 px-4 border-b">{booking.note}</td>
+                <td className="py-3 px-4 border-b">{booking.created_at}</td>
                 <td className="py-3 px-4 border-b">{booking.location}</td>
               </tr>
             ))}

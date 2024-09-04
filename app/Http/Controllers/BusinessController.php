@@ -16,7 +16,7 @@ use App\Models\AcceptedBids;
 use App\Models\Review;
 use App\Models\BusinessSubscriptions;
 
-//use Stripe\StripeClient;
+use Stripe\StripeClient;
 use Response;
 use Session; 
 use Hash;
@@ -36,12 +36,12 @@ class BusinessController extends Controller
   }
 
 //private $auth_id;
-   // public function __construct(StripeClient $client)
-   //  {   
-   //      $this->Client = $client;
-   //      //$this->middleware('business');
+   public function __construct(StripeClient $client)
+    {   
+        $this->Client = $client;
+        //$this->middleware('business');
   
-   //  }
+    }
 
 public function auth_id(){
   $auth_email = Session::get('business_email');
@@ -57,6 +57,8 @@ public function logoutB(){
 
 public function account(){
 $user = User::where('id',Auth::id())->first();
+$user2 = array(); $user2[] = $user;
+
 if($user->connect_id)
 $connected = 1;
 else $connected = 0;
@@ -73,7 +75,9 @@ $balanceP = '$'.(float)($balanceP/100);
 }
 else $balanceA = $balanceP ='N/A';
 $user_id = $user->id;
-return view('business.account', compact('user', 'balanceA','balanceP', 'connected', 'user_id'));
+
+return response()->json(['user' => $user2, 'balanceA'=>$balanceA, 'balanceP'=>$balanceP, 'connected'=>$connected, 'user_id'=>$user_id ]);
+
 }
 
 
