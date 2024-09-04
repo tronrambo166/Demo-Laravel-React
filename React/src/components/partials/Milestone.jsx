@@ -1,11 +1,48 @@
-import  { useState } from 'react';
+import  { useState,useEffect } from 'react';
+import axiosClient from "../../axiosClient";
 
 function Milestones() {
-  const [milestones, setMilestones] = useState([
-    { id: 1, title: "M 1", business: "Spurs 17", amount: 30000, status: "Done" },
-    { id: 2, title: "M 2", business: "Spurs 17", amount: 30000, status: "In Progress" },
-    // Add more sample data if needed
-  ]);
+  const [milestones, setMilestones] = useState([]);
+  const [business, setBusiness] = useState([]);
+  const [businessName, setBusinessName] = useState([]);
+
+
+
+  useEffect(() => {
+    const getMilestones = (id) => {
+      id = 'all'
+        axiosClient.get('/business/bBQhdsfE_WWe4Q-_f7ieh7Hdhf7E_-'+id)
+          .then(({ data }) => {
+            setMilestones(data.milestones);
+            setBusiness(data.business)
+          })
+          .catch(err => {
+            console.log(err);
+          });
+    };
+    getMilestones();
+  }, []);
+
+  console.log(milestones)
+  // const [milestones, setMilestones] = useState([
+  //   { id: 1, title: "M 1", business: "Spurs 17", amount: 30000, status: "Done" },
+  //   { id: 2, title: "M 2", business: "Spurs 17", amount: 30000, status: "In Progress" },
+  //   // Add more sample data if needed
+  // ]);
+  const getMilestones2 = (id) => {
+      axiosClient.get('/business/bBQhdsfE_WWe4Q-_f7ieh7Hdhf7E_-'+id)
+        .then(({ data }) => {
+          setMilestones();
+          setBusinessName(data.business_name)
+
+          setMilestones(data.milestones);
+
+        })
+        .catch(err => {
+          console.log(err);
+        });
+  };
+
 
   const [selectedBusiness, setSelectedBusiness] = useState('All');
 
@@ -17,16 +54,41 @@ function Milestones() {
   };
 
   const handleDelete = (id) => {
-    setMilestones(milestones.filter((milestone) => milestone.id !== id));
+    axiosClient.get('/business/delete_milestone/'+id)
+    .then(({ data }) => {
+      setMilestones(milestones.filter((milestone) => milestone.id !== id));
+
+    })
+    .catch(err => {
+      console.log(err);
+    });
   };
 
-  const handleSet = (id) => {
-    // Implement the logic for the "Set" button action here
+  const handleSet = (id ,status) => {
+
+    const payload = {
+      id:id ,
+      status:status,
+  } 
+  console.log(payload);
+  axiosClient.post("/business/mile_status",payload).then(({data})=>{
+  console.log(data);
+      
+}).catch(err => { console.log(err);
+    const response = err.response;
+    if(response && response.status === 422){
+        console.log(response.data.errors);
+    }
+    console.log(err);
+
+});    setMilestones(updatedMilestones);
+
     console.log(`Set action for milestone ${id}`);
   };
 
   const handleDropdownChange = (e) => {
-    setSelectedBusiness(e.target.value);
+
+    setSelectedBusiness(businessName);
   };
 
   // Filter milestones based on selected business
@@ -40,16 +102,19 @@ function Milestones() {
       
       {/* Dropdown for selecting business */}
       <div className="mb-4 flex gap-2">
-        <select
-          value={selectedBusiness}
-          onChange={handleDropdownChange}
-          className="border rounded-lg p-2 focus:outline-none text-sm focus:ring-2 focus:ring-blue-500"
-        >
-          <option value="All ">All Businesses</option>
-          <option value="Spurs 17">Spurs 17</option>
-          {/* Add more options as needed */}
-        </select>
-      </div>
+  <select
+    // value={selectedBusiness}
+    onChange={(e) => getMilestones2(e.target.value)}
+    className="border rounded-lg p-2 focus:outline-none text-sm focus:ring-2 focus:ring-blue-500"
+  >
+    {business.map((business) => (
+      <option key={business.id} value={business.id}>
+        {business.name}
+      </option>
+    ))}
+  </select>
+</div>
+
       
       <div className="overflow-x-auto shadow-md sm:rounded-lg">
         <table className="min-w-full bg-white">
@@ -80,12 +145,14 @@ function Milestones() {
                   </select>
                 </td>
                 <td className="py-3 px-4 border-b text-center flex gap-2 items-center">
-                  <button
-                    onClick={() => handleSet(milestone.id)}
-                    className=" text-black px-4 py-2 rounded-lg hover:bg-green transition-colors"
-                  >
-                    Set
-                  </button>
+                <div>
+      <button
+        onClick={() => handleSet(milestone.id, milestone.status)}
+        className="text-black px-4 py-2 rounded-lg hover:bg-green transition-colors"
+      >
+        Set
+      </button>
+    </div>
                   <button
                     onClick={() => handleDelete(milestone.id)}
                     className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-colors"

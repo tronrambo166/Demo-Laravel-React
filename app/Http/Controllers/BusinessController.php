@@ -586,7 +586,7 @@ public function activate_milestone($id){
 
 public function delete_milestone($id){
 $milestones = Milestones::where('id',$id)->delete();
-return redirect()->back();
+return "success" ;//redirect()->back();
 }
 
 public function add_milestones(){
@@ -706,7 +706,8 @@ else{
 }
 
 $business = listing::where('user_id',Auth::id())->get();
-return view('business.milestones',compact('milestones','business', 'business_name'));
+// return view('business.milestones',compact('milestones','business', 'business_name'));
+return response()->json(['milestones' => $milestones, 'business'=>$business, 'business_name' =>$business_name ]);
 }
 
 
@@ -816,7 +817,7 @@ try{
         }
         //Email
 
-      return redirect()->back();
+      return "success";
     }
     //Last Milestone Check
 
