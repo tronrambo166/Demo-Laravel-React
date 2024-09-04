@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import  { useEffect } from 'react';
+import axiosClient from "../../axiosClient";
 
 function AddMilestone() {
   const [form, setForm] = useState({
@@ -11,10 +13,7 @@ function AddMilestone() {
   });
 
   const [fileAlert, setFileAlert] = useState("");
-  const [milestones, setMilestones] = useState([
-    { id: 1, title: "Milestone 1", business: "Business 1", amount: 1000, status: "In Progress" },
-    // Add more sample data if needed
-  ]);
+  const [milestones, setMilestones] = useState([]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -41,6 +40,21 @@ function AddMilestone() {
     );
     setMilestones(updatedMilestones);
   };
+
+  useEffect(() => {
+    const getMilestones = (id) => {
+      id = 'all'
+        axiosClient.get('/business/bBQhdsfE_WWe4Q-_f7ieh7Hdhf7E_-'+id)
+          .then(({ data }) => {
+            setMilestones(data.milestones);
+            setBusiness(data.business)
+          })
+          .catch(err => {
+            console.log(err);
+          });
+    };
+    getMilestones();
+  }, []);
 
   return (
     <div className="container mx-auto p-6">
@@ -151,15 +165,15 @@ function AddMilestone() {
                       onChange={(e) => handleStatusChange(e, milestone.id)}
                       className="border rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                     >
-                      <option value="In Progress">In Progress</option>
-                      <option value="Done">Done</option>
+                      <option value="In Progress">{milestone.status}</option>
+                      {/*<option value="Done">Done</option>*/}
                     </select>
                   </td>
-                  <td className="py-3 px-4 border-b text-center">
+                  {/*<td className="py-3 px-4 border-b text-center">
                     <button className="border border-black rounded-xl text-black px-4 py-2 hover:text-red-600 transition-colors">
                       Delete
                     </button>
-                  </td>
+                  </td>*/}
                 </tr>
               ))}
             </tbody>

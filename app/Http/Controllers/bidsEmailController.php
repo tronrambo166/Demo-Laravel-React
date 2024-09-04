@@ -36,9 +36,9 @@ public function __construct(StripeClient $client)
 public function bidsAccepted(Request $request)
 {
 
-    try { 
+    try {
         $bid_ids = $request->bid_ids;
-        $business_id = $request->business_id;
+        return $bid_ids;
 
         //REJECT
         if(isset($request->reject) && $request->reject == 1){
@@ -67,6 +67,7 @@ public function bidsAccepted(Request $request)
         return redirect()->back();
         }
         //REJECT 
+
 
         foreach($bid_ids as $id){
         if($id !=''){
@@ -134,13 +135,12 @@ public function bidsAccepted(Request $request)
          //remove
          }
        }
-        Session::put('success','Accepted!');
-        return redirect()->back();
+      Session::put('success','Accepted!');
+      return response()->json(['message' => 'Accepted!']);
      
        }
         catch(\Exception $e){
-            Session::put('failed',$e->getMessage());
-            return redirect()->back();
+            return response()->json(['status' => 'failed', 'message' => $e->getMessage()]);
        }  
 
    }

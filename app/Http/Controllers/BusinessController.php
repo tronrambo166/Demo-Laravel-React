@@ -1003,12 +1003,6 @@ return view('business.investor_bids',compact('bids'));
 public function business_bids(){
   if(Auth::check())
       $investor = User::where('id', Auth::id())->first();
-  else {
-      if(Session::has('investor_email')){   
-      $mail = Session::get('investor_email');
-      $investor = User::where('email',$mail)->first();
-    }
-  }
 
 $res = BusinessBids::where('owner_id', Auth::id())->latest()->get();
 $bids = array();
@@ -1036,11 +1030,11 @@ foreach($res as $r){
 
 $remove_new = BusinessBids::where('owner_id', Auth::id())
 ->update(['new'=>0]);
-return view('business.bids',compact('bids'));
+return response()->json(['bids' => $bids]);
 }
  catch(\Exception $e){
   Session::put('failed',$e->getMessage());
-  return redirect()->back();
+  return response()->json(['status' => 'failed', 'message' => $e->getMessage()]);
  }
 }
 

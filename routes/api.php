@@ -8,6 +8,7 @@ use App\Http\Controllers\BusinessController;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\PagesController;
 use App\Http\Controllers\checkoutController;
+use App\Http\Controllers\bidsEmailController;
 //P R O T E C T E D    R O U T E S
 Route::middleware('auth:sanctum')->group(function() {
     Route::get('logout',[AuthController::class,'logout']);
