@@ -784,7 +784,7 @@ Milestones::create([
 
 
 public function mile_status(Request $request){
-try{
+try{ 
   $mile_id = $request->id;
   $thisMile = Milestones::where('id',$mile_id)->first();
   $listing_id = $thisMile->listing_id;
@@ -793,7 +793,7 @@ try{
   'status' => $request->status
   ]);
 
-  if($request->status == 'Done'){
+  if($request->status == 'Done'){ 
     // Release this milestone payment from Escrow
 
     //Last Milestone Check
@@ -804,7 +804,9 @@ try{
         $bids = AcceptedBids::where('business_id',$listing_id)->get();
         foreach($bids as $bid){
         $investor = User::where('id',$bid->investor_id)->first();
+        if($investor)
         $investor_mail = $investor->email;
+        else $investor_mail = 'tottenham266@gmail.com';
 
         $list = listing::where('id',$bid->business_id)->first();
         $info=[ 'business_name'=>$list->name,'business_id' => base64_encode(base64_encode($list->id)) ];
@@ -817,7 +819,7 @@ try{
         }
         //Email
 
-      return "success";
+       return response()->json(['message' => 'Status set success, mail sent!']);
     }
     //Last Milestone Check
 
@@ -827,13 +829,16 @@ try{
 
     foreach($bids as $bid){
         $investor = User::where('id',$bid->investor_id)->first();
+        if($investor)
         $investor_mail = $investor->email;
+        else $investor_mail = 'tottenham266@gmail.com';
 
         $list = listing::where('id',$bid->business_id)->first();
         $info=[ 'business_name'=>$list->name, 'mile_name'=>$thisMile->title,
         'bid_id' => $bid->id ];
         $user['to'] =  $investor_mail; //'tottenham266@gmail.com';
         //Email
+
         Mail::send('bids.milecompletion_alert', $info, function($msg) use ($user){
              $msg->to($user['to']);
              $msg->subject('Milestone completion alert!');
@@ -841,12 +846,16 @@ try{
       //Email
          
     }
+    return response()->json(['message' => 'Status set success, mail sent!']);
       
   }
+
+  else {
+    return 'ok';
+  }
 }
-catch(\Exception $e){
-  Session::put('failed',$e->getMessage());
-  return redirect()->back();
+catch(\Exception $e){ 
+  return response()->json($e->getMessage());
  }
 
 //$next_mile = Milestones::where('listing_id',$thisMile->listing_id)->where('status','To Do')->first();
