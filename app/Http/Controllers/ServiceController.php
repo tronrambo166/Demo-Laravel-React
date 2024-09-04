@@ -645,8 +645,10 @@ if($id == 'all'){
 // }
 
 $business = Services::where('shop_id',Auth::id())->get();
-return view('services.milestones',compact('milestones','business', 'business_name'));
+// return view('services.milestones',compact('milestones','business', 'business_name'));
+return response()->json(['milestones' => $milestones, 'business'=>$business, 'business_name' =>$business_name ]);
 }
+
 
 public function findMilestones(Request $request){
 

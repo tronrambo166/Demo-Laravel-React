@@ -1,11 +1,34 @@
-import  { useState } from 'react';
+import  { useState,useEffect } from 'react';
+import axiosClient from "../../axiosClient";
+
 
 function ServiceMilestone() {
-  const [milestones, setMilestones] = useState([
-    { id: 1, name: "Milestone 1", service: "Web Development", customer: "John Doe", amount: 30000, status: "Done" },
-    { id: 2, name: "Milestone 2", service: "App Design", customer: "Jane Smith", amount: 15000, status: "In Progress" },
-    // Add more sample data as needed
-  ]);
+  const [milestones, setMilestones] = useState([]);
+  const [business, setBusiness] = useState([]);
+  const [businessName, setBusinessName] = useState([]);
+
+
+
+  useEffect(() => {
+    const getMilestones = (id) => {
+      id = 'all'
+        axiosClient.get('/business/bBQhdsfE_WWe4Q-_f7ieh7Hdhf4F_-'+id)
+          .then(({ data }) => {
+            setBusiness(data.business)
+            console.log(data)
+          })
+          .catch(err => {
+            console.log(err);
+          });
+    };
+    getMilestones();
+  }, []);
+console.log()
+  // const [milestones, setMilestones] = useState([
+  //   { id: 1, name: "Milestone 1", service: "Web Development", customer: "John Doe", amount: 30000, status: "Done" },
+  //   { id: 2, name: "Milestone 2", service: "App Design", customer: "Jane Smith", amount: 15000, status: "In Progress" },
+  //   // Add more sample data as needed
+  // ]);
 
   const [selectedService, setSelectedService] = useState('All');
   const [selectedCustomer, setSelectedCustomer] = useState('All');
@@ -21,14 +44,17 @@ function ServiceMilestone() {
     setMilestones(milestones.filter((milestone) => milestone.id !== id));
   };
 
+  const handleFindCustomer = (id) => {
+    // setMilestones(milestones.filter((milestone) => milestone.id !== id));
+  };
   const handleSet = (id) => {
     // Implement the logic for the "Set" button action here
     console.log(`Set action for milestone ${id}`);
   };
 
-  const handleServiceChange = (e) => {
-    setSelectedService(e.target.value);
-  };
+  const getBookers = (id) => {
+alert(id)  
+};
 
   const handleCustomerChange = (e) => {
     setSelectedCustomer(e.target.value);
@@ -48,7 +74,7 @@ function ServiceMilestone() {
       <div className="mb-4 flex gap-2">
         <select
           value={selectedService}
-          onChange={handleServiceChange}
+          // onChange={handleServiceChange}
           className="border rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
         >
           <option value="All">Select Service</option>
@@ -59,7 +85,7 @@ function ServiceMilestone() {
 
         <select
           value={selectedCustomer}
-          onChange={handleCustomerChange}
+          onChange={getBookers}
           className="border rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
         >
           <option value="All">Select Customer</option>
@@ -67,6 +93,8 @@ function ServiceMilestone() {
           <option value="Jane Smith">Jane Smith</option>
           {/* Add more options as needed */}
         </select>
+        <button           onClick={handleFindCustomer}
+ type='submit' className='btn-primary py-2 text-white rounded-md px-6'>Find</button>
       </div>
       
       <div className="overflow-x-auto shadow-md sm:rounded-lg">
