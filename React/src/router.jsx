@@ -49,7 +49,7 @@ const router = createBrowserRouter([
         path: 'dashboard',
         element: <Dashboard />,
         children: [
-          { path: '', element: <Dashhome /> },
+          { path: '/dashboard', element: <Dashhome /> },
           { path: 'my-businesses', element: <MyBusinesses /> },
           { path: 'add-milestone', element: <AddMilestone /> },
           { path: 'milestones', element: <Milestones /> },

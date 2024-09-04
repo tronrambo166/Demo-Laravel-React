@@ -161,7 +161,8 @@ $listings = Listing::where('user_id',Auth::id())->latest()->get();
 //   ->where('status','In Progress')->first();
 //   if($mile) $list->active = true;else $list->active = false;
 // }
-return view('business.listings',compact('listings'));
+// return view('business.listings',compact('listings'));
+return response()->json(['business'=>$listings]);
 }
 
 

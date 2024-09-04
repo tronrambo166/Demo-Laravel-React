@@ -1,39 +1,37 @@
 import { Link } from 'react-router-dom';
-import { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react';
 import axiosClient from "../../axiosClient";
-// import doc from "../images/doc.png"
 
-  const ServiceTable = () => {
+const ServiceTable = () => {
+  const [user, setUser] = useState();
+  const [business, setBusiness] = useState([]);
+  const [service, setService] = useState([]);
 
-    const [user, setUser] = useState();
-    const [business, setBusiness] = useState('')
-    const [service, setService] = useState('');
-
-    useEffect(()=> {
-     const getBusinessAndServices = () => { 
+  useEffect(() => {
+    const getBusinessAndServices = () => {
       setTimeout(() => {
         axiosClient.get('/business/dashhome')
           .then(({ data }) => {
-            setBusiness(data.business)
-            setService(data.service)
-            
+            setBusiness(data.business);
+            setService(data.services);
           })
           .catch(err => {
-            console.log(err); 
-          })
-        }, 500);
+            console.log(err);
+          });
+      }, 500);
     };
     getBusinessAndServices();
-    }, [])
-    console.log(business)
+  }, []);
+
+  console.log(business);
+  console.log(service)
 
   // Example data for the table
   const data = [
     { name: 'Service 1', category: 'Category A', details: 'Details about Service 1', required: true, amount: '$100', contact: '123-456-7890' },
     { name: 'Service 2', category: 'Category B', details: 'Details about Service 2', required: false, amount: '$200', contact: '987-654-3210' },
     { name: 'Service 3', category: 'Category C', details: 'Details about Service 3', required: true, amount: '$150', contact: '555-555-5555' },
-];
-
+  ];
 
   return (
     <div className="bg-white shadow-md mt-[80px] rounded-xl w-[900px] h-auto pl-3 m-3 p-4">
@@ -50,7 +48,7 @@ import axiosClient from "../../axiosClient";
             </tr>
           </thead>
           <tbody className="bg-white divide-y">
-            {Object.keys(data).map((item, index) => (
+            {service.map((item, index) => (
               <tr key={index}>
                 <td className="px-6 py-4 flex items-center">
                   <img 
@@ -88,7 +86,7 @@ import axiosClient from "../../axiosClient";
             </tr>
           </thead>
           <tbody className="bg-white divide-y">
-             {business.map((item, index) => (
+            {business.map((item, index) => (
               <tr key={index}>
                 <td className="px-6 py-4 flex items-center">
                   <img 
@@ -112,11 +110,7 @@ import axiosClient from "../../axiosClient";
           </tbody>
         </table>
       </div>
-
     </div>
-
-
-
   );
 }
 

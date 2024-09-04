@@ -51,7 +51,7 @@ const Sidebar = () => {
           <li className="nav-item py-2">
             <NavLink
               className={`navLink flex items-center gap-4 py-2 px-4 rounded hover:bg-gray-200 text-[12px] ${!isOpen && 'justify-center'}`}
-              to="/dashboard/home"
+              to="/dashboard"
             >
               <FaHome className={`text-[18px] text-green ${!isOpen && 'mx-auto'}`} />
               {isOpen && <span className="text-gray-400">Dashboard</span>}
