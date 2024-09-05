@@ -33,6 +33,7 @@ import Login from './views/login';
 import ServiceTable from './components/partials/servicestable';
 import CategoryPage from './components/partials/Categorypage';
 import InvestorRegistration from './components/partials/Investreg';
+import Addservicemilestone from './components/partials/Addservicemilestone';
 
 const router = createBrowserRouter([
   {
@@ -62,6 +63,8 @@ const router = createBrowserRouter([
           { path: 'add-business', element: <AddBusiness /> },
           { path: 'payment-form', element: <PaymentForm /> },
 		  { path: 'services-table', element: <ServiceTable/> },
+      { path: 'addservicemilestone', element: <Addservicemilestone/> },
+
 
         ],
 

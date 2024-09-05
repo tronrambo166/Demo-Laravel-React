@@ -134,7 +134,7 @@ const Sidebar = () => {
             <li className="nav-item py-2">
               <NavLink
                 className={`navLink flex items-center gap-4 py-2 px-4 rounded hover:bg-gray-200 text-[12px] ${!isOpen && 'justify-center'}`}
-                to="/dashboard/add-service"
+                to="/dashboard/addservicemilestone"
               >
                 <img src={calendarIcon} alt="Add Service Milestone" className={`w-4 h-4 ${!isOpen && 'mx-auto'}`} />
                 {isOpen && <span className="text-gray-400">Add Service Milestone</span>}

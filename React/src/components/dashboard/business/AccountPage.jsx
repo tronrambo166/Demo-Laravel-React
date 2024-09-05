@@ -73,11 +73,11 @@ function AccountPage() {
         <div className="border-t border-gray-200 pt-6">
           <div className="flex justify-between mb-4">
             <span className="text-gray-600">First Name:</span>
-            <span className="font-semibold text-gray-800">{details[0].fname}</span>
+            <span className="font-semibold text-gray-800">{details.fname}</span>
           </div>
           <div className="flex justify-between mb-4">
             <span className="text-gray-600">Last Name:</span>
-            <span className="font-semibold text-gray-800">{details[0].lname}</span>
+            <span className="font-semibold text-gray-800">{details.lname}</span>
           </div>
           <div className="flex justify-between mb-4">
             <span className="text-gray-600">Balance Available:</span>
