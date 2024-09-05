@@ -100,7 +100,7 @@ Route::get('assetEquip/download/{id}/{type}', [BusinessController::class, 'asset
 Route::get('account', [BusinessController::class, 'account'])->name('account');
 
 // --- MILESTONE
-Route::get('bBQhdsfE_WWe4Q-_f7ieh7Hdhf6E_', [BusinessController::class, 'add_milestones'])->name('add_milestones');
+Route::get('add_milestones', [BusinessController::class, 'add_milestones'])->name('add_milestones');
 
 Route::get('activate_milestone/{id}', [BusinessController::class, 'activate_milestone'])->name('activate_milestone');
 Route::get('bBQhdsfE_WWe4Q-_f7ieh7Hdhf7E_-{id}', [BusinessController::class, 'milestones'])->name('milestones');

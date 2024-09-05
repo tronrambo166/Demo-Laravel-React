@@ -15,6 +15,7 @@ function AddMilestone() {
 
   const [fileAlert, setFileAlert] = useState("");
   const [milestones, setMilestones] = useState([]);
+  const [business, setBusiness] = useState([]);
   const [fileDetails, setFileDetails] = useState(null);
 
   const handleInputChange = (e) => {
@@ -26,11 +27,12 @@ function AddMilestone() {
     if (e.target.files.length > 0) {
       const selectedFile = e.target.files[0];
       setForm({ ...form, file: selectedFile });
-      setFileDetails({
-        name: selectedFile.name,
-        type: selectedFile.type,
-        size: selectedFile.size,
-      });
+
+      // setFileDetails({
+      //   name: selectedFile.name,
+      //   type: selectedFile.type,
+      //   size: selectedFile.size,
+      // });
       setFileAlert("");
     }
   };
@@ -40,7 +42,7 @@ function AddMilestone() {
     if (!form.file) {
       setFileAlert("No files selected!");
       return;
-    }
+    } 
 
     const formData = new FormData();
     formData.append("title", form.title);
@@ -50,18 +52,22 @@ function AddMilestone() {
     formData.append("business_id", form.business_id);
     formData.append("file", form.file);
 
-    try {
-      toast.info("Uploading...");
-      await axiosClient.post("/upload", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
-      toast.success("Upload successful!");
+    //console.log(form.file)
+
+    try { 
+
+        toast.info("Uploading..."); // save_s_milestone // for service part
+        const response = await axiosClient.post('business/save_milestone', formData);
+        
+         toast.success(response.data.message);
+         if(response.data.status == 200)
+         getMilestones();
+
     } catch (error) {
-      toast.error("Upload failed.");
+      toast.error(error);
     }
   };
+
 
   const handleStatusChange = (e, id) => {
     const updatedMilestones = milestones.map((milestone) =>
@@ -71,13 +77,16 @@ function AddMilestone() {
   };
 
   useEffect(() => {
-    const getMilestones = async () => {
-      try {
-        const { data } = await axiosClient.get(`/business/all`);
-        setMilestones(data.milestones);
-      } catch (err) {
-        console.log(err);
-      }
+    const getMilestones = () => {
+    axiosClient.get('/business/add_milestones')
+          .then(({ data }) => {
+            setMilestones(data.milestones)
+            setBusiness(data.business)
+            //console.log(data)
+          })
+          .catch(err => {
+            console.log(err);
+          });
     };
     getMilestones();
   }, []);
@@ -152,8 +161,11 @@ function AddMilestone() {
           <option value="" hidden>
             Select Business
           </option>
-          <option value="1">Business 1</option>
-          <option value="2">Business 2</option>
+          {business.map((business) => (
+            <option key={business.id} value={business.id}>
+              {business.name}
+            </option>
+          ))}
         </select>
 
         <button
@@ -182,7 +194,7 @@ function AddMilestone() {
               {milestones.map((milestone) => (
                 <tr key={milestone.id} className="text-gray-500 hover:bg-gray-50 transition-colors">
                   <td className="py-3 px-4 border-b">{milestone.title}</td>
-                  <td className="py-3 px-4 border-b">{milestone.business}</td>
+                  <td className="py-3 px-4 border-b">{milestone.business_name}</td>
                   <td className="py-3 px-4 border-b">${milestone.amount}</td>
                   <td className="py-3 px-4 border-b">
                     <select

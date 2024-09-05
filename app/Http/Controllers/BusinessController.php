@@ -596,7 +596,12 @@ return "success" ;//redirect()->back();
 public function add_milestones(){
 $milestones = Milestones::where('user_id',Auth::id())->latest()->get();
 $business = listing::where('user_id',Auth::id())->get();
-return view('business.add_milestones',compact('business','milestones'));
+foreach($business as $b)
+  foreach($milestones as $m)
+     if($m->listing_id == $b->id)
+      $m->business_name = $b->name;
+
+  return response()->json([ 'business' => $business, 'milestones' => $milestones]);
 }
 
 public function getMilestones($id){
@@ -717,6 +722,7 @@ return response()->json(['milestones' => $milestones, 'business'=>$business, 'bu
 
 
 public function save_milestone(Request $request){
+
 $title = $request->title;
 $business_id = $request->business_id;
 $amount = $request->amount;
@@ -733,30 +739,30 @@ $n_o_days = 30*$n_o_days;
 //$mile = Milestones::where('listing_id',$business_id)->latest()->first();
 //if($mile  &&  ($mile->status ==  'Created' || $mile->status ==  'In Progress'))
 //$status = 'On Hold';if($mile  && $mile->status ==  'Done') $status = 'In Progress';
+try{
+    $this_listing = Listing::where('id',$business_id)->first();
+    $inv_need = $this_listing->investment_needed;
+    $share = round(( round($amount)/round($inv_need) )*$this_listing->share, 2);
 
-$this_listing = Listing::where('id',$business_id)->first();
-$inv_need = $this_listing->investment_needed;
-$share = round(( round($amount)/round($inv_need) )*$this_listing->share, 2);
+    $mile_shares = Milestones::where('listing_id',$business_id)->get();
+    $total_share_amount = 0;
+    foreach($mile_shares as $single){
+    $total_share_amount = $total_share_amount+$single->amount;
+    }
+    $total_share_amount = $total_share_amount+$amount;
+    if($total_share_amount>$inv_need){
+      return response()->json([ 'status' => 404, 'message' => 'The amount exceeds the total investment needed!']);
+    
+    }
 
-$mile_shares = Milestones::where('listing_id',$business_id)->get();
-$total_share_amount = 0;
-foreach($mile_shares as $single){
-$total_share_amount = $total_share_amount+$single->amount;
-}
-$total_share_amount = $total_share_amount+$amount;
-if($total_share_amount>$inv_need){
-Session::put('failed','The amount exceeds the total investment needed!');
-        return redirect()->back();
-}
-
- $single_img=$request->file('file');
+    $single_img=$request->file('file');
  
           $uniqid=hexdec(uniqid());
           $ext=strtolower($single_img->getClientOriginalExtension());
           if($ext!='pdf' && $ext!= 'docx')
           {
-            Session::put('error','Only pdf & docx are allowed!');
-            return redirect()->back();
+            
+            return response()->json([ 'status' => 404, 'message' => 'Only pdf & docx are allowed!']);
           }
 
           $create_name=$uniqid.'.'.$ext;
@@ -770,19 +776,26 @@ Session::put('failed','The amount exceeds the total investment needed!');
           $final_file=$loc.$create_name;
            
 
-Milestones::create([
-            'user_id' => $user_id,
-            'title' => $title,
-            'listing_id' => $business_id,
-            'amount' => $amount,
-            'document' => $final_file,
-      			'n_o_days' => $n_o_days,
-            'status' => $status,
-            'share'  => $share           
-           ]);       
+         //    Milestones::create([
+         //    'user_id' => $user_id,
+         //    'title' => $title,
+         //    'listing_id' => $business_id,
+         //    'amount' => $amount,
+         //    'document' => $final_file,
+      			// 'n_o_days' => $n_o_days,
+         //    'status' => $status,
+         //    'share'  => $share           
+         //   ]);  
 
-        Session::put('success','Milestone added!');
-        return redirect()->back();
+            return response()->json([ 'status' => 200, 'message' => 'Success']);
+  
+
+    }   
+
+    catch(\Exception $e){
+    return response()->json([ 'status' => 404, 'message' => $e->getMessage() ]);
+    }
+
 
 }
 
