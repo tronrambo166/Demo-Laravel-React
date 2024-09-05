@@ -154,7 +154,7 @@ const Sidebar = () => {
             <li className="nav-item my-6 bg-green/50 rounded-xl py-2">
               <NavLink
                 className={`navLink flex items-center gap-4 py-2 px-4 rounded text-[12px] ${!isOpen && 'justify-center'}`}
-                to="/dashboard/service_bookings"
+                to="/dashboard/mybookings"
               >
                 <img src={btmIcon} alt="My Bookings" className={`w-5 h-5 ${!isOpen && 'mx-auto'}`} />
                 {isOpen && <span className="text-white">My Bookings</span>}
