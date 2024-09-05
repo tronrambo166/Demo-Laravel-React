@@ -35,10 +35,9 @@ public function __construct(StripeClient $client)
 
 public function bidsAccepted(Request $request)
 {
- return $request->all();
+    //return $request->all();
     try {
         $bid_ids = $request->bid_ids;
-        return $bid_ids;
 
         //REJECT
         if(isset($request->reject) && $request->reject == 1){
@@ -408,11 +407,14 @@ public function bidCommitsEQP(Request $request){
 
 public function bookingAccepted(Request $request)
 {
-    try { 
+    
         $bid_ids = $request->bid_ids;
+
+        try {
         foreach($bid_ids as $id){
         if($id !=''){
         $bid = serviceBook::where('id',$id)->first();
+        if($bid){ 
         $investor = User::where('id',$bid->booker_id)->first();
         $investor_mail = $investor->email;
 
@@ -451,13 +453,14 @@ public function bookingAccepted(Request $request)
 
          }
        }
+       }
         Session::put('success','Confirmed!');
-        return redirect()->back();
+        return response()->json(['message' => 'Success']);
      
        }
         catch(\Exception $e){
             Session::put('failed',$e->getMessage());
-            return redirect()->back();
+            return response()->json(['message' => $e->getMessage()]);
        }  
 
    }

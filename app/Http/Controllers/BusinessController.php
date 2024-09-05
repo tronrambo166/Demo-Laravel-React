@@ -36,12 +36,12 @@ class BusinessController extends Controller
   }
 
 //private $auth_id;
-  //  public function __construct(StripeClient $client)
-  //   {   
-  //       $this->Client = $client;
-  //       //$this->middleware('business');
+   public function __construct(StripeClient $client)
+    {   
+        $this->Client = $client;
+        //$this->middleware('business');
   
-  //   }
+    }
 
 public function auth_id(){
   $auth_email = Session::get('business_email');

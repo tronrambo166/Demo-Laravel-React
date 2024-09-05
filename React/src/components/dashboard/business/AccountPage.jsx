@@ -21,17 +21,18 @@ function AccountPage() {
         //   })
     };
 
- const [setDetails, details] = useState([]);
- const [setBal, bal] = useState('');
- const [setBalP, balP] = useState('');
- const [setC, C] = useState('');
+ const [details, setDetails] = useState([]);
+ const [bal, setBal] = useState('');
+ const [balP, setBalP] = useState('');
+ const [C, setC] = useState('');
 
     useEffect(() => {
     const getAccount = (id) => {
         axiosClient.get('/business/account')
           .then(({ data }) => {
-            console.log(data.balanceA);
+            console.log(data.connected);
             setBal(data.balanceA);
+
             setBalP(data.balanceA);
             setC(data.connected);
             setDetails(data.user)
@@ -71,20 +72,20 @@ function AccountPage() {
         
         <div className="border-t border-gray-200 pt-6">
           <div className="flex justify-between mb-4">
-            <span className="text-gray-600">First Name:{details.fname}</span>
-            <span className="font-semibold text-gray-800">Daniel</span>
+            <span className="text-gray-600">First Name:</span>
+            <span className="font-semibold text-gray-800">{details[0].fname}</span>
           </div>
           <div className="flex justify-between mb-4">
-            <span className="text-gray-600">Last Name:{details.lname}</span>
-            <span className="font-semibold text-gray-800">Levy</span>
+            <span className="text-gray-600">Last Name:</span>
+            <span className="font-semibold text-gray-800">{details[0].lname}</span>
           </div>
           <div className="flex justify-between mb-4">
             <span className="text-gray-600">Balance Available:</span>
-            <span className="font-semibold text-green-600">${171931.3}</span>
+            <span className="font-semibold text-green-600">{bal}</span>
           </div>
           <div className="flex justify-between mb-4">
             <span className="text-gray-600">Balance Pending:</span>
-            <span className="font-semibold text-red-600">${200}</span>
+            <span className="font-semibold text-red-600">{balP}</span>
           </div>
 
           <div className="mt-6">
@@ -94,14 +95,24 @@ function AccountPage() {
               View Stripe Account
             </button>*/}
 
-            <button onClick={connectToStripe}
+            {C? (
+              <button onClick={connectToStripe}
               className="btn-primary py-2 px-6 rounded-lg text-white focus:outline-none"
-            
-            >
-              Connect to Stripe
-            </button>
+              >
+              View Stripe Account
+              </button>):(
 
-            <p class="text-center bg-light p-2 "> You must onboard to Jitume Stripe platform to receive business milestone payments.</p>
+              <div >
+              <p className="text-center bg-light p-2 "> You must onboard to Jitume Stripe platform to receive business milestone payments.</p>
+              <button onClick={connectToStripe}
+              className="btn-primary py-2 px-6 rounded-lg text-white focus:outline-none"
+              >
+              Connect to Stripe
+              </button>
+              </div>
+            )}
+
+            
 
           </div>
         </div>

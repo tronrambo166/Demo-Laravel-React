@@ -24,6 +24,7 @@ function InvestmentBids() {
     axiosClient.post("bookingAccepted", payload)
       .then(({ data }) => {
         console.log(data);
+        alert(data.success);
       })
       .catch(err => {
         const response = err.response;
@@ -36,9 +37,9 @@ function InvestmentBids() {
 
   useEffect(() => {
     const getMilestones = (id = 'all') => {
-      axiosClient.get('/business/bBQhdsfE_WWe4Q-_f7ieh7Hdhf4E_')
+      axiosClient.get('/business/service_booking')
         .then(({ data }) => {
-          setBids(data.bids);
+          setBids(data.results);
         })
         .catch(err => {
           console.log(err);
@@ -56,11 +57,9 @@ function InvestmentBids() {
             <tr className="text-gray-600 text-sm">
               <th className="text-left py-3 px-4 uppercase font-semibold text-[12px]">Check</th>
               <th className="text-left py-3 px-4 uppercase font-semibold text-[12px]">Date</th>
-              <th className="text-left py-3 px-4 uppercase font-semibold text-[12px]">Investor</th>
-              <th className="text-left py-3 px-4 uppercase font-semibold text-[12px]">Business</th>
-              <th className="text-left py-3 px-4 uppercase font-semibold text-[12px]">Type</th>
-              <th className="text-left py-3 px-4 uppercase font-semibold text-[12px]">Amount</th>
-              <th className="text-left py-3 px-4 uppercase font-semibold text-[12px]">Representation %</th>
+              <th className="text-left py-3 px-4 uppercase font-semibold text-[12px]">Booker</th>
+              <th className="text-left py-3 px-4 uppercase font-semibold text-[12px]">Service</th>
+              <th className="text-left py-3 px-4 uppercase font-semibold text-[12px]">Email</th>
             </tr>
           </thead>
           <tbody>
@@ -76,12 +75,10 @@ function InvestmentBids() {
                 </td>
                 <td className="py-3 px-4 border-b">{bid.date}</td>
                 <td className="py-3 px-4 border-b">
-                  <a className="bid_btns bg-light rounded">{bid.investor}</a>
+                  <a className="bid_btns bg-light rounded">{bid.customer_name}</a>
                 </td>
-                <td className="py-3 px-4 border-b">{bid.business}</td>
-                <td className="py-3 px-4 border-b">{bid.type}</td>
-                <td className="py-3 px-4 border-b">${bid.amount}</td>
-                <td className="py-3 px-4 border-b">{bid.representation}%</td>
+                <td className="py-3 px-4 border-b">{bid.service}</td>
+                <td className="py-3 px-4 border-b">{bid.email}</td>
               </tr>
             ))}
           </tbody>
