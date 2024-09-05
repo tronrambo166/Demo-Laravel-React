@@ -54,44 +54,41 @@ console.log()
     console.log(`Set action for milestone ${id}`);
   };
 
-  const getBookers = (e) => {
-  setS_id(e.target.value);
+const getBookers = (e) => {
+  const id = e.target.value;
+  setS_id(id);
 
-    axiosClient.get('/business/getBookers/'+S_id)
-        .then(({ data }) => {
-          console.log(data);
-          setCustomers(data.data || null);
-          //setBusinessName(data.business_name)
-          //setMilestones(data.milestones || null);
-        })
-        .catch(err => {
-          console.log(err);
-        });
-  };
+  axiosClient.get(`/business/getBookers/${id}`)
+    .then(({ data }) => {
+      console.log(data);
+      setCustomers(data.data || []);
+    })
+    .catch(err => {
+      console.log(err);
+    });
+};
 
-  const handleCustomerChange = (e) => {
-    setSelectedCustomer(e.target.value);
-    console.log(S_id+selectedCustomer);
+const handleCustomerChange = (e) => {
+  const customer = e.target.value;
+  setSelectedCustomer(customer);
 
-     axiosClient.get('/business/findMilestones/'+S_id+'/'+selectedCustomer)
-        .then(({ data }) => {
-          console.log(data);
-          setMilestones(data.milestones);
-          
-        })
-        .catch(err => {
-          console.log(err);
-        });
-        console.log(milestones)
+  if (S_id) {
+    axiosClient.get(`/business/findMilestones/${S_id}/${customer}`)
+      .then(({ data }) => {
+        console.log(data);
+        setMilestones(data.milestones || []);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  }
+};
 
-  };
-
-  // Filter milestones based on selected service and customer
-  const filteredMilestones = milestones.filter(milestone =>
-    (selectedService === 'All' || milestone.service === selectedService) &&
-    (selectedCustomer === 'All' || milestone.customer === selectedCustomer)
-  );
-
+// Filter milestones based on selected service and customer
+const filteredMilestones = milestones.filter(milestone =>
+  (selectedService === 'All' || milestone.service === selectedService) &&
+  (selectedCustomer === 'All' || milestone.customer === selectedCustomer)
+);
   return (
     <div className="container mx-auto p-6">
       <h3 className="text-left text-2xl font-semibold mb-6">Service Milestones</h3>
