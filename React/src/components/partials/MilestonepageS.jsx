@@ -17,13 +17,14 @@ const MilestonePage = () => {
 
   useEffect(() => {
     const getMilestones = () => {
-      axiosClient.get('/getMilestonesS/' + listing_id)
+      axiosClient.get('/getMilestonesS_Auth/' + listing_id)
         .then(({ data }) => {
           if (Array.isArray(data.data)) {
             setMiles(data.data);
-            if (data.data.length > 0) {
-              setNo_mile(false);
+            if (data.data.length != 0) {
+              //setNo_mile(false);
             }
+
           } else {
             console.error('API did not return an array:', data);
             setMiles([]);
@@ -37,7 +38,7 @@ const MilestonePage = () => {
         .catch(err => {
           console.log(err);
           setMiles([]);
-          setHasmile(true);
+          //setHasmile(true);
         });
     };
     getMilestones();
@@ -47,6 +48,26 @@ const MilestonePage = () => {
     //console.log(Milestone ${milestoneName} status changed to: ${status});
     // Update milestone status logic here
   };
+
+  const handlePay = (mile_id,amount) => {
+    //alert(mile_id+ amount)
+        var amount = btoa(amount);
+        //var mile_id = btoa(mile_id)
+        var purpose = btoa('s_mile');
+        $.confirm({
+          title: 'Please Confirm',
+          content: 'Are you sure?',
+          buttons: {
+            confirm: function () {
+              window.location.href = '/checkoutS/' + mile_id + '/' + amount+'/'+purpose;
+            },
+            cancel: function () {
+              $.alert('Canceled!');
+            },
+          }
+        });
+
+    }
 
   return (
     <div className="container mx-auto p-5">
@@ -117,39 +138,26 @@ const MilestonePage = () => {
                 <div className="flex space-x-2">
                   {booked && milestone.status === 'To Do' &&  
                     <button
-                    onClick={() => handleStatusChange(milestone.title, 'To Pay')}
-                    className={`px-3 py-1 rounded ${
-                      milestone.status === 'To Do'
-                        ? 'bg-green text-white'
-                        : 'bg-gray-200 text-gray-700'
-                    }`}
-                  >
-                    To PAY (PAY)
-                  </button> 
+                    onClick={() => handlePay(milestone.id, milestone.amount)}> 
+                  To Do  </button>
                 }
 
                 {booked && milestone.status === 'In Progress' &&  
                     <button
-                    onClick={() => handleStatusChange(milestone.title, 'Paid')}
+                    // onClick={() => handleStatusChange(milestone.title, 'Paid')}
                     className={`px-3 py-1 rounded ${
                       milestone.status === 'In Progress'
                         ? 'bg-green text-white'
                         : 'bg-gray-200 text-gray-700'
                     }`}
                   >
-                    In Progress -
+                    In Progress
                   </button> 
                 }
 
                 {!booked  &&  
-                    <button
-                    onClick={() => handleStatusChange(milestone.title, 'Paid')}
-                    className={`px-3 py-1 rounded ${
-                      milestone.status === 'In Progress'
-                        ? 'bg-green text-white'
-                        : 'bg-gray-200 text-gray-700'
-                    }`}
-                  >
+                    <button 
+                    className="px-3 py-1 rounded bg-gray-200 text-gray-700" >
                    {milestone.status}
                   </button> 
                 }
@@ -159,6 +167,25 @@ const MilestonePage = () => {
                   <div className="text-red-500 mt-2">{milestone.due}</div>
                 )}*/}
               </td>
+
+              {booked && milestone.status === 'To Do'?( 
+               <td className="border border-gray-300 px-4 py-2"> 
+               
+               <button
+                    onClick={() => handlePay(milestone.id, milestone.amount)}
+                    className={`px-3 py-1 rounded ${
+                      milestone.status === 'To Do'
+                        ? 'bg-green text-white'
+                        : 'bg-gray-200 text-gray-700'
+                    }`}
+                  >
+                    PAY
+                  </button> 
+               </td>
+               ): (
+                <td className="border border-gray-300 px-4 py-2"> - </td>
+               ) }
+
               <td className="border border-gray-300 px-4 py-2">{milestone.time_left} </td>
 
             </tr>

@@ -533,7 +533,7 @@ catch(\Exception $e){
 
    
     public function milestoneStripePostS(Request $request)
-    {
+    { 
 
     if(Auth::check())
         $investor_id = Auth::id();
@@ -553,20 +553,25 @@ catch(\Exception $e){
     $mile = Smilestones::where('id',$id)->first();    
     $tax = taxes::where('id',1)->first();$tax = $tax->tax+$tax->vat;
 
-        $amount= Session::get('service_part_amount');//$request->price; 
-        $amountReal= Session::get('service_part_amount_real');
-    //$amount =($mile->amount)+($mile->amount)*($tax/100);
+        $amount= $request->amount; 
+        $transferAmount= round($amount-($amount*.05),2);
+        $amountReal= $request->amountOriginal; //$request->amountReal;
+        $transferAmount=round($amountReal,2);
+
+        // $amount= Session::get('service_part_amount');//$request->price; 
+        // $amountReal= Session::get('service_part_amount_real');
+
 
     $user_id = $mile->user_id;
     $business_id = $mile->listing_id;
 
 
     //Stripe
-    try{
+    try{ 
 
         $curr='USD'; //$request->currency; 
         $amount=round($amount,2);
-        $transferAmount=round($amountReal,2);
+        $transferAmount=round($transferAmount,2);
 
         $this->validate($request, [
             'stripeToken' => ['required', 'string']
@@ -580,9 +585,10 @@ catch(\Exception $e){
         ]);
         }
       catch(\Exception $e){
-      Session::put('Stripe_failed',$e->getMessage());
-      return redirect()->back();
+      return response()->json(['message' =>  $e->getMessage(),'status' => 400 ]);
     }
+
+    //return $request->all();
 
     
     $Business = Services::where('id',$business_id)->first();
@@ -623,10 +629,9 @@ catch(\Exception $e){
     //Check if Asset-related Milestone
         }
 
-catch(\Exception $e){
-    Session::put('Stripe_failed',$e->getMessage());
-    return redirect()->back();
-}
+  catch(\Exception $e){
+      return response()->json(['message' =>  $e->getMessage(),'status' => 400 ]);
+    }
 
  //Stripe
    
@@ -671,8 +676,9 @@ catch(\Exception $e){
 // }
 // }
 
-       Session::put('Stripe_pay','Milestone paid successfully!');
-       return redirect("/");
+       return response()->json(['message' =>  'Stripe_pay','Bid placed! you will get a notification if your bid is accepted!', 'status' => 200]);
+
+
 
     }
 

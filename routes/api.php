@@ -150,6 +150,8 @@ Route::post('embed_service_videos', [ServiceController::class, 'embed_service_vi
 
 // B U S I N E S S    P R O T E C T E D   ENDS
 
+Route::get('serviceResultsAuth/{ids}', [PagesController::class, 'serviceResultsAuth']); 
+Route::get('getMilestonesS_Auth/{id}', [ServiceController::class, 'getMilestones'])->name('getMilestonesS');
 });
 //P R O T E C T E D    R O U T E S
 

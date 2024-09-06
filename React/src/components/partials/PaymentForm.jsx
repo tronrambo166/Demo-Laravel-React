@@ -74,7 +74,7 @@ const navigate = useNavigate();
       setTimeout(() => {
         const payload = {
             listing: listing_id,
-            percent: atob(percent),
+            percent: 5.00,
             package: $('#package').val(),
             amount: $('#amount').val(),
             amountOriginal: amount_real,
@@ -100,11 +100,38 @@ const navigate = useNavigate();
             
           });
       }
-      else{
+      else if(purpos == 'bids'){
           axiosClient.post("/bidCommits", payload).then(({data})=>{
           
           if(data.status == 200){
             alert('Bid placed, you will be notified if bid is accepted!');
+            navigate('/');
+          }
+          if(data.status == 400) 
+            alert(data.message);
+              
+          }).catch(err => { 
+            console.log(err);
+            const response = err.response;
+            if(response && response.status === 422){
+                console.log(response.data.errors);
+            }
+            
+          });
+      }
+
+      else{
+        const payloadS = {
+            milestone_id: listing_id,
+            amount: $('#amount').val(),
+            amountOriginal: amount_real,
+            stripeToken: $('#stripeToken').val(),
+        } 
+          axiosClient.post("/milestoneService", payloadS).then(({data})=>{
+          
+          console.log(data);
+          if(data.status == 200){
+            alert('Success, Paid! Check email for next milestone');
             navigate('/');
           }
           if(data.status == 400) 

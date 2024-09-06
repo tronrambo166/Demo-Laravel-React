@@ -77,6 +77,8 @@ const router = createBrowserRouter([
       { path: '/business-milestones/:id', element: <MilestonesPage /> },
       { path: '/service-milestones/:id', element: <MilestonesPageS /> },
       { path: '/checkout/:amount/:listing_id/:percent/:purpose', element: <PaymentForm /> },
+
+      { path: '/checkoutS/:listing_id/:amount/:purpose', element: <PaymentForm /> },
       { path: '/serviceresults/:resIds/:loc', name: 'serviceresults', element: <ServiceResults /> },
       { path: '/subscribe/:id', element: <Subscribepage /> },
       { path: '/checkout', element: <PaymentForm /> },

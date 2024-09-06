@@ -24,7 +24,7 @@ function InvestmentBids() {
     axiosClient.post("bookingAccepted", payload)
       .then(({ data }) => {
         console.log(data);
-        alert(data.success);
+        alert(data.message);
       })
       .catch(err => {
         const response = err.response;

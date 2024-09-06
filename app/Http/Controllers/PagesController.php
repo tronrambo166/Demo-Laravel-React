@@ -480,6 +480,35 @@ return response()->json([ 'data' => $results, 'count'=>$count] );
 }
 
 
+public function serviceResultsAuth($ids){
+$results = array();$count = 0;
+$ids = explode(',',$ids); 
+foreach($ids as $id){ 
+    if($id!='' && $id != 'no-results'){
+    $listing = Services::where('id',$id)->first();
+
+    if($listing){
+    $listing->price = number_format($listing->price);
+
+    $listing->lat = (float)$listing->lat;
+    $listing->lng = (float)$listing->lng;
+
+
+//Booking check
+$booking = serviceBook::where('service_id',$id)
+->where('booker_id', Auth::id())->first();
+if($booking) $listing->booked = 1; else $listing->booked = 0;
+
+    $count++;
+    $results[] = $listing;
+}
+}
+}
+
+return response()->json([ 'data' => $results, 'count'=>$count] );
+}
+
+
 public function categoryResults($name){
 $results = array();
 $name = str_replace('-','/',$name);

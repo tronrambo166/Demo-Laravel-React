@@ -62,7 +62,7 @@ const ServiceDetails = () => {
     //CORE METHODS
   useEffect(()=> {
     const getDetails = () => { 
-        axiosClient.get('/ServiceResults/'+form.service_id)
+        axiosClient.get('/serviceResultsAuth/'+form.service_id)
           .then(({ data }) => {
 
             data.data[0]['rating'] = parseFloat(data.data[0]['rating']) / parseFloat(data.data[0]['rating_count']);
@@ -80,7 +80,7 @@ const ServiceDetails = () => {
       axiosClient.get('/getMilestonesS/'+ form.service_id)
       .then(({ data }) => {
         setMilestonesRes(data.data); 
-        console.log(data);        
+        //console.log(data);        
        })
        .catch(err => {
          console.log(err); 
@@ -110,7 +110,7 @@ const ServiceDetails = () => {
         } 
         console.log(payload);
         axiosClient.post("/serviceBook",payload).then(({data})=>{
-            console.log(data);
+            //console.log(data);
             if (data.success) {
             $.alert({
               title: 'Alert!',
@@ -196,7 +196,8 @@ const ServiceDetails = () => {
               {details.rating_count} Ratings
             </div>
 
-            <div className="my-4">
+            {!details.booked ? (
+              <div className="my-4">
               <div className="mb-4">
                 <label className="block text-sm font-semibold mb-1">Desired start date:</label>
                 <input id="date"
@@ -221,6 +222,10 @@ const ServiceDetails = () => {
                ( <button onClick={book} className="btn-primary font-semibold w-[125px] h-[50px] whitespace-nowrap rounded-2xl mx-auto lg:mx-0"> Book Now </button> )} 
               </div>
             </div>
+            ): 
+            (
+              <p> You booked this service! </p>
+              )}
 
           </div>
         </div>
