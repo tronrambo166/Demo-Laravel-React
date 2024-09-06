@@ -16,7 +16,6 @@ function Addservicemilestone() {
   const [fileAlert, setFileAlert] = useState("");
   const [milestones, setMilestones] = useState([]);
   const [business, setBusiness] = useState([]);
-  const [fileDetails, setFileDetails] = useState(null);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -52,7 +51,16 @@ function Addservicemilestone() {
 
       toast.success(response.data.message);
       if (response.data.status === 200) {
-        getMilestones(); // Call getMilestones to refresh the list
+        getMilestones();
+        // Clear the form
+        setForm({
+          title: "",
+          amount: "",
+          time_type: "Days",
+          n_o_days: "01",
+          file: null,
+          business_id: "",
+        });
       }
     } catch (error) {
       toast.error(error.message || "An error occurred");
@@ -72,7 +80,7 @@ function Addservicemilestone() {
   };
 
   useEffect(() => {
-    getMilestones(); // Initial fetch
+    getMilestones();
   }, []);
 
   const handleStatusChange = (e, id) => {
@@ -194,14 +202,8 @@ function Addservicemilestone() {
                       className="border rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                     >
                       <option value="In Progress">{milestone.status}</option>
-                      {/* <option value="Done">Done</option> */}
                     </select>
                   </td>
-                  {/* <td className="py-3 px-4 border-b text-center">
-                    <button className="border border-black rounded-xl text-black px-4 py-2 hover:text-red-600 transition-colors">
-                      Delete
-                    </button>
-                  </td> */}
                 </tr>
               ))}
             </tbody>
@@ -209,7 +211,7 @@ function Addservicemilestone() {
         </div>
       </div>
 
-      <ToastContainer /> {/* Add this for toast notifications */}
+      <ToastContainer />
     </div>
   );
 }
