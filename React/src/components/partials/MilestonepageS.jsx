@@ -2,12 +2,18 @@ import { useState, useEffect } from "react";
 import { useParams } from 'react-router-dom';
 import axiosClient from "../../axiosClient";
 import React from 'react';
+import { useStateContext } from '../../contexts/contextProvider';
 
 const MilestonePage = () => {
   const { id } = useParams();
   const listing_id = atob(atob(id));
   const [miles, setMiles] = useState([]); // Initialize as an array
-  const [hasMile, setHasmile] = useState(false);
+  const [no_mile, setNo_mile] = useState(false);
+  const [isDone, setIsDone] = useState(false);
+  const [booked, setbooked] = useState(false);
+  const [allow, setallow] = useState(false);
+  const [reviews, setReviews] = useState([]);
+  const { token } = useStateContext();
 
   useEffect(() => {
     const getMilestones = () => {
@@ -15,14 +21,18 @@ const MilestonePage = () => {
         .then(({ data }) => {
           if (Array.isArray(data.data)) {
             setMiles(data.data);
-            if (data.data.length === 0) {
-              setHasmile(true);
+            if (data.data.length > 0) {
+              setNo_mile(false);
             }
           } else {
             console.error('API did not return an array:', data);
             setMiles([]);
-            setHasmile(true);
           }
+          setIsDone(data.done_msg)
+          setbooked(data.booked)
+          setallow(data.allow)
+          //setReviews(data.reviews)
+
         })
         .catch(err => {
           console.log(err);
@@ -40,7 +50,25 @@ const MilestonePage = () => {
 
   return (
     <div className="container mx-auto p-5">
-      <h3 className="text-left my-5 text-2xl font-bold">SMilestones</h3>
+      <h3 className="text-left my-5 text-2xl font-bold">Milestones</h3>
+
+        { !token &&
+            <div class="w-75 h-100 py-5 my-5 my-auto justify-content-center my-2 text-center mx-auto">
+                <a style="cursor:pointer; width:40%;" 
+                    class="searchListing mx-auto text-center py-1 text-light font-weight-bold" data-target="#loginModal"
+                    data-toggle="modal">Login to pay</a>
+            </div>
+          }
+
+            { no_mile && <div  class="w-75 h-100 py-5 my-5 my-auto justify-content-center my-2 text-center mx-auto">
+                <h5 class="w-75 mx-auto bg-light py-3 my-3 text-secondary">No Milestones Yet!</h5>
+            </div> }
+
+            { isDone &&
+              <div  class="w-75 my-5 h-100 text-center mx-auto">
+                <h5 class="w-75 mx-auto bg-light py-3 my-3 text-secondary">Milestones completed, Service delivered!</h5>
+              </div>
+            }
 
       {/* Steps 1-4 */}
       <div className="flex justify-center items-center mb-8">
@@ -65,21 +93,6 @@ const MilestonePage = () => {
         ))}
       </div>
 
-      <div className="w-full flex justify-end mb-4">
-        <div className="relative inline-block w-1/4">
-          <button className="w-full bg-gray-200 border py-2 px-4 rounded inline-flex items-center justify-between">
-            Select Business
-            <svg className="w-4 h-4 ml-2" fill="currentColor" viewBox="0 0 20 20">
-              <path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" />
-            </svg>
-          </button>
-          <ul className="dropdown-menu absolute hidden text-gray-700 pt-1">
-            <li className="bg-gray-200 hover:bg-gray-400 py-2 px-4 block whitespace-no-wrap">Business 1</li>
-            <li className="bg-gray-200 hover:bg-gray-400 py-2 px-4 block whitespace-no-wrap">Business 2</li>
-          </ul>
-        </div>
-      </div>
-
       <table className="table-auto w-full border-collapse border border-gray-300">
         <thead>
           <tr className="bg-gray-200">
@@ -87,11 +100,13 @@ const MilestonePage = () => {
             <th className="border border-gray-300 px-4 py-2 text-left">Amount</th>
             <th className="border border-gray-300 px-4 py-2 text-left">Document</th>
             <th className="border border-gray-300 px-4 py-2 text-left">Status</th>
+            <th className="border border-gray-300 px-4 py-2 text-left">Action</th>
             <th className="border border-gray-300 px-4 py-2 text-left">Time left</th>
           </tr>
         </thead>
         <tbody>
-          {miles.filter(milestone => milestone.status === 'In Progress').map((milestone, index) => (
+          {miles.filter(milestone => milestone.status === 'In Progress' ||
+           milestone.status === 'To Do').map((milestone, index) => (
             <tr key={index} className="hover:bg-gray-100">
               <td className="border border-gray-300 px-4 py-2">{milestone.title}</td>
               <td className="border border-gray-300 px-4 py-2">{milestone.amount}</td>
@@ -100,35 +115,55 @@ const MilestonePage = () => {
               </td>
               <td className="border border-gray-300 px-4 py-2">
                 <div className="flex space-x-2">
-                  <button
+                  {booked && milestone.status === 'To Do' &&  
+                    <button
+                    onClick={() => handleStatusChange(milestone.title, 'To Pay')}
+                    className={`px-3 py-1 rounded ${
+                      milestone.status === 'To Do'
+                        ? 'bg-green text-white'
+                        : 'bg-gray-200 text-gray-700'
+                    }`}
+                  >
+                    To PAY (PAY)
+                  </button> 
+                }
+
+                {booked && milestone.status === 'In Progress' &&  
+                    <button
                     onClick={() => handleStatusChange(milestone.title, 'Paid')}
                     className={`px-3 py-1 rounded ${
-                      milestone.status === 'Paid'
+                      milestone.status === 'In Progress'
                         ? 'bg-green text-white'
                         : 'bg-gray-200 text-gray-700'
                     }`}
                   >
-                    milestone.status
-                  </button>
-                  <button
-                    onClick={() => handleStatusChange(milestone.title, 'Done')}
+                    In Progress -
+                  </button> 
+                }
+
+                {!booked  &&  
+                    <button
+                    onClick={() => handleStatusChange(milestone.title, 'Paid')}
                     className={`px-3 py-1 rounded ${
-                      milestone.status === 'Done'
+                      milestone.status === 'In Progress'
                         ? 'bg-green text-white'
                         : 'bg-gray-200 text-gray-700'
                     }`}
                   >
-                    milestone.status
-                  </button>
+                   {milestone.status}
+                  </button> 
+                }
+                  
                 </div>
-                {milestone.status === 'In Progress' && (
+                {/*{milestone.status === 'In Progress' && (
                   <div className="text-red-500 mt-2">{milestone.due}</div>
-                )}
+                )}*/}
               </td>
-              <td className="border border-gray-300 px-4 py-2">{milestone.time_left}
+              <td className="border border-gray-300 px-4 py-2">{milestone.time_left} </td>
 
             </tr>
           ))}
+
           {miles.filter(milestone => milestone.status === 'Done').map((milestone, index) => (
             <tr key={index} className="hover:bg-gray-100">
               <td className="border border-gray-300 px-4 py-2">{milestone.title}</td>
@@ -146,27 +181,20 @@ const MilestonePage = () => {
                         : 'bg-gray-200 text-gray-700'
                     }`}
                   >
-                    Paid
-                  </button>
-                  <button
-                    onClick={() => handleStatusChange(milestone.title, 'Done')}
-                    className={`px-3 py-1 rounded ${
-                      milestone.status === 'Done'
-                        ? 'bg-blue-500 text-white'
-                        : 'bg-gray-200 text-gray-700'
-                    }`}
-                  >
                     Done
                   </button>
-                </div>
+                  </div>
+
+                {/*</div>
                 {milestone.status === 'Done' && (
-                  <div className="text-green-500 mt-2">Completed</div>
-                )}
+                  <div className="text-green-500 mt-2">Done</div>
+                )}*/}
+
               </td>
-                            <td className="border border-gray-300 px-4 py-2">{milestone.time_left}
 
             </tr>
           ))}
+{/*
           {miles.filter(milestone => milestone.status === 'To Do').map((milestone, index) => (
             <tr key={index} className="hover:bg-gray-100">
               <td className="border border-gray-300 px-4 py-2">{milestone.title}</td>
@@ -179,32 +207,24 @@ const MilestonePage = () => {
                   <button
                     onClick={() => handleStatusChange(milestone.title, 'Paid')}
                     className={`px-3 py-1 rounded ${
-                      milestone.status === 'Paid'
+                      milestone.status === 'To Do'
                         ? 'bg-green-500 text-white'
                         : 'bg-gray-200 text-gray-700'
                     }`}
                   >
-                    Paid
+                    To Do
                   </button>
-                  <button
-                    onClick={() => handleStatusChange(milestone.title, 'Done')}
-                    className={`px-3 py-1 rounded ${
-                      milestone.status === 'Done'
-                        ? 'bg-green text-white'
-                        : 'bg-gray-200 text-gray-700'
-                    }`}
-                  >
-                    Done
-                  </button>
+                  
                 </div>
-                {milestone.status === 'To Do' && (
-                  <div className="text-gray-500 mt-2">Pending</div>
-                )}
-              </td>
-                            <td className="border border-gray-300 px-4 py-2">{milestone.time_left}
+                {/*{milestone.status === 'To Do' && (
+                  <div className="text-gray-500 mt-2">PAY</div>
+                )}*/}
+           {/*   </td>
+              <td className="border border-gray-300 px-4 py-2">{milestone.time_left}  </td>*/}
 
-            </tr>
-          ))}
+         {/*   </tr>
+          ))}*/}*/}
+
         </tbody>
       </table>
     </div>

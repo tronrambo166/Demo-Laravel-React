@@ -598,9 +598,9 @@ if($time_now > $time_due_date)
 if($d == count($milestones) && count($milestones)!=0)
 { 
   $allow = true;
-  $done_msg = 'Milestone completed! Service Delivered!';
+  $done_msg = true;
 }
-else $done_msg = null;
+else $done_msg = false;
 
 }
 catch(\Exception $e){
