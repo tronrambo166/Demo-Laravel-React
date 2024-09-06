@@ -40,7 +40,7 @@ const MilestonePage = () => {
 
   return (
     <div className="container mx-auto p-5">
-      <h3 className="text-left my-5 text-2xl font-bold">Milestones</h3>
+      <h3 className="text-left my-5 text-2xl font-bold">SMilestones</h3>
 
       {/* Steps 1-4 */}
       <div className="flex justify-center items-center mb-8">
@@ -85,8 +85,9 @@ const MilestonePage = () => {
           <tr className="bg-gray-200">
             <th className="border border-gray-300 px-4 py-2 text-left">Milestone Name</th>
             <th className="border border-gray-300 px-4 py-2 text-left">Amount</th>
-            <th className="border border-gray-300 px-4 py-2 text-left">Documentation</th>
+            <th className="border border-gray-300 px-4 py-2 text-left">Document</th>
             <th className="border border-gray-300 px-4 py-2 text-left">Status</th>
+            <th className="border border-gray-300 px-4 py-2 text-left">Time left</th>
           </tr>
         </thead>
         <tbody>
@@ -107,7 +108,7 @@ const MilestonePage = () => {
                         : 'bg-gray-200 text-gray-700'
                     }`}
                   >
-                    Paid
+                    milestone.status
                   </button>
                   <button
                     onClick={() => handleStatusChange(milestone.title, 'Done')}
@@ -117,13 +118,15 @@ const MilestonePage = () => {
                         : 'bg-gray-200 text-gray-700'
                     }`}
                   >
-                    Done
+                    milestone.status
                   </button>
                 </div>
                 {milestone.status === 'In Progress' && (
                   <div className="text-red-500 mt-2">{milestone.due}</div>
                 )}
               </td>
+              <td className="border border-gray-300 px-4 py-2">{milestone.time_left}
+
             </tr>
           ))}
           {miles.filter(milestone => milestone.status === 'Done').map((milestone, index) => (
@@ -160,6 +163,8 @@ const MilestonePage = () => {
                   <div className="text-green-500 mt-2">Completed</div>
                 )}
               </td>
+                            <td className="border border-gray-300 px-4 py-2">{milestone.time_left}
+
             </tr>
           ))}
           {miles.filter(milestone => milestone.status === 'To Do').map((milestone, index) => (
@@ -196,6 +201,8 @@ const MilestonePage = () => {
                   <div className="text-gray-500 mt-2">Pending</div>
                 )}
               </td>
+                            <td className="border border-gray-300 px-4 py-2">{milestone.time_left}
+
             </tr>
           ))}
         </tbody>

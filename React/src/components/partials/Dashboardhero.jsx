@@ -12,10 +12,10 @@ const Dashboardhero = () => {
     const getUser = () => { 
       axiosClient.get('/checkAuth')
         .then(({ data }) => {
-          setUser(data);            // Set user data
+          setUser(data.user);            // Set user data
           setid(data.user.id);       // Update the id state correctly
-          console.log(data.user);    // Debugging user data
-          console.log(data.user.id); // Debugging id
+          //console.log(data.user);    // Debugging user data
+        // Debugging id
         })
         .catch(err => {
           console.log(err); 
@@ -56,8 +56,8 @@ const Dashboardhero = () => {
                 <img src={profile} className='rounded-xl' alt="" />
 
                 <div className='flex flex-col items-center'>
-                  <h2 className="text-black text-lg font-bold">{user.user?.name || 'Emmanuel Nurul'}</h2>
-                  <h3>{user.user?.email || 'test@email.com'}</h3>
+                  <h2 className="text-black text-lg font-bold">{user.fname} {user.lname}</h2>
+                  <h3>{user.email || 'test@email.com'}</h3>
                 </div>
               </div>
               <div className='flex text-[13px] gap-3 text-uppercase items-center'>

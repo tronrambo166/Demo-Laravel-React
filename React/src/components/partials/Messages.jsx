@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import axiosClient from "../../axiosClient";
 
 function Messages() {
   const [messages, setMessages] = useState([
@@ -10,6 +11,21 @@ function Messages() {
   ]);
 
   const [selectedMessage, setSelectedMessage] = useState(null);
+
+  useEffect(() => {
+    const getUser = () => { 
+      axiosClient.get('/business/service_messages')
+        .then(({ data }) => {
+          setMessages(data.messages);           
+          console.log(data);    
+
+        })
+        .catch(err => {
+          console.log(err); 
+        });
+    };
+    getUser();
+  }, []);
 
   const handleReply = (message) => {
     setSelectedMessage(message);

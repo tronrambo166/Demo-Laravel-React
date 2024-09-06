@@ -13,6 +13,21 @@ function Addservicemilestone() {
     business_id: "",
   });
 
+  useEffect(() => {
+    const getMilestones = () => {
+    axiosClient.get('/business/add_s_milestones')
+          .then(({ data }) => {
+            setMilestones(data.milestones)
+            setBusiness(data.business)
+            //console.log(data)
+          })
+          .catch(err => {
+            console.log(err);
+          });
+    };
+    getMilestones();
+  }, []);
+
   const [fileAlert, setFileAlert] = useState("");
   const [milestones, setMilestones] = useState([]);
   const [business, setBusiness] = useState([]);
@@ -57,11 +72,14 @@ function Addservicemilestone() {
     try { 
 
         toast.info("Uploading..."); // save_s_milestone // for service part
-        const response = await axiosClient.post('business/save_s_milestone', formData);
-        
-         toast.success(response.data.message);
+        const response = await axiosClient.post('business/save_s_milestone', formData);        
          if(response.data.status == 200)
-         getMilestones();
+         toast.success(response.data.message);
+         //getMilestones();
+
+         if(response.data.status == 404)
+         toast.error(response.data.message);
+         console.log(response)
 
     } catch (error) {
       toast.error(error);
@@ -77,20 +95,7 @@ function Addservicemilestone() {
     setMilestones(updatedMilestones);
   };
 
-  useEffect(() => {
-    const getMilestones = () => {
-    axiosClient.get('/business/bBQhdsfE_WWe4Q-_f7ieh7Hdhf3F_')
-          .then(({ data }) => {
-            setMilestones(data.milestones)
-            setBusiness(data.business)
-            //console.log(data)
-          })
-          .catch(err => {
-            console.log(err);
-          });
-    };
-    getMilestones();
-  }, []);
+  
 
   return (
     <div className="container mx-auto p-6">
@@ -195,7 +200,7 @@ function Addservicemilestone() {
               {milestones.map((milestone) => (
                 <tr key={milestone.id} className="text-gray-500 hover:bg-gray-50 transition-colors">
                   <td className="py-3 px-4 border-b">{milestone.title}</td>
-                  <td className="py-3 px-4 border-b">{milestone.business_name}</td>
+                  <td className="py-3 px-4 border-b">{milestone.service_name}</td>
                   <td className="py-3 px-4 border-b">${milestone.amount}</td>
                   <td className="py-3 px-4 border-b">
                     <select

@@ -35,6 +35,9 @@ console.log()
   const [selectedCustomer, setSelectedCustomer] = useState('All');
   const [S_id, setS_id] = useState('');
 
+  const [S_name, setS_name] = useState('');
+  const [bookerName, setbookerName] = useState('');
+
   const handleStatusChange = (e, id) => {
     const updatedMilestones = milestones.map((milestone) =>
       milestone.id === id ? { ...milestone, status: e.target.value } : milestone
@@ -77,6 +80,8 @@ const handleCustomerChange = (e) => {
       .then(({ data }) => {
         console.log(data);
         setMilestones(data.milestones || []);
+        setS_name(data.s_name)
+        setbookerName(data.booker_name)
       })
       .catch(err => {
         console.log(err);
@@ -141,8 +146,8 @@ const filteredMilestones = milestones.filter(milestone =>
             {milestones.map((milestone) => (
               <tr key={milestone.id} className="text-gray-600 hover:bg-gray-50 transition-colors">
                 <td className="py-3 px-4 border-b">{milestone.title}</td>
-                <td className="py-3 px-4 border-b">{milestone.service}</td>
-                <td className="py-3 px-4 border-b">{milestone.customer}</td>
+                <td className="py-3 px-4 border-b">{S_name}</td>
+                <td className="py-3 px-4 border-b">{bookerName}</td>
                 <td className="py-3 px-4 border-b">${milestone.amount}</td>
                 <td className="py-3 px-4 border-b">
                   <select

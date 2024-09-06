@@ -550,7 +550,13 @@ return redirect()->back();
 public function add_milestones(){
 $milestones = Smilestones::where('user_id',Auth::id())->latest()->get();
 $business = Services::where('shop_id',Auth::id())->get();
-return view('services.add_milestones',compact('business','milestones'));
+
+foreach($business as $b)
+  foreach($milestones as $m)
+     if($m->listing_id == $b->id)
+      $m->service_name = $b->name;
+
+return response()->json([ 'business' => $business, 'milestones' => $milestones ]);
 }
 
 public function getMilestones($id){
@@ -658,12 +664,12 @@ public function findMilestones($service_id, $booker_id){
   $service = Services::where('id',$service_id)->first();
   if($service)
   $s_name = $service->name;
-  else $s_name = '';
+  else $s_name = 'N/A';
 
   $booker = User::where('id',$booker_id)->first();
   if($booker)
   $booker_name = $booker->fname.' '.$booker->lname;
-  else $booker_name = '';
+  else $booker_name = 'N/A';
   //Optional
 
   $milestones = ServiceMileStatus::where('service_id', $service_id)
@@ -745,8 +751,7 @@ $total_share_amount = $total_share_amount+$single->amount;
 }
 $total_share_amount = $total_share_amount+$amount;
 if($total_share_amount>$serv->price){
-Session::put('error','The amount exceeds the total service price!');
-        return redirect()->back();
+return response()->json([ 'status' => 404, 'message' => 'The amount exceeds the total investment needed!']);
 }
 //Amount
 
@@ -762,8 +767,7 @@ try{
           $ext=strtolower($single_img->getClientOriginalExtension());
           if($ext!='pdf' && $ext!= 'docx')
           {
-            Session::put('error','Only pdf & docx are allowed!');
-            return redirect()->back();
+            return response()->json([ 'status' => 404, 'message' => 'Only pdf & docx are allowed!']);
           }
 
           $create_name=$uniqid.'.'.$ext;
@@ -785,13 +789,13 @@ Smilestones::create([
             'document' => $final_file,
             'n_o_days' => $n_o_days,
             'status' => $status       
-           ]);       
+           ]);     
+
+           return response()->json([ 'status' => 200, 'message' => 'Success']);  
 }
 catch(\Exception $e){
-  Session::put('failed', $e->getMessage()); ;
-}
-        Session::put('success','Milestone added!');
-        return redirect()->back();
+    return response()->json([ 'status' => 404, 'message' => $e->getMessage() ]);
+    }
 
 }
 
@@ -901,7 +905,7 @@ foreach($booking as $book)
   $results[] = $book;
 }
 }
-return view('services.my_booking',compact('results'));
+return response()->json([ 'results' => $results ]);
 }
 
 
@@ -925,7 +929,7 @@ foreach($messages as $book)
 
 $remove_new = ServiceMessages::where('to_id',Auth::id())->update(['new'=>0]);
 
-return view('services.messages',compact('results'));
+return response()->json(['messages' => $results]);
 }
 
 

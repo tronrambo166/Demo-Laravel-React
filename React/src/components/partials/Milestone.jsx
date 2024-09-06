@@ -98,7 +98,7 @@ function Milestones() {
 
   return (
     <div className="container mx-auto p-6">
-      <h3 className="text-left text-2xl font-semibold mb-6">Milestones</h3>
+      <h3 className="text-left text-2xl font-semibold mb-6">Business Milestones</h3>
       
       {/* Dropdown for selecting business */}
       <div className="mb-4 flex gap-2">
@@ -131,7 +131,7 @@ function Milestones() {
             {filteredMilestones.map((milestone) => (
               <tr key={milestone.id} className="text-gray-600 text-sm hover:bg-gray-50 transition-colors">
                 <td className="py-3 px-4 border-b">{milestone.title}</td>
-                <td className="py-3 px-4 border-b">{milestone.business}</td>
+                <td className="py-3 px-4 border-b">{milestone.business_name}</td>
                 <td className="py-3 px-4 border-b">${milestone.amount}</td>
                 <td className="py-3 px-4 border-b">
                   <select

@@ -7,9 +7,10 @@ const MyBookings = () => {
   useEffect(() => {
     const getBookings = () => {
       setTimeout(() => {
-        axiosClient.get('/bookings')
+        axiosClient.get('/business/my_booking')
           .then(({ data }) => {
-            setBookings(data.bookings);
+            setBookings(data.results);
+            console.log(data);
           })
           .catch(err => {
             console.log(err);
@@ -56,25 +57,25 @@ const MyBookings = () => {
               <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider">Start Date</th>
               <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider">Location</th>
               <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider">Status</th>
-              <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider">Action</th>
-            </tr>
+{/*              <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider">Action</th>
+*/}            </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
             {bookings.map((item) => (
               <tr key={item.id}>
                 <td className="px-4 py-4 text-sm">{item.date}</td>
-                <td className="px-4 py-4 text-sm">{item.serviceName}</td>
+                <td className="px-4 py-4 text-sm">{item.service}</td>
                 <td className="px-4 py-4 text-sm">{item.category}</td>
-                <td className="px-4 py-4 text-sm">{item.notes}</td>
-                <td className="px-4 py-4 text-sm">{item.startDate}</td>
+                <td className="px-4 py-4 text-sm">{item.note}</td>
+                <td className="px-4 py-4 text-sm">{item.created_at}</td>
                 <td className="px-4 py-4 text-sm">{item.location}</td>
                 <td className="px-4 py-4 text-sm">{item.status}</td>
-                <td className="px-4 py-4 text-sm">
+                {/*<td className="px-4 py-4 text-sm">
                   <div className="flex space-x-2">
                     <button onClick={() => handleEdit(item)} className="text-black py-1 px-2 border rounded-xl hover:underline">Edit</button>
                     <button onClick={() => handleDelete(item.id)} className="text-red-600 py-2 px-3 border rounded-xl hover:underline">Delete</button>
                   </div>
-                </td>
+                </td>*/}
               </tr>
             ))}
           </tbody>

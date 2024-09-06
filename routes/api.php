@@ -120,7 +120,7 @@ Route::get('bBQhdsfE_WWe4Q-_f7ieh7Hdhf8F_', [ServiceController::class, 'services
 Route::get('bBQhdsfE_WWe4Q-_f7ieh7Hdhf2F_', [ServiceController::class, 'add_listing'])->name('add-services');
 Route::post('create-service', [ServiceController::class, 'save_listing'])->name('create-service');
 // --- MILESTONE
-Route::get('bBQhdsfE_WWe4Q-_f7ieh7Hdhf3F_', [ServiceController::class, 'add_milestones'])->name('add_s_milestones');
+Route::get('add_s_milestones', [ServiceController::class, 'add_milestones'])->name('add_s_milestones');
 Route::get('bBQhdsfE_WWe4Q-_f7ieh7Hdhf4F_-{id}', [ServiceController::class, 'milestones'])->name('s_milestones');
 Route::get('findMilestones/{s_id}/{booker_id}', [ServiceController::class, 'findMilestones'])->name('findMilestones');
 
@@ -130,10 +130,10 @@ Route::get('delete_s_milestone/{id}', [ServiceController::class, 'delete_milesto
 Route::post('mile_s_status', [ServiceController::class, 'mile_status'])->name('mile_s_status');
 // --- MILESTONE
 Route::get('service_booking', [ServiceController::class, 'service_booking'])->name('service_booking');
-Route::get('bBQhdsfE_WWe4Q-_f7ieh7Hdhf6F_', [ServiceController::class, 'my_booking'])->name('my_booking');
+Route::get('my_booking', [ServiceController::class, 'my_booking'])->name('my_booking');
 Route::get('bBQhdsfE_WWe4Q-_f7ieh7Hdhf6F__', [ServiceController::class, 'booker_milestones'])->name('booker-milestones');
 Route::get('getBookers/{s_id}', [ServiceController::class, 'getBookers'])->name('getBookers');
-Route::get('bBQhdsfE_WWe4Q-_f7ieh7Hdhf7F_', [ServiceController::class, 'service_messages'])->name('service-messages');
+Route::get('service_messages', [ServiceController::class, 'service_messages'])->name('service-messages');
 
 
 Route::get('/dashhome', [BusinessController::class, 'home'])->name('services/index');

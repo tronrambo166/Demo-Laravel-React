@@ -715,7 +715,12 @@ else{
 }
 
 $business = listing::where('user_id',Auth::id())->get();
-// return view('business.milestones',compact('milestones','business', 'business_name'));
+
+foreach($business as $b)
+  foreach($milestones as $m)
+     if($m->listing_id == $b->id)
+      $m->business_name = $b->name;
+    
 return response()->json(['milestones' => $milestones, 'business'=>$business, 'business_name' =>$business_name ]);
 }
 
@@ -776,16 +781,16 @@ try{
           $final_file=$loc.$create_name;
            
 
-         //    Milestones::create([
-         //    'user_id' => $user_id,
-         //    'title' => $title,
-         //    'listing_id' => $business_id,
-         //    'amount' => $amount,
-         //    'document' => $final_file,
-      			// 'n_o_days' => $n_o_days,
-         //    'status' => $status,
-         //    'share'  => $share           
-         //   ]);  
+            Milestones::create([
+            'user_id' => $user_id,
+            'title' => $title,
+            'listing_id' => $business_id,
+            'amount' => $amount,
+            'document' => $final_file,
+      			'n_o_days' => $n_o_days,
+            'status' => $status,
+            'share'  => $share           
+           ]);  
 
             return response()->json([ 'status' => 200, 'message' => 'Success']);
   
