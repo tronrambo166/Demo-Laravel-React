@@ -1,4 +1,4 @@
-import  { useState } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom'; // Use useNavigate instead of useHistory
 import axios from 'axios';
 
@@ -21,22 +21,129 @@ const AddService = ({ connected, userId }) => {
   const [messages, setMessages] = useState({ success: '', error: '' });
   const navigate = useNavigate(); // Use useNavigate for navigation
 
-  const handleChange = (e) => {
-    const { name, value, files } = e.target;
-    setFormData({
-      ...formData,
-      [name]: files ? files[0] : value
-    });
+  // Handle file input changes
+  const handleFileChange = (e) => {
+    const { name, files } = e.target;
+    if (files && files[0]) {
+      setFormData(prevData => ({
+        ...prevData,
+        [name]: files[0]
+      }));
+    }
   };
 
+  // Handle text input changes
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prevData => ({
+      ...prevData,
+      [name]: value
+    }));
+  };
+
+  // Handle uploads
+  const handleUploadImage = async () => {
+    if (!formData.image) return;
+    const data = new FormData();
+    data.append('image', formData.image);
+
+    try {
+      await axios.post('/upload/image', data, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      });
+    } catch (error) {
+      console.error('Error uploading image:', error);
+    }
+  };
+
+  const handleUploadPin = async () => {
+    if (!formData.pin) return;
+    const data = new FormData();
+    data.append('pin', formData.pin);
+
+    try {
+      await axios.post('/upload/pin', data, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      });
+    } catch (error) {
+      console.error('Error uploading pin:', error);
+    }
+  };
+
+  const handleUploadIdentification = async () => {
+    if (!formData.identification) return;
+    const data = new FormData();
+    data.append('identification', formData.identification);
+
+    try {
+      await axios.post('/upload/identification', data, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      });
+    } catch (error) {
+      console.error('Error uploading identification:', error);
+    }
+  };
+
+  const handleUploadVideo = async () => {
+    if (!formData.video) return;
+    const data = new FormData();
+    data.append('video', formData.video);
+
+    try {
+      await axios.post('/upload/video', data, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      });
+    } catch (error) {
+      console.error('Error uploading video:', error);
+    }
+  };
+
+  const handleUploadDocument = async () => {
+    if (!formData.document) return;
+    const data = new FormData();
+    data.append('document', formData.document);
+
+    try {
+      await axios.post('/upload/document', data, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      });
+    } catch (error) {
+      console.error('Error uploading document:', error);
+    }
+  };
+
+  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Call individual upload handlers
+    await Promise.all([
+      handleUploadImage(),
+      handleUploadPin(),
+      handleUploadIdentification(),
+      handleUploadVideo(),
+      handleUploadDocument()
+    ]);
+
     const data = new FormData();
     Object.keys(formData).forEach(key => {
-      if (formData[key]) data.append(key, formData[key]);
+      if (key !== 'image' && key !== 'pin' && key !== 'identification' && key !== 'video' && key !== 'document') {
+        data.append(key, formData[key]);
+      }
     });
 
     try {
+      console.log(Array.from(data.entries())); // Log form data as an array
       const response = await axios.post('/create-service', data);
       setMessages({ success: response.data.success || '', error: '' });
       navigate('/some-page'); // Replace '/some-page' with the desired path
@@ -164,105 +271,137 @@ const AddService = ({ connected, userId }) => {
               value={formData.details}
               onChange={handleChange}
               required
-              className="border border-gray-300 rounded px-3 py-2 w-full"
               rows="4"
-              placeholder="Details..."
+              className="border border-gray-300 rounded px-3 py-2 w-full"
+              placeholder="Provide details about your service"
             />
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block mb-2 text-sm font-semibold">Cover*</label>
-              <label className="block cursor-pointer bg-gray-200 border border-gray-400 rounded text-center py-2 px-4 hover:bg-gray-300">
-                Upload
-                <input
-                  type="file"
-                  name="image"
-                  onChange={handleChange}
-                  className="hidden"
-                  required
-                />
-              </label>
+              <label className="block mb-2 text-sm font-semibold">Service Image*</label>
+              <input
+                id="image"
+                type="file"
+                name="image"
+                onChange={handleFileChange}
+                className="border border-gray-300 rounded px-3 py-2 w-full"
+              />
+              {formData.image && (
+                <section>
+                  File details:
+                  <ul>
+                    <li>Name: {formData.image.name}</li>
+                    <li>Type: {formData.image.type}</li>
+                    <li>Size: {formData.image.size} bytes</li>
+                  </ul>
+                </section>
+              )}
             </div>
             <div>
-              <label className="block mb-2 text-sm font-semibold">Company/Individual Pin*</label>
-              <label className="block cursor-pointer bg-gray-200 border border-gray-400 rounded text-center py-2 px-4 hover:bg-gray-300">
-                Upload
-                <input
-                  type="file"
-                  name="pin"
-                  onChange={handleChange}
-                  className="hidden"
-                  required
-                />
-                <span className="block text-green-600 mt-1 text-xs">Only docs & pdfs</span>
-              </label>
+              <label className="block mb-2 text-sm font-semibold">Service Pin*</label>
+              <input
+                id="pin"
+                type="file"
+                name="pin"
+                onChange={handleFileChange}
+                className="border border-gray-300 rounded px-3 py-2 w-full"
+              />
+              {formData.pin && (
+                <section>
+                  File details:
+                  <ul>
+                    <li>Name: {formData.pin.name}</li>
+                    <li>Type: {formData.pin.type}</li>
+                    <li>Size: {formData.pin.size} bytes</li>
+                  </ul>
+                </section>
+              )}
             </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block mb-2 text-sm font-semibold">Directors Identification (Id/Passport)*</label>
-              <label className="block cursor-pointer bg-gray-200 border border-gray-400 rounded text-center py-2 px-4 hover:bg-gray-300">
-                Upload
-                <input
-                  type="file"
-                  name="identification"
-                  onChange={handleChange}
-                  className="hidden"
-                  required
-                />
-                <span className="block text-green-600 mt-1 text-xs">Only docs & pdfs</span>
-              </label>
+              <label className="block mb-2 text-sm font-semibold">Identification*</label>
+              <input
+                id="identification"
+                type="file"
+                name="identification"
+                onChange={handleFileChange}
+                className="border border-gray-300 rounded px-3 py-2 w-full"
+              />
+              {formData.identification && (
+                <section>
+                  File details:
+                  <ul>
+                    <li>Name: {formData.identification.name}</li>
+                    <li>Type: {formData.identification.type}</li>
+                    <li>Size: {formData.identification.size} bytes</li>
+                  </ul>
+                </section>
+              )}
             </div>
             <div>
-              <label className="block mb-2 text-sm font-semibold">Supportive Video*</label>
-              <label className="block cursor-pointer bg-gray-200 border border-gray-400 rounded text-center py-2 px-4 hover:bg-gray-300">
-                Upload
-                <input
-                  type="file"
-                  name="video"
-                  onChange={handleChange}
-                  className="hidden"
-                  required
-                />
-              </label>
-              <div className="my-3 text-center">
-                <span className="font-semibold">OR</span>
-              </div>
+              <label className="block mb-2 text-sm font-semibold">Business Video*</label>
               <input
-                type="text"
-                name="link"
-                value={formData.link}
-                onChange={handleChange}
+                id="video"
+                type="file"
+                name="video"
+                onChange={handleFileChange}
                 className="border border-gray-300 rounded px-3 py-2 w-full"
-                placeholder="YouTube Video Link"
               />
+              {formData.video && (
+                <section>
+                  File details:
+                  <ul>
+                    <li>Name: {formData.video.name}</li>
+                    <li>Type: {formData.video.type}</li>
+                    <li>Size: {formData.video.size} bytes</li>
+                  </ul>
+                </section>
+              )}
             </div>
           </div>
 
           <div>
-            <label className="block mb-2 text-sm font-semibold">Service Document*</label>
-            <label className="block cursor-pointer bg-gray-200 border border-gray-400 rounded text-center py-2 px-4 hover:bg-gray-300">
-              Upload
-              <input
-                type="file"
-                name="document"
-                onChange={handleChange}
-                className="hidden"
-                required
-              />
-            </label>
+            <label className="block mb-2 text-sm font-semibold">Additional Document*</label>
+            <input
+              id="document"
+              type="file"
+              name="document"
+              onChange={handleFileChange}
+              className="border border-gray-300 rounded px-3 py-2 w-full"
+            />
+            {formData.document && (
+              <section>
+                File details:
+                <ul>
+                  <li>Name: {formData.document.name}</li>
+                  <li>Type: {formData.document.type}</li>
+                  <li>Size: {formData.document.size} bytes</li>
+                </ul>
+              </section>
+            )}
           </div>
 
-          <div className="text-center">
-            <button
-              type="submit"
-              className="btn-primary w-70 text-white rounded py-2 px-8 "
-            >
-              Save
-            </button>
+          <div>
+            <label className="block mb-2 text-sm font-semibold">Additional Link*</label>
+            <input
+              type="url"
+              name="link"
+              value={formData.link}
+              onChange={handleChange}
+              className="border border-gray-300 rounded px-3 py-2 w-full"
+              placeholder="Enter URL"
+            />
           </div>
+
+          <button
+            type="submit"
+            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+          >
+            Add Service
+          </button>
         </form>
       )}
     </div>
