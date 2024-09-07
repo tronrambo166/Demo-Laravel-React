@@ -796,9 +796,10 @@ public function bidCommits(Request $request){
         ->where('status','In Progress')->first();
         $this_bids = BusinessBids::where('business_id',$business_id)->get();
         foreach($this_bids as $b)
-        if($b->amount)
+        if($b)
         $total_bid_amount = $total_bid_amount+($b->amount);
 
+        if($mile1)
         if($total_bid_amount >= $mile1->amount){
             $list = listing::where('id',$business_id)->first();
             $owner = User::where('id',$list->user_id)->first();
@@ -892,7 +893,9 @@ public function saveStripe($token) {
         DB::table('users')->where('id',$seller->id)
         ->update(['completed_onboarding'=>1]);
     }
-    return redirect('business/add-listing');
+
+    redirect()->to('http://127.0.0.1:5173/dashboard/add-business')->send();
+    //return redirect('http://127.0.0.1:5173/dashboard/add-business');
  }
 // CONNECT
 

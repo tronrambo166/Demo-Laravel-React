@@ -72,7 +72,7 @@ return view('services.listings',compact('listings'));
 
 
 public function save_listing(Request $request){ 
-
+//return $request->file('pin');
 $title = $request->title;
 $category = $request->category; 
 $details = $request->details;
@@ -94,8 +94,7 @@ if($image) {
           $ext=strtolower($image->getClientOriginalExtension());
           if($ext!='jpg' && $ext!= 'png' && $ext!='jpeg' && $ext!= 'svg'&& $ext!='gif')
           {
-            Session::put('error','For Cover, Only images are allowed!');
-            return redirect()->back();
+            return response()->json([ 'status' => 404, 'message' => 'For Cover, Only images are allowed!']);
           } }
 
   $pin=$request->file('pin');
@@ -103,8 +102,7 @@ if($image) {
           $ext=strtolower($pin->getClientOriginalExtension());
           if($ext!='pdf' && $ext!= 'docx')
           {
-            Session::put('error','For pin, Only pdf & docx are allowed!');
-            return redirect()->back();
+            return response()->json([ 'status' => 404, 'message' => 'Only pdf & docx are allowed!']);
           } }
 
  $identification=$request->file('identification');
@@ -112,8 +110,7 @@ if($image) {
           $ext=strtolower($identification->getClientOriginalExtension());
           if($ext!='pdf' && $ext!= 'docx')
           {
-            Session::put('error','For identification, Only pdf & docx are allowed!');           
-            return redirect()->back();
+            return response()->json([ 'status' => 404, 'message' => 'Only pdf & docx are allowed!']);
           } }
 
 
@@ -122,8 +119,7 @@ if($image) {
           $ext=strtolower($document->getClientOriginalExtension());
           if($ext!='pdf' && $ext!= 'docx')
           {
-            Session::put('error','For service document, Only pdf & docx are allowed!');          
-            return redirect()->back();
+            return response()->json([ 'status' => 404, 'message' => 'Only pdf & docx are allowed!']);
           } }
 
 
@@ -133,9 +129,8 @@ $video=$request->file('video');
           if($ext!='mpg' && $ext!= 'mpeg' && $ext!='webm' && $ext!= 'mp4' 
             && $ext!='avi' && $ext!= 'wmv')
           { 
-            Session::put('error','For video, Only mpg || mpeg || webm || mp4 
-            avi || wmv are allowed!');          
-            return redirect()->back();
+            return response()->json([ 'status' => 404, 'message' => 'For video, Only mpg || mpeg || webm || mp4 
+            avi || wmv are allowed!']);
           } }
 
 
@@ -160,7 +155,7 @@ $listing = Services::create([
           $uniqid=hexdec(uniqid());
           $ext=strtolower($image->getClientOriginalExtension());
           $create_name=$uniqid.'.'.$ext;
-          $loc='images/services/';
+          $loc='../React/images/services/';
           //Move uploaded file
           $image->move($loc, $create_name);
           $final_img=$loc.$create_name;
@@ -232,7 +227,7 @@ $listing = Services::create([
           
 
 //FILES End
-Services::where('id',$listing)->update([
+$S = Services::where('id',$listing)->update([
             'image' => $final_img,
             'pin' => $final_pin,
             'identification' => $final_identification,
@@ -255,13 +250,13 @@ Services::where('id',$listing)->update([
              ]);   
     }      
 // <!-- Asset Service -->
+    if($S)
+    return response()->json([ 'status' => 200, 'message' => 'Success!']);
 
   }
   catch(\Exception $e){
-  Session::put('failed', $e->getMessage()); ;
-}
-        Session::put('success','Service added!');
-        return redirect()->back();
+    return response()->json([ 'status' => 404, 'message' => $e->getMessage() ]);
+    }
 
 }
 

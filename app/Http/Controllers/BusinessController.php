@@ -171,6 +171,7 @@ return response()->json(['business'=>$listings]);
 
 
 public function save_listing(Request $request){
+  return $request->file();
 $title = $request->title;
 $contact = $request->contact;
 $category = $request->category;
@@ -200,8 +201,7 @@ if($image) {
           $ext=strtolower($image->getClientOriginalExtension());
           if($ext!='jpg' && $ext!= 'png' && $ext!='jpeg' && $ext!= 'svg'&& $ext!='gif')
           {
-            Session::put('error','For Cover, Only images are allowed!');
-            return redirect()->back();
+            return response()->json([ 'status' => 404, 'message' => 'For Cover, Only images are allowed!']);
           } }
 
   $pin=$request->file('pin');
@@ -727,7 +727,7 @@ return response()->json(['milestones' => $milestones, 'business'=>$business, 'bu
 
 
 public function save_milestone(Request $request){
-
+return $request->file('file');
 $title = $request->title;
 $business_id = $request->business_id;
 $amount = $request->amount;

@@ -21,6 +21,7 @@ Route::get('/', function () {
 Route::get('/stripeSubscribe/{amount}/{plan}/{days}/{range}', [checkoutController::class, 'stripeSubscribeGet'])->name('stripeSubscribe');
 Route::get('/stripeSubscribeSuccess', [checkoutController::class, 'stripeSubscribeSuccess'])->name('stripeSubscribeSuccess');
 Route::get('/connect/{id}', [checkoutController::class, 'connect'])->name('connect.stripe');
+Route::get('/saveStripe/{token}', [checkoutController::class, 'saveStripe'])->name('return.stripe');
 
 Route::get('milestoneService/{milestone_id}/{amount}', [checkoutController::class, 'milestoneCheckoutS'])->name('milestoneService');
 

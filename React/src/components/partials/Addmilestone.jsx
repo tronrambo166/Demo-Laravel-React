@@ -52,13 +52,13 @@ function AddMilestone() {
     formData.append("business_id", form.business_id);
     formData.append("file", form.file);
 
-    //console.log(form.file)
+    console.log(form)
 
     try { 
 
         toast.info("Uploading..."); // save_s_milestone // for service part
         const response = await axiosClient.post('business/save_milestone', formData);
-        
+        console.log(response)
          toast.success(response.data.message);
          if(response.data.status == 200)
          getMilestones();

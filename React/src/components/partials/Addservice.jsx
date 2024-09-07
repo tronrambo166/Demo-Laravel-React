@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import axiosClient from "../../axiosClient";
 
 const AddService = ({ connected, userId }) => {
     const [formData, setFormData] = useState({
@@ -24,6 +25,7 @@ const AddService = ({ connected, userId }) => {
     const handleFileChange = (e) => {
         const { name, files } = e.target;
         if (files && files[0]) {
+
             setFormData((prevData) => ({
                 ...prevData,
                 [name]: files[0],
@@ -44,22 +46,21 @@ const AddService = ({ connected, userId }) => {
         const data = new FormData();
         data.append(field, formData[field]);
 
-        try {
-            await axios.post(`/upload/${field}`, data, {
-                headers: {
-                    "Content-Type": "multipart/form-data",
-                },
-            });
-        } catch (error) {
-            console.error(`Error uploading ${field}:`, error);
-        }
+        // try {
+        //     await axios.post(`/upload/${field}`, data, {
+        //         headers: {
+        //             "Content-Type": "multipart/form-data",
+        //         },
+        //     });
+        // } catch (error) {
+        //     console.error(`Error uploading ${field}:`, error);
+        // }
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
         // Log form data to the console
-        console.log("Form Data:", formData);
 
         // Call individual upload handlers
         await Promise.all(
@@ -69,25 +70,27 @@ const AddService = ({ connected, userId }) => {
         );
 
         const data = new FormData();
+        //data.append("image", formData.image);
         Object.keys(formData).forEach((key) => {
-            if (
-                ![
-                    "image",
-                    "pin",
-                    "identification",
-                    "video",
-                    "document",
-                ].includes(key)
-            ) {
-                data.append(key, formData[key]);
-            }
+                data.append(key, formData[key]);     
         });
 
         try {
-            const response = await axios.post("/create-service", data);
-            setMessages({ success: response.data.success || "", error: "" });
-            navigate("/some-page");
+            //const response = await axiosClient.post('business/create-service', data);
+            const response = await axiosClient.post(`/business/create-service`, data, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
+            });
+           console.log(response.data);
+           if(response.data.status == 200)
+            setMessages({ success: response.data.message || "", error: "" });
+           if(response.data.status == 404)
+            setMessages({ error: response.data.message });
+
+        
         } catch (error) {
+            console.log(error);
             setMessages({
                 success: "",
                 error: error.response?.data?.error || "An error occurred",

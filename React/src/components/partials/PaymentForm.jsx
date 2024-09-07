@@ -74,7 +74,7 @@ const navigate = useNavigate();
       setTimeout(() => {
         const payload = {
             listing: listing_id,
-            percent: 5.00,
+            percent: atob(percent),
             package: $('#package').val(),
             amount: $('#amount').val(),
             amountOriginal: amount_real,
@@ -129,9 +129,8 @@ const navigate = useNavigate();
         } 
           axiosClient.post("/milestoneService", payloadS).then(({data})=>{
           
-          console.log(data);
           if(data.status == 200){
-            alert('Success, Paid! Check email for next milestone');
+            alert('Success, you will be notified if bid is accepted!');
             navigate('/');
           }
           if(data.status == 400) 
