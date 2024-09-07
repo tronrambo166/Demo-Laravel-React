@@ -21,7 +21,7 @@ import AddBusiness from './components/partials/Addbusiness';
 import PaymentForm from './components/partials/PaymentForm';
 import ServiceDetails from './components/partials/ServiceDetails';
 import MilestonesPage from './components/partials/Milestonepage';
-import MilestonesPageS from './components/partials/MilestonePageS';
+import MilestonesPageS from './components/partials/MilestonepageS';
 import ServiceResults from './components/partials/Serviceresults';
 import Subscribepage from './components/partials/Subscribepage';
 import Mile from './components/partials/mile';
@@ -35,64 +35,80 @@ import CategoryPage from './components/partials/Categorypage';
 import InvestorRegistration from './components/partials/Investreg';
 import Addservicemilestone from './components/partials/Addservicemilestone';
 import MyBookings from './components/partials/Mybookings';
+import AddBusinesS from './components/dashboard/business/AddBusiness';
 
 const router = createBrowserRouter([
-  {
-    path: '/',
-    element: <DefaultLayout />,
-    children: [
-      { path: '/', element: <Homepage /> },
-      { path: '/home', element: <Homepage /> },
-      { path: '/services', element: <Servicepage /> },
-      { path: '/users', element: <Users /> },
-      { path: '/listingResults/:resIds/:loc', name: 'listingResults', element: <ListingResults /> },
-      { path: '/listing/:id', element: <ListingDetails /> },
-      {
-        path: 'dashboard',
-        element: <Dashboard />,
+    {
+        path: "/",
+        element: <DefaultLayout />,
         children: [
-          { path: '/dashboard', element: <Dashhome /> },
-          { path: 'my-businesses', element: <MyBusinesses /> },
-          { path: 'add-milestone', element: <AddMilestone /> },
-          { path: 'milestones', element: <Milestones /> },
-          { path: 'investment-bids', element: <InvestmentBids /> },
-          { path: 'add-service', element: <AddService /> },
-          { path: 'service-milestone', element: <ServiceMilestone /> },
-          { path: 'service-bookings', element: <ServiceBookings /> },
-          { path: 'messages', element: <Messages /> },
-          { path: 'account/:user_id', element: <AccountPage /> },
-          { path: 'add-business', element: <AddBusiness /> },
-          { path: 'payment-form', element: <PaymentForm /> },
-		  { path: 'services-table', element: <ServiceTable/> },
-      { path: 'addservicemilestone', element: <Addservicemilestone/> },
-      { path: 'mybookings', element: <MyBookings/> },
+            { path: "/", element: <Homepage /> },
+            { path: "/home", element: <Homepage /> },
+            { path: "/services", element: <Servicepage /> },
+            { path: "/users", element: <Users /> },
+            {
+                path: "/listingResults/:resIds/:loc",
+                name: "listingResults",
+                element: <ListingResults />,
+            },
+            { path: "/listing/:id", element: <ListingDetails /> },
+            {
+                path: "dashboard",
+                element: <Dashboard />,
+                children: [
+                    { path: "/dashboard", element: <Dashhome /> },
+                    { path: "my-businesses", element: <MyBusinesses /> },
+                    { path: "add-milestone", element: <AddMilestone /> },
+                    { path: "milestones", element: <Milestones /> },
+                    { path: "investment-bids", element: <InvestmentBids /> },
+                    { path: "add-service", element: <AddService /> },
+                    {
+                        path: "service-milestone",
+                        element: <ServiceMilestone />,
+                    },
+                    { path: "service-bookings", element: <ServiceBookings /> },
+                    { path: "messages", element: <Messages /> },
+                    { path: "account/:user_id", element: <AccountPage /> },
+                    { path: "add-business", element: <AddBusiness /> },
+                    { path: "payment-form", element: <PaymentForm /> },
+                    { path: "services-table", element: <ServiceTable /> },
+                    {
+                        path: "addservicemilestone",
+                        element: <Addservicemilestone />,
+                    },
+                    { path: "mybookings", element: <MyBookings /> },
+                    { path: "addbusiness", element: <AddBusinesS /> }
+                ],
+            },
+            { path: "/service-details/:id", element: <ServiceDetails /> },
+            { path: "/business-milestones/:id", element: <MilestonesPage /> },
+            { path: "/service-milestones/:id", element: <MilestonesPageS /> },
+            {
+                path: "/checkout/:amount/:listing_id/:percent/:purpose",
+                element: <PaymentForm />,
+            },
 
+            {
+                path: "/checkoutS/:listing_id/:amount/:purpose",
+                element: <PaymentForm />,
+            },
+            {
+                path: "/serviceresults/:resIds/:loc",
+                name: "serviceresults",
+                element: <ServiceResults />,
+            },
+            { path: "/subscribe/:id", element: <Subscribepage /> },
+            { path: "/checkout", element: <PaymentForm /> },
+            { path: "/categorypage", element: <CategoryPage /> },
+            { path: "/createinvestor", element: <InvestorRegistration /> },
 
-
+            { path: "/mile", element: <Mile /> },
+            { path: "/investEquip/:amount/:id/:percent", element: <Invest /> },
+            { path: "/register", element: <Register /> },
+            { path: "/login", element: <Login /> },
+            { path: "/user-form", element: <UserForm /> },
         ],
-
-
-      },
-      { path: '/service-details/:id', element: <ServiceDetails /> },
-      { path: '/business-milestones/:id', element: <MilestonesPage /> },
-      { path: '/service-milestones/:id', element: <MilestonesPageS /> },
-      { path: '/checkout/:amount/:listing_id/:percent/:purpose', element: <PaymentForm /> },
-
-      { path: '/checkoutS/:listing_id/:amount/:purpose', element: <PaymentForm /> },
-      { path: '/serviceresults/:resIds/:loc', name: 'serviceresults', element: <ServiceResults /> },
-      { path: '/subscribe/:id', element: <Subscribepage /> },
-      { path: '/checkout', element: <PaymentForm /> },
-      { path: '/categorypage', element: <CategoryPage/> },
-      { path: '/createinvestor', element: <InvestorRegistration/> },
-
-
-      { path: '/mile', element: <Mile /> },
-      { path: '/investEquip/:amount/:id/:percent', element: <Invest /> },
-      { path: '/register', element: <Register /> },
-      { path: '/login', element: <Login /> },
-      { path: '/user-form', element: <UserForm /> },
-    ],
-  },
+    },
 ]);
 
 export default router;
