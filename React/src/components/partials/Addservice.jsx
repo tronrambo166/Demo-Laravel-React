@@ -271,27 +271,6 @@ const AddService = ({ connected, userId }) => {
                                 onChange={handleFileChange}
                                 className="border border-gray-300 rounded px-3 py-2 w-full"
                             />
-                            {formData.image && (
-                                <section className="mt-2">
-                                    <p className="font-semibold">
-                                        File details:
-                                    </p>
-                                    <ul className="list-disc list-inside pl-4">
-                                        <li>
-                                            <strong>Name:</strong>{" "}
-                                            {formData.image.name}
-                                        </li>
-                                        <li>
-                                            <strong>Type:</strong>{" "}
-                                            {formData.image.type}
-                                        </li>
-                                        <li>
-                                            <strong>Size:</strong>{" "}
-                                            {formData.image.size} bytes
-                                        </li>
-                                    </ul>
-                                </section>
-                            )}
                         </div>
                         <div>
                             <label className="block mb-2 text-sm font-semibold">
@@ -303,27 +282,6 @@ const AddService = ({ connected, userId }) => {
                                 onChange={handleFileChange}
                                 className="border border-gray-300 rounded px-3 py-2 w-full"
                             />
-                            {formData.pin && (
-                                <section className="mt-2">
-                                    <p className="font-semibold">
-                                        File details:
-                                    </p>
-                                    <ul className="list-disc list-inside pl-4">
-                                        <li>
-                                            <strong>Name:</strong>{" "}
-                                            {formData.pin.name}
-                                        </li>
-                                        <li>
-                                            <strong>Type:</strong>{" "}
-                                            {formData.pin.type}
-                                        </li>
-                                        <li>
-                                            <strong>Size:</strong>{" "}
-                                            {formData.pin.size} bytes
-                                        </li>
-                                    </ul>
-                                </section>
-                            )}
                         </div>
                     </div>
 
@@ -338,27 +296,6 @@ const AddService = ({ connected, userId }) => {
                                 onChange={handleFileChange}
                                 className="border border-gray-300 rounded px-3 py-2 w-full"
                             />
-                            {formData.identification && (
-                                <section className="mt-2">
-                                    <p className="font-semibold">
-                                        File details:
-                                    </p>
-                                    <ul className="list-disc list-inside pl-4">
-                                        <li>
-                                            <strong>Name:</strong>{" "}
-                                            {formData.identification.name}
-                                        </li>
-                                        <li>
-                                            <strong>Type:</strong>{" "}
-                                            {formData.identification.type}
-                                        </li>
-                                        <li>
-                                            <strong>Size:</strong>{" "}
-                                            {formData.identification.size} bytes
-                                        </li>
-                                    </ul>
-                                </section>
-                            )}
                         </div>
                         <div>
                             <label className="block mb-2 text-sm font-semibold">
@@ -370,33 +307,12 @@ const AddService = ({ connected, userId }) => {
                                 onChange={handleFileChange}
                                 className="border border-gray-300 rounded px-3 py-2 w-full"
                             />
-                            {formData.video && (
-                                <section className="mt-2">
-                                    <p className="font-semibold">
-                                        File details:
-                                    </p>
-                                    <ul className="list-disc list-inside pl-4">
-                                        <li>
-                                            <strong>Name:</strong>{" "}
-                                            {formData.video.name}
-                                        </li>
-                                        <li>
-                                            <strong>Type:</strong>{" "}
-                                            {formData.video.type}
-                                        </li>
-                                        <li>
-                                            <strong>Size:</strong>{" "}
-                                            {formData.video.size} bytes
-                                        </li>
-                                    </ul>
-                                </section>
-                            )}
                         </div>
                     </div>
 
                     <div>
                         <label className="block mb-2 text-sm font-semibold">
-                            Document (optional)
+                            Service Document (optional)
                         </label>
                         <input
                             type="file"
@@ -404,25 +320,6 @@ const AddService = ({ connected, userId }) => {
                             onChange={handleFileChange}
                             className="border border-gray-300 rounded px-3 py-2 w-full"
                         />
-                        {formData.document && (
-                            <section className="mt-2">
-                                <p className="font-semibold">File details:</p>
-                                <ul className="list-disc list-inside pl-4">
-                                    <li>
-                                        <strong>Name:</strong>{" "}
-                                        {formData.document.name}
-                                    </li>
-                                    <li>
-                                        <strong>Type:</strong>{" "}
-                                        {formData.document.type}
-                                    </li>
-                                    <li>
-                                        <strong>Size:</strong>{" "}
-                                        {formData.document.size} bytes
-                                    </li>
-                                </ul>
-                            </section>
-                        )}
                     </div>
 
                     <div>
@@ -430,21 +327,23 @@ const AddService = ({ connected, userId }) => {
                             Service Link (optional)
                         </label>
                         <input
-                            type="url"
+                            type="text"
                             name="link"
                             value={formData.link}
                             onChange={handleChange}
                             className="border border-gray-300 rounded px-3 py-2 w-full"
-                            placeholder="https://example.com"
+                            placeholder="Add a URL (optional)"
                         />
                     </div>
 
-                    <button
-                        type="submit"
-                        className="bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700"
-                    >
-                        Submit
-                    </button>
+                    <div>
+                        <button
+                            type="submit"
+                            className="block bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-600"
+                        >
+                            Submit
+                        </button>
+                    </div>
                 </form>
             )}
         </div>
