@@ -1,16 +1,18 @@
 import React, { useState, useEffect } from "react";
 import { FiUpload } from "react-icons/fi";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import axiosClient from "../../../axiosClient";
 
 const AddBusiness = () => {
     const [formData, setFormData] = useState({
         title: "",
-        contact: "",
+        contact: "", // Updated
         category: "",
         details: "",
         location: "",
         investment_needed: "",
         share: "",
-        contact_mail: "",
         reason: "",
         y_turnover: "",
         investors_fee: "",
@@ -19,36 +21,28 @@ const AddBusiness = () => {
         lat: "",
         lng: "",
         yeary_fin_statement: null,
-        pin: null,
+        pin: null, // Updated
         identification: null,
-        document: null,
+        document: null, // Updated
         video: null,
+        investors_fee: "",
+        videoLink: "",
     });
 
     const [isFormValid, setIsFormValid] = useState(false);
+    const [showAmountInput, setShowAmountInput] = useState(false);
 
     useEffect(() => {
         const allRequiredFilled = [
-            // formData.title,
-            // formData.contact,
-            // formData.category,
-            // formData.details,
-            // formData.location,
-            // formData.investment_needed,
-            // formData.share,
-            // formData.contact_mail,
-            // formData.reason,
-            // formData.y_turnover,
-            // formData.investors_fee,
-            // formData.id_no,
-            // formData.tax_pin,
-            // formData.lat,
-            // formData.lng,
-            // formData.yeary_fin_statement,
-            // formData.pin,
-            // formData.identification,
-            // formData.document,
-            // formData.video,
+            formData.title,
+            formData.contact, // Updated
+            formData.category,
+            formData.details,
+            formData.location,
+            //formData.reason,
+            formData.y_turnover,
+            formData.id_no,
+            formData.tax_pin,
         ].every((field) => field !== null && field !== "");
 
         setIsFormValid(allRequiredFilled);
@@ -62,15 +56,47 @@ const AddBusiness = () => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
-    const handleSubmit = (e) => {
+    const handleCheckboxChange = (e) => {
+        setShowAmountInput(e.target.checked);
+    };
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
         const data = new FormData();
+
+        // Append form data
         Object.entries(formData).forEach(([key, value]) => {
-            data.append(key, value);
+            if (value instanceof File) {
+                data.append(key, value);
+            } else {
+                data.append(key, value);
+            }
         });
+
+        // Log FormData content as an object
+        const formDataObject = Object.fromEntries(data.entries());
+        console.log("Submitted Form Data:", formDataObject);
+
+        try {
+          const response = await axiosClient.post('business/create-listing', data);
+          
+           console.log(response.data);
+           if(response.data.status == 200)
+            setMessages({ success: response.data.message || "", error: "" });
+           if(response.data.status == 404)
+            setMessages({ error: response.data.message });
+
         
-        console.log("Form data submitted:", formData);
+        } catch (error) {
+            console.log(error);
+            setMessages({
+                success: "",
+                error: error.response?.data?.error || "An error occurred",
+            });
+        }
     };
+
+
 
     return (
         <div className="p-4 bg-gray-100 min-h-screen">
@@ -86,22 +112,22 @@ const AddBusiness = () => {
                     {[
                         {
                             label: "Business Title",
-                            name: "businessTitle",
+                            name: "title",
                             placeholder: "Business Title*",
                         },
                         {
                             label: "Contact",
-                            name: "contact",
+                            name: "contact", // Updated
                             placeholder: "Contact*",
                         },
                         {
                             label: "Yearly Turnover",
-                            name: "yearlyTurnover",
+                            name: "y_turnover",
                             placeholder: "Yearly Turnover*",
                         },
                         {
                             label: "Email",
-                            name: "email",
+                            name: "contact_mail", // This should stay as is if it's not being used
                             placeholder: "Email (Optional)",
                         },
                         {
@@ -111,13 +137,18 @@ const AddBusiness = () => {
                         },
                         {
                             label: "Director's Passport/ID No.",
-                            name: "directorsPassport",
+                            name: "id_no",
                             placeholder: "Director's Passport/ID No.*",
                         },
                         { label: "Share", name: "share", placeholder: "Share" },
                         {
+                            label: "Investment Needed",
+                            name: "investment_needed",
+                            placeholder: "Investment Needed",
+                        },
+                        {
                             label: "Individual/Company Tax PIN",
-                            name: "taxPin",
+                            name: "tax_pin",
                             placeholder: "Individual/Company Tax PIN*",
                         },
                     ].map((input, idx) => (
@@ -134,7 +165,8 @@ const AddBusiness = () => {
                                 onChange={handleInputChange}
                                 required={
                                     input.label !== "Email" &&
-                                    input.label !== "Share"
+                                    input.label !== "Share" &&
+                                    input.label !== "Investment Needed"
                                 }
                             />
                         </div>
@@ -181,15 +213,18 @@ const AddBusiness = () => {
 
                     {/* File Uploads */}
                     {[
-                        { label: "Cover", field: "coverFile" },
-                        { label: "PIN Certificate", field: "pinFile" },
-                        { label: "ID/Passport", field: "idFile" },
+                        { label: "Cover", field: "image" },
+                        { label: "PIN Certificate", field: "pin" }, // Updated
+                        { label: "ID/Passport", field: "identification" },
                         {
                             label: "Financial Statements",
-                            field: "financialFile",
+                            field: "yeary_fin_statement",
                         },
-                        { label: "Documents", field: "documentsFile" },
-                        { label: "Video (if applicable)", field: "videoFile" },
+                        {
+                            label: "Supporting Business Documents",
+                            field: "document", // Updated
+                        },
+                        { label: "Video (if applicable)", field: "video" },
                     ].map((fileInput, idx) => (
                         <div className="flex flex-col" key={idx}>
                             <label className="text-xs font-medium dark:text-gray-200">
@@ -219,6 +254,30 @@ const AddBusiness = () => {
                         </div>
                     ))}
 
+                    {/* Fee Input */}
+                    <div className="flex flex-col col-span-2">
+                        <label className="text-xs font-medium dark:text-gray-200">
+                            <input
+                                type="checkbox"
+                                name="feeCheckbox"
+                                onChange={handleCheckboxChange}
+                                className="mr-2"
+                            />
+                            Set fee for investor to view your full business
+                            data?
+                        </label>
+                        {showAmountInput && (
+                            <input
+                                type="text"
+                                name="investors_fee"
+                                placeholder="Amount"
+                                value={formData.investors_fee}
+                                onChange={handleInputChange}
+                                className="border border-gray-300 dark:border-gray-700 p-2 rounded-lg w-full mt-1 dark:bg-gray-900 dark:text-white text-sm focus:ring focus:ring-dark-green outline-none transition-all duration-200"
+                            />
+                        )}
+                    </div>
+
                     {/* Video Link */}
                     <div className="flex flex-col col-span-2">
                         <label className="text-xs font-medium dark:text-gray-200">
@@ -234,27 +293,14 @@ const AddBusiness = () => {
                         />
                     </div>
 
-                    {/* Reason for Funding */}
-                    <div className="flex flex-col col-span-2">
-                        <label className="text-xs font-medium dark:text-gray-200">
-                            Reason for Funding*
-                        </label>
-                        <textarea
-                            name="reasonForFunding"
-                            placeholder="Reason for Funding*"
-                            value={formData.reasonForFunding}
-                            onChange={handleInputChange}
-                            className="border border-gray-300 dark:border-gray-700 p-2 rounded-lg w-full mt-1 dark:bg-gray-900 dark:text-white text-sm focus:ring focus:ring-dark-green outline-none transition-all duration-200"
-                            required
-                        />
-                    </div>
-
                     {/* Submit Button */}
-                    <div className="col-span-2 mt-4 flex justify-center">
+                    <div className="flex flex-col col-span-2">
                         <button
                             type="submit"
-                            className={`btn btn-primary py-2 px-10 max-w-xs rounded-full ${
-                                isFormValid ? "" : "cursor-not-allowed"
+                            className={`w-full py-2 px-4 rounded-lg text-white ${
+                                isFormValid
+                                    ? "bg-blue-600 hover:bg-blue-700"
+                                    : "bg-gray-400 cursor-not-allowed"
                             }`}
                             disabled={!isFormValid}
                         >

@@ -171,7 +171,7 @@ return response()->json(['business'=>$listings]);
 
 
 public function save_listing(Request $request){
-  return $request->file();
+  return $request->file('document');
 $title = $request->title;
 $contact = $request->contact;
 $category = $request->category;
