@@ -57,7 +57,7 @@ const navigate = useNavigate();
 });
   //Stripe Code
 
-  const { listing_id } = useParams(); 
+  const { listing_id } = useParams(); alert(atob(listing_id))
   let { purpose } = useParams();
   const purpos = base64_decode(purpose);
 
@@ -73,7 +73,7 @@ const navigate = useNavigate();
       
       setTimeout(() => {
         const payload = {
-            listing: listing_id,
+            listing: atob(listing_id),
             percent: atob(percent),
             package: $('#package').val(),
             amount: $('#amount').val(),
@@ -122,7 +122,7 @@ const navigate = useNavigate();
 
       else{
         const payloadS = {
-            milestone_id: listing_id,
+            milestone_id: atob(listing_id), 
             amount: $('#amount').val(),
             amountOriginal: amount_real,
             stripeToken: $('#stripeToken').val(),

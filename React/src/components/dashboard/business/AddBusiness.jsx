@@ -13,7 +13,7 @@ const AddBusiness = () => {
         location: "",
         investment_needed: "",
         share: "",
-        reason: "",
+        reason: "test",
         y_turnover: "",
         investors_fee: "",
         id_no: "",
@@ -29,6 +29,7 @@ const AddBusiness = () => {
         videoLink: "",
     });
 
+    const [messages, setMessages] = useState({ success: "", error: "" });
     const [isFormValid, setIsFormValid] = useState(false);
     const [showAmountInput, setShowAmountInput] = useState(false);
 
@@ -43,6 +44,11 @@ const AddBusiness = () => {
             formData.y_turnover,
             formData.id_no,
             formData.tax_pin,
+            formData.image,
+            formData.pin,
+            formData.document,
+             formData.identification,
+              formData.pin,
         ].every((field) => field !== null && field !== "");
 
         setIsFormValid(allRequiredFilled);
@@ -78,8 +84,9 @@ const AddBusiness = () => {
         console.log("Submitted Form Data:", formDataObject);
 
         try {
-          const response = await axiosClient.post('business/create-listing', data);
-          
+            //toast.info("Saving...");
+            const response = await axiosClient.post('business/create-listing', data);
+
            console.log(response.data);
            if(response.data.status == 200)
             setMessages({ success: response.data.message || "", error: "" });
@@ -158,7 +165,7 @@ const AddBusiness = () => {
                                 <span className="text-red-500">*</span>
                             </label>
                             <input
-                                type="text"
+                                type="email"
                                 name={input.name}
                                 placeholder={input.placeholder}
                                 className="border border-gray-300 dark:border-gray-700 p-2 rounded-lg w-full mt-1 dark:bg-gray-900 dark:text-white text-sm focus:ring focus:ring-dark-green outline-none transition-all duration-200"
@@ -292,6 +299,22 @@ const AddBusiness = () => {
                             className="border border-gray-300 dark:border-gray-700 p-2 rounded-lg w-full mt-1 dark:bg-gray-900 dark:text-white text-sm focus:ring focus:ring-dark-green outline-none transition-all duration-200"
                         />
                     </div>
+
+
+                    <div className="flex flex-col col-span-2">
+                        <label className="text-xs font-medium dark:text-gray-200">
+                            Reason for funding (Optional)
+                        </label>
+                        <input
+                            type="text"
+                            name="reason"
+                            placeholder="Business Reason "
+                            value={formData.reason}
+                            onChange={handleInputChange}
+                            className="border border-gray-300 dark:border-gray-700 p-2 rounded-lg w-full mt-1 dark:bg-gray-900 dark:text-white text-sm focus:ring focus:ring-dark-green outline-none transition-all duration-200"
+                        />
+                    </div>
+
 
                     {/* Submit Button */}
                     <div className="flex flex-col col-span-2">

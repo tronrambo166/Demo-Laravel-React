@@ -53,7 +53,7 @@ const ServiceTable = () => {
                 <td className="px-6 py-4 flex items-center">
                   <img 
                     className="w-[50px] h-[50px] rounded-lg" 
-                    src="https://plus.unsplash.com/premium_photo-1680859126164-ac4fd8f56625?q=80&w=2071&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" 
+                    src={'../'+item.image}      
                     alt="Service" 
                   />
                   <div className="ml-4">
@@ -65,7 +65,9 @@ const ServiceTable = () => {
                 <td className="px-6 py-4 whitespace-nowrap text-sm">{item.details}</td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm">{item.amount}</td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm">
+                <Link to={`/service-milestones/${btoa(btoa(item.id))}`} key={item.id}>
                   <button className="text-green rounded-xl border py-2 px-5">View milestones</button>
+                </Link>
                 </td>
               </tr>
             ))}
@@ -91,7 +93,7 @@ const ServiceTable = () => {
                 <td className="px-6 py-4 flex items-center">
                   <img 
                     className="w-[50px] h-[50px] rounded-lg" 
-                    src="https://plus.unsplash.com/premium_photo-1680859126164-ac4fd8f56625?q=80&w=2071&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" 
+                    src={'../'+item.image}
                     alt="Service" 
                   />
                   <div className="ml-4">
@@ -103,7 +105,9 @@ const ServiceTable = () => {
                 <td className="px-6 py-4 whitespace-nowrap text-sm">{item.details}</td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm">{item.amount}</td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm">
+                <Link to={`/business-milestones/${btoa(btoa(item.id))}`} key={item.id}>
                   <button className="text-green rounded-xl border py-2 px-5">View milestones</button>
+                </Link>
                 </td>
               </tr>
             ))}

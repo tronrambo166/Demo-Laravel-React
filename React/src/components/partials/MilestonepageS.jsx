@@ -52,7 +52,7 @@ const MilestonePage = () => {
   const handlePay = (mile_id,amount) => {
     //alert(mile_id+ amount)
         var amount = btoa(amount);
-        //var mile_id = btoa(mile_id)
+        var mile_id = btoa(mile_id)
         var purpose = btoa('s_mile');
         $.confirm({
           title: 'Please Confirm',

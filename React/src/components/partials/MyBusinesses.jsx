@@ -74,7 +74,7 @@ console.log(business)
                 <td className="px-4 py-4 flex items-center">
                   <img
                     className="w-12 h-12 rounded-lg object-cover"
-                    src="https://plus.unsplash.com/premium_photo-1680859126164-ac4fd8f56625?q=80&w=2071&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                    src={'../'+item.image}
                     alt="Business"
                   />
                   <div className="ml-4 text-sm font-medium">{item.name}</div>

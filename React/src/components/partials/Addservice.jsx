@@ -60,8 +60,6 @@ const AddService = ({ connected, userId }) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        // Log form data to the console
-
         // Call individual upload handlers
         await Promise.all(
             ["image", "pin", "identification", "video", "document"].map(
@@ -69,8 +67,14 @@ const AddService = ({ connected, userId }) => {
             )
         );
 
+        formData.location = $('#searchbox').val();
+        formData.lat = $('#lat').val();
+        formData.lng = $('#lng').val();
+
         const data = new FormData();
-        //data.append("image", formData.image);
+        console.log(formData);
+        //return;
+
         Object.keys(formData).forEach((key) => {
                 data.append(key, formData[key]);     
         });
@@ -97,6 +101,46 @@ const AddService = ({ connected, userId }) => {
             });
         }
     };
+
+    const getPlaces = (e) => { 
+    e.preventDefault();
+    $("#result_list").html('');
+    const searchText = formData.location;
+
+        $.ajax({
+                url: 'https://photon.komoot.io/api/?q=' + encodeURIComponent(searchText),
+                method: 'get',
+                dataType: 'json',
+                success: function(response) {
+                  var i;  console.log(response.features);
+                
+                    for (i = 0; i < 10; i++) { //console.log(response.features[i].name);
+                        var name = response.features[i].properties.name;
+                        var city = response.features[i].properties.city;
+                        if(city == null || city == 'undefined')
+                        city = '';
+                        var country = response.features[i].properties.country;
+                        var lng = response.features[i].geometry.coordinates[0];
+                        var lat = response.features[i].geometry.coordinates[1];
+
+                        $("#result_list").show();
+                            if(i<10)
+
+                            if(city == '')
+                            $("#result_list").append(' <div onclick="address(\'' + name + ','  + country + '\', \'' + lat + '\', \'' + lng + '\');" style="" data-id="' + name + '" class="address  py-1 px-1 my-0 border-top bg-white single_comms">  <p class="h6 small text-dark d-inline" ><i class="fa fa-map-marker mr-1 text-dark" aria-hidden="true"></i> ' + name + '</p> <p  class="d-inline text-dark"><small>, ' + country + '</small> </p> </div>');
+                            else
+                            $("#result_list").append(' <div onclick="address(\'' + name + ','+ city + ','  + country + '\', \'' + lat + '\', \'' + lng + '\');" style="" data-id="' + name + '" class="address  py-1 px-1 my-0 border-top bg-white single_comms">  <p class="small h6 text-dark d-inline" ><i class="fa fa-map-marker mr-1 text-dark" aria-hidden="true"></i> ' + name + '</p> <p  class="d-inline text-dark"><small>, ' + city + ',' + country + '</small> </p> </div>');
+
+
+                        }
+                        //document.getElementById('result_list').style.overflowY="scroll";                      
+                },
+                error: function(error) {
+                    console.log(error);
+                }
+
+            });
+      }
 
     return (
         <div className="container mx-auto px-4 py-6">
@@ -227,6 +271,8 @@ const AddService = ({ connected, userId }) => {
                                 Location*
                             </label>
                             <input
+                                onKeyUp={getPlaces}
+                                id="searchbox"
                                 type="text"
                                 name="location"
                                 value={formData.location}
@@ -236,16 +282,28 @@ const AddService = ({ connected, userId }) => {
                                 placeholder="Enter a location..."
                             />
                             <input
-                                type="hidden"
+                                hidden
                                 name="lat"
-                                value={formData.lat}
+                                id="lat"
+                                value=""
                             />
                             <input
-                                type="hidden"
+                                hidden
                                 name="lng"
-                                value={formData.lng}
+                                id="lng"
+                                value=""
                             />
+                            {/*suggestion-list box*/}
+                      <ul id="suggestion-list" className="absolute w-[250px] bg-white  border-t-0 rounded-b-md shadow-lg z-10 top-full">
+                      </ul>
+                      <div id="result_list" style={{top:'582px', left:'809px'}} className="absolute w-[250px] bg-white  border-gray-300 border-t-0 rounded-b-md shadow-lg z-10 top-full">
+
+                      </div>
+                      {/*suggestion-list box*/}
+
                         </div>
+
+
                     </div>
 
                     <div>

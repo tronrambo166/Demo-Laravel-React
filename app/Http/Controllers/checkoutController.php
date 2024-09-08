@@ -805,10 +805,10 @@ public function bidCommits(Request $request){
             $owner = User::where('id',$list->user_id)->first();
             $info=[ 'business_name'=>$list->name ];
             $user['to'] = $owner->email; //'tottenham266@gmail.com'; //
-             // Mail::send('bids.mile_fulfill', $info, function($msg) use ($user){
-             //     $msg->to($user['to']);
-             //     $msg->subject('Fulfills a milestone!');
-             // });
+             Mail::send('bids.mile_fulfill', $info, function($msg) use ($user){
+                 $msg->to($user['to']);
+                 $msg->subject('Fulfills a milestone!');
+             });
      }
 // Milestone Fulfill check
 

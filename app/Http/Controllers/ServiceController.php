@@ -72,7 +72,7 @@ return view('services.listings',compact('listings'));
 
 
 public function save_listing(Request $request){ 
-//return $request->file('pin');
+//return $request->all();
 $title = $request->title;
 $category = $request->category; 
 $details = $request->details;
@@ -158,7 +158,7 @@ $listing = Services::create([
           $loc='../React/images/services/';
           //Move uploaded file
           $image->move($loc, $create_name);
-          $final_img=$loc.$create_name;
+          $final_img='images/services/'.$create_name;
              }
           else $final_img='';
 

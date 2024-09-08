@@ -33,7 +33,7 @@ function AccountPage() {
             console.log(data.connected);
             setBal(data.balanceA);
 
-            setBalP(data.balanceA);
+            setBalP(data.balanceP);
             setC(data.connected);
             setDetails(data.user)
           })

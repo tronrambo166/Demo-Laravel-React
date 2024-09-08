@@ -171,7 +171,7 @@ return response()->json(['business'=>$listings]);
 
 
 public function save_listing(Request $request){
-  return $request->file('document');
+//return $request->file('document');
 $title = $request->title;
 $contact = $request->contact;
 $category = $request->category;
@@ -209,8 +209,7 @@ if($image) {
           $ext=strtolower($pin->getClientOriginalExtension());
           if($ext!='pdf' && $ext!= 'docx')
           {
-            Session::put('error','For pin, Only pdf & docx are allowed!');
-            return redirect()->back();
+            return response()->json([ 'status' => 404, 'message' => 'For Cover, Only images are allowed!']);
           } }
 
 
@@ -219,8 +218,7 @@ if($image) {
           $ext=strtolower($identification->getClientOriginalExtension());
           if($ext!='pdf' && $ext!= 'docx')
           {
-            Session::put('error','For pin, Only pdf & docx are allowed!');
-            return redirect()->back();
+            return response()->json([ 'status' => 404, 'message' => 'For Cover, Only images are allowed!']);
           } }
 
 
@@ -229,8 +227,7 @@ if($image) {
           $ext=strtolower($yeary_fin_statement->getClientOriginalExtension());
           if($ext!='pdf' && $ext!= 'docx')
           {
-            Session::put('error','For financial statement, Only pdf & docx are allowed!');           
-            return redirect()->back();
+            return response()->json([ 'status' => 404, 'message' => 'For Cover, Only images are allowed!']);
           } }
 
 
@@ -239,20 +236,18 @@ if($image) {
           $ext=strtolower($document->getClientOriginalExtension());
           if($ext!='pdf' && $ext!= 'docx')
           {
-            Session::put('error','For supportive document, Only pdf & docx are allowed!');          
-            return redirect()->back();
+            return response()->json([ 'status' => 404, 'message' => 'For Cover, Only images are allowed!']);
           } }
 
 
 $video=$request->file('video');
- if($video) {     
+ if($video && $video !='') {     
           $ext=strtolower($video->getClientOriginalExtension());
           if($ext!='mpg' && $ext!= 'mpeg' && $ext!='webm' && $ext!= 'mp4' 
             && $ext!='avi' && $ext!= 'wmv')
           { 
-            Session::put('error','For video, Only mpg || mpeg || webm || mp4 
-            avi || wmv are allowed!');          
-            return redirect()->back();
+            return response()->json([ 'status' => 404, 'message' => 'For video, Only mpg || mpeg || webm || mp4 
+            avi || wmv are allowed!']);
           } }
 
 
@@ -286,10 +281,10 @@ try{
           $uniqid=hexdec(uniqid());
           $ext=strtolower($image->getClientOriginalExtension());
           $create_name=$uniqid.'.'.$ext;
-          $loc='images/listing/';
+          $loc='../React/images/listing/';
           //Move uploaded file
           $image->move($loc, $create_name);
-          $final_img=$loc.$create_name;
+          $final_img='images/listing/'.$create_name;
              }
           else $final_img='';
 
@@ -364,12 +359,12 @@ try{
           //Move uploaded file
           $video->move($loc, $create_name);
           $final_video=$loc.$create_name;
-             }else $final_video=$request->link;                     
+             }else $final_video=$request->videoLink;                     
       
 
 //FILES END
 
-Listing::where('id',$listing)->update([          
+$B = Listing::where('id',$listing)->update([          
             'image' => $final_img,            
             'pin' => $final_pin,  
             'identification' => $final_identification,         
@@ -378,14 +373,12 @@ Listing::where('id',$listing)->update([
             'yeary_fin_statement' => $final_statement         
            ]);       
 
-        Session::put('success','Business added!');
-        return redirect()->back();
-}
-catch (\Exception $e) {
-
-    Session::put('loginFailed',$e->getMessage());
-    return redirect()->back(); 
-}
+    if($B)
+    return response()->json([ 'status' => 200, 'message' => 'Success!']);
+  }
+  catch(\Exception $e){
+    return response()->json([ 'status' => 404, 'message' => $e->getMessage() ]);
+    }
 }
 
 public function up_listing(Request $request){

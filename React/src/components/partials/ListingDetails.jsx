@@ -172,14 +172,15 @@ const closeAuthModal = () => {
       else {
         var amount = base64_encode(amount);
         var percent = base64_encode(percent) 
-        var purpose = base64_encode('bids') 
+        var purpose = base64_encode('bids'); 
+        var listing_id = base64_encode(form.listing_id);
   
           $.confirm({
           title: 'Are you sure?',
           content: 'Are you sure to bid?',
           buttons: {
             confirm: function () {
-              window.location.href = '/checkout/' + amount + '/' + form.listing_id + '/' + percent +'/'+ purpose;
+              window.location.href = '/checkout/' + amount + '/' + listing_id + '/' + percent +'/'+ purpose;
             },
             cancel: function () {
               $.alert('Canceled!');
