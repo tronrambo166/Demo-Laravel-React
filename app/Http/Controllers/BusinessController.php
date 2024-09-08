@@ -720,7 +720,7 @@ return response()->json(['milestones' => $milestones, 'business'=>$business, 'bu
 
 
 public function save_milestone(Request $request){
-return $request->file('file');
+//return $request->file('file');
 $title = $request->title;
 $business_id = $request->business_id;
 $amount = $request->amount;
