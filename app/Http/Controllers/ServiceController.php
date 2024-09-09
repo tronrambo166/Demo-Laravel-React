@@ -833,17 +833,17 @@ $milestones = ServiceMileStatus::where('id',$request->id)
              $msg->to($user['to']);
              $msg->subject('Milestone Done!');
          });  
+         return response()->json(['message' => 'Status set success, mail sent!']);
 //Mail
 
     // if(!$notLastMile)
     //   $booking = serviceBook::where('service_id',$mile->service_id)
     //     ->where('booker_id',$mile->booker_id)->orderBy("id", "DESC")->delete();
  }
-      catch(\Exception $e){
-      return redirect('business/bBQhdsfE_WWe4Q-_f7ieh7Hdhf4F_-all')->with('failed', $e->getMessage());
-    }
-Session::put('success', 'Status Changed!');
-return redirect('business/bBQhdsfE_WWe4Q-_f7ieh7Hdhf4F_-all'); //->back();
+      catch(\Exception $e){ 
+        return response()->json([ 'message' => $e->getMessage() ]);
+      }
+
 }
 
 

@@ -89,7 +89,7 @@ const router = createBrowserRouter([
             },
 
             {
-                path: "/checkoutS/:listing_id/:amount/:purpose",
+                path: "/checkoutS/:listing_id/:amount/:purpose/:percent",
                 element: <PaymentForm />,
             },
             {

@@ -19,7 +19,7 @@ const MilestonePage = () => {
     const getMilestones = () => {
       axiosClient.get('/getMilestonesS_Auth/' + listing_id)
         .then(({ data }) => {
-          if (Array.isArray(data.data)) {
+          if (Array.isArray(data.data)) { //console.log(data.data);
             setMiles(data.data);
             if (data.data.length != 0) {
               //setNo_mile(false);
@@ -59,7 +59,7 @@ const MilestonePage = () => {
           content: 'Are you sure?',
           buttons: {
             confirm: function () {
-              window.location.href = '/checkoutS/' + mile_id + '/' + amount+'/'+purpose;
+              window.location.href = '/checkoutS/' + mile_id + '/' + amount+'/'+purpose+'/'+btoa('null');
             },
             cancel: function () {
               $.alert('Canceled!');
@@ -75,7 +75,7 @@ const MilestonePage = () => {
 
         { !token &&
             <div class="w-75 h-100 py-5 my-5 my-auto justify-content-center my-2 text-center mx-auto">
-                <a style="cursor:pointer; width:40%;" 
+                <a style={{cursor:'pointer', width:'40%'}} 
                     class="searchListing mx-auto text-center py-1 text-light font-weight-bold" data-target="#loginModal"
                     data-toggle="modal">Login to pay</a>
             </div>
@@ -168,7 +168,7 @@ const MilestonePage = () => {
                 )}*/}
               </td>
 
-              {booked && milestone.status === 'To Do'?( 
+              {booked && milestone.status === 'To Do' && milestone.active ?( 
                <td className="border border-gray-300 px-4 py-2"> 
                
                <button

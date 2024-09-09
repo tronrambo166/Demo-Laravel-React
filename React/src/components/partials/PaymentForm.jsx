@@ -57,13 +57,13 @@ const navigate = useNavigate();
 });
   //Stripe Code
 
-  const { listing_id } = useParams(); alert(atob(listing_id))
+  const { listing_id } = useParams(); 
   let { purpose } = useParams();
   const purpos = base64_decode(purpose);
 
   let { amount } = useParams();
   const amount_real = base64_decode(amount);
-  const { percent } = useParams();
+  const { percent } = useParams(); //alert(atob(percent))
 
   const [showModal, setShowModal] = useState(false);
   const price = parseFloat(amount_real)+parseFloat(0.05*amount_real); // Fixed price value
@@ -147,7 +147,7 @@ const navigate = useNavigate();
       }
 
     //timeout  
-    }, 500);
+    }, 700);
       //timeout
   };
 

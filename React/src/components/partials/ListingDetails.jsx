@@ -368,7 +368,7 @@ const closeAuthModal = () => {
           content: 'Are you sure?',
           buttons: {
             confirm: function () {
-              window.location.href = '/checkout/' + amount + '/' + business_id+'/null/'+purpose;
+              window.location.href = '/checkout/' + amount + '/' + business_id+'/'+btoa('null')+'/'+purpose;
             },
             cancel: function () {
               $.alert('Canceled!');

@@ -876,8 +876,6 @@ catch(\Exception $e){
 //$next_mile = Milestones::where('listing_id',$thisMile->listing_id)->where('status','To Do')->first();
 //if($next_mile && $next_mile->id > $request->id)
 //Milestones::where('id',$next_mile->id)->update(['status' => 'In Progress' ]);
-
-return redirect()->back();
 }
 
 

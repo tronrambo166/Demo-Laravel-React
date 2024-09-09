@@ -52,9 +52,24 @@ console.log()
   const handleFindCustomer = (id) => {
     // setMilestones(milestones.filter((milestone) => milestone.id !== id));
   };
-  const handleSet = (id) => {
-    // Implement the logic for the "Set" button action here
-    console.log(`Set action for milestone ${id}`);
+  const handleSet = (id, status) => {
+    const payload = {
+      id:id ,
+      status:status,
+  } 
+  console.log(payload);
+  axiosClient.post("/business/mile_s_status",payload).then(({data})=>{
+  alert(data.message);
+      
+}).catch(err => { console.log(err);
+    const response = err.response;
+    if(response && response.status === 422){
+        console.log(response.data.errors);
+    }
+    console.log(err);
+
+});    
+  //setMilestones(updatedMilestones);
   };
 
 const getBookers = (e) => {
@@ -162,7 +177,7 @@ const filteredMilestones = milestones.filter(milestone =>
                 </td>
                 <td className="py-3 px-4 border-b text-center flex gap-2 items-center">
                   <button
-                    onClick={() => handleSet(milestone.id)}
+                    onClick={() => handleSet(milestone.id, milestone.status)}
                     className="border border-black text-black px-4 py-2 rounded-lg hover:bg-green-500 transition-colors"
                   >
                     Set

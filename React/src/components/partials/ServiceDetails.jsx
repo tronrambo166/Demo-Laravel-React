@@ -60,9 +60,14 @@ const ServiceDetails = () => {
     //end rebook
 
     //CORE METHODS
+  let url = '';
   useEffect(()=> {
+    if(token)
+    url = '/serviceResultsAuth/';
+    else  url = '/ServiceResults/';
+
     const getDetails = () => { 
-        axiosClient.get('/serviceResultsAuth/'+form.service_id)
+        axiosClient.get(url+form.service_id)
           .then(({ data }) => {
 
             data.data[0]['rating'] = parseFloat(data.data[0]['rating']) / parseFloat(data.data[0]['rating_count']);
@@ -70,6 +75,7 @@ const ServiceDetails = () => {
             if(data.data[0]['rating_count'] == 0) data.data[0]['rating'] = 0;
             setDetails(data.data[0]);
             console.log(details)
+            console.log(data)
           })
           .catch(err => {
             console.log(err); //setLoading(false)
