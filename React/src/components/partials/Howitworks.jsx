@@ -44,24 +44,21 @@ const HowItWorks = () => {
     ];
 
     return (
-        <section className="flex flex-col items-center px-4 sm:px-8 py-6 mx-auto max-w-6xl">
-            <h3 className="text-2xl font-bold mb-6 text-center">
-                How Jitume Works
-            </h3>
-            <div className="flex flex-col gap-6 lg:flex-row lg:justify-between items-center">
+        <section className="flex flex-col items-center w-[832.55px] mx-auto gap-8 space-y-8 pb-6 mt-6">
+            <div className="how-it-works-header mt-4">
+                <h3 className="text-[24px] font-bold">How Jitume Works</h3>
+            </div>
+            <div className="flex flex-col gap-6 lg:flex-row lg:justify-between px-[60px]">
                 {steps.map((step, index) => (
-                    <div
-                        key={index}
-                        className="flex flex-col items-center text-center"
-                    >
-                        <div className="w-20 h-20 flex items-center justify-center rounded-full bg-[#EAF7EE] mb-2">
+                    <div key={index} className="flex flex-col items-center">
+                        <div className="w-20 h-20 flex items-center justify-center rounded-full bg-[#EAF7EE] mb-2 mx-auto">
                             <img
                                 src={step.imgSrc}
                                 alt={step.imgAlt}
                                 className={`${step.imgWidth} ${step.imgHeight}`}
                             />
                         </div>
-                        <p className="text-lg text-[#000000] font-medium">
+                        <p className="text-center whitespace-nowrap text-[16px] pt-4 text-[#000000] font-500">
                             {step.text}
                         </p>
                     </div>

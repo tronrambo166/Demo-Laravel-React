@@ -1,5 +1,7 @@
 import { useParams, useNavigate } from "react-router-dom";
-import { useRef, useState, useEffect } from "react";
+import { useRef } from "react";
+import { useState } from "react";
+import { useEffect } from "react";
 import axiosClient from "../../axiosClient";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -32,13 +34,15 @@ const Homesearch = () => {
             lat: $("#lat").val(),
             lng: $("#lng").val(),
         };
+        //console.log(payload);
         axiosClient
             .post("/search", payload)
             .then(({ data }) => {
+                console.log(data + "h");
                 Object.entries(data.results).forEach((entry) => {
                     const [index, row] = entry;
                     ids = ids + row.id + ",";
-                });
+                }); //console.log(ids);
                 if (!ids) ids = 0;
 
                 sessionStorage.setItem("queryLat", payload.lat);
@@ -53,6 +57,7 @@ const Homesearch = () => {
                 if (response && response.status === 422) {
                     console.log(response.data.errors);
                 }
+                console.log(err);
             });
     };
 
@@ -69,7 +74,10 @@ const Homesearch = () => {
             dataType: "json",
             success: function (response) {
                 var i;
+                console.log(response.features);
+
                 for (i = 0; i < 10; i++) {
+                    //console.log(response.features[i].name);
                     var name = response.features[i].properties.name;
                     var city = response.features[i].properties.city;
                     if (city == null || city == "undefined") city = "";
@@ -89,9 +97,11 @@ const Homesearch = () => {
                                     lat +
                                     "', '" +
                                     lng +
-                                    '\');" class="address py-2 px-2 border-t bg-white">  <p class="text-lg text-dark"><i class="fa fa-map-marker mr-1 text-dark"></i> ' +
+                                    '\');" style="" data-id="' +
                                     name +
-                                    '</p> <p class="text-dark"><small>, ' +
+                                    '" class="address  py-1 px-1 my-0 border-top bg-white single_comms">  <p class="h6 small text-dark d-inline" ><i class="fa fa-map-marker mr-1 text-dark" aria-hidden="true"></i> ' +
+                                    name +
+                                    '</p> <p  class="d-inline text-dark"><small>, ' +
                                     country +
                                     "</small> </p> </div>"
                             );
@@ -107,24 +117,27 @@ const Homesearch = () => {
                                     lat +
                                     "', '" +
                                     lng +
-                                    '\');" class="address py-2 px-2 border-t bg-white">  <p class="text-lg text-dark"><i class="fa fa-map-marker mr-1 text-dark"></i> ' +
+                                    '\');" style="" data-id="' +
                                     name +
-                                    '</p> <p class="text-dark"><small>, ' +
+                                    '" class="address  py-1 px-1 my-0 border-top bg-white single_comms">  <p class="small h6 text-dark d-inline" ><i class="fa fa-map-marker mr-1 text-dark" aria-hidden="true"></i> ' +
+                                    name +
+                                    '</p> <p  class="d-inline text-dark"><small>, ' +
                                     city +
                                     "," +
                                     country +
                                     "</small> </p> </div>"
                             );
                 }
+                //document.getElementById('result_list').style.overflowY="scroll";
             },
             error: function (error) {
                 console.log(error);
             },
         });
     };
-
     const address = (place, lat2, lng2) => {
         document.getElementById("searchbox").value = place;
+        //$("#result_list").html('');
         document.getElementById("result_list").style.display = "none";
         const lat = document.getElementById("lat");
         const lng = document.getElementById("lng");
@@ -132,22 +145,28 @@ const Homesearch = () => {
         lng.value = lng2;
     };
 
+    //KEVIN
     useEffect(() => {
-        // Placeholder for future effects
+        // begin setRange
+        // this is from the range () in listingDetails.vue
     }, []);
 
+    console.log(results);
+
+    //KEVIN
+
     return (
-        <div className="flex flex-col pt-8 justify-center px-4 sm:px-8">
-            <h1 className="text-center text-black text-2xl font-semibold sm:text-3xl">
+        <div className="flex flex-col pt-6 justify-center">
+            <h1 className="text-center text-black text-xl font-semibold">
                 Your platform to invest in local businesses
             </h1>
 
             {/* search section starts */}
-            <div className="flex flex-col md:flex-row gap-6 justify-center pt-10 items-center w-full max-w-6xl mx-auto">
+            <div className="flex flex-col md:flex-row gap-4 justify-center pt-8 px-2 sm:px-6 md:px-4 items-center w-full max-w-3xl mx-auto">
                 <input
                     ref={nameRef}
                     type="text"
-                    className="border py-3 text-lg px-5 border-[#666666]/30 rounded-lg focus:outline-none w-full md:flex-1"
+                    className="border py-2 text-md px-4 font-regular border-[#666666]/30 rounded-xl focus:outline-none w-full md:flex-1"
                     placeholder="What are you looking for?"
                 />
                 <div className="relative w-full md:flex-1">
@@ -156,7 +175,7 @@ const Homesearch = () => {
                         id="searchbox"
                         type="text"
                         placeholder="Location"
-                        className="border border-[#666666]/30 w-full text-lg rounded-lg py-3 px-5 focus:outline-none"
+                        className="border border-[#666666]/30 w-full text-md rounded-xl py-2 px-4 focus:outline-none"
                         ref={locationInputRef}
                     />
                     <FontAwesomeIcon
@@ -166,7 +185,7 @@ const Homesearch = () => {
                 </div>
                 <div className="relative w-full md:flex-1">
                     <select
-                        className="border border-[#666666]/30 w-full text-lg rounded-lg py-3 px-5 focus:outline-none appearance-none"
+                        className="border border-[#666666]/30 w-full text-md rounded-xl py-2 px-4 focus:outline-none appearance-none"
                         ref={categoryRef}
                     >
                         <option className="text-slate-400" value="">
@@ -201,31 +220,32 @@ const Homesearch = () => {
                         className="absolute right-4 top-1/2 transform -translate-y-1/2 text-black cursor-pointer pointer-events-none"
                     />
                 </div>
+                {/*       <Link to="/listingResults/:results/:loc">*/}
                 <button
                     onClick={Search}
-                    className="btn-primary w-full md:w-auto py-3 rounded-full px-5 focus:outline-none mt-4 md:mt-0 text-lg"
+                    className="btn-primary w-full md:w-auto py-3  rounded-full px-4 focus:outline-none mt-4 md:mt-0"
                 >
                     <FontAwesomeIcon icon={faSearch} />
                 </button>
+                {/*   </Link>*/}
             </div>
-
             <ul
                 id="suggestion-list"
-                className="absolute w-full max-w-xs bg-white border-t-0 rounded-b-md shadow-lg z-10 top-full"
+                className="absolute w-[250px] bg-white  border-t-0 rounded-b-md shadow-lg z-10 top-full"
             ></ul>
             <div
                 id="result_list"
-                className="absolute w-full max-w-xs bg-white border-gray-300 border-t-0 rounded-b-md shadow-lg z-10 top-full"
+                className="absolute w-[250px] bg-white  border-gray-300 border-t-0 rounded-b-md shadow-lg z-10 top-full"
             ></div>
             <input type="text" name="lat" id="lat" hidden value="" />
             <input type="text" name="lng" id="lng" hidden value="" />
             {/* search section ends */}
 
-            <div className="flex font-semibold flex-wrap gap-4 py-8 justify-center items-center w-full mx-auto">
-                <button className="btn-primary w-60 rounded-lg py-3 text-lg px-5 text-white">
+            <div className="flex font-semibold flex-wrap gap-4 py-6 justify-center items-center w-full mx-auto">
+                <button className="btn-primary w-50 rounded-lg py-2 text-sm px-4 text-white">
                     Agriculture
                 </button>
-                <button className="bg-black hover:bg-gray-800 py-3 rounded-lg text-lg px-5 text-white">
+                <button className="bg-black hover:bg-gray-800 py-2 rounded-lg text-sm px-4 text-white">
                     Renewable Energy
                 </button>
             </div>

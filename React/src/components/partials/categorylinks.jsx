@@ -1,88 +1,85 @@
-import React from "react";
-import { Link } from "react-router-dom";
-
 const CategoryLinks = () => {
     return (
-        <div className="flex flex-col pt-8 justify-center px-4 sm:px-8">
-            <div className="max-w-6xl mx-auto">
-                <ul className="flex flex-wrap gap-4 justify-center">
-                    <li className="border border-gray-300 text-black rounded-md px-4 py-2 text-sm md:text-base hover:text-green-700">
-                        <Link to="#arts-culture" className="no-underline">
+        <div className="text-center py-3 pb-0">
+            <div className="max-w-4xl mx-auto">
+                <ul className="flex flex-wrap justify-center gap-2">
+                    <li className="border border-gray-300 text-black rounded-md p-2 hover:text-green-700">
+                        <a href="#arts-culture" className="no-underline">
                             Arts/Culture
-                        </Link>
+                        </a>
                     </li>
-                    <li className="border border-gray-300 text-black rounded-md px-4 py-2 text-sm md:text-base hover:text-green-700">
-                        <Link to="#auto" className="no-underline">
+                    <li className="border border-gray-300 text-black rounded-md p-2 hover:text-green-700">
+                        <a href="#auto" className="no-underline">
                             Auto
-                        </Link>
+                        </a>
                     </li>
-                    <li className="border border-gray-300 text-black rounded-md px-4 py-2 text-sm md:text-base hover:text-green-700">
-                        <Link to="#domestic" className="no-underline">
-                            Domestic (Home Help etc)
-                        </Link>
+                    <li className="border border-gray-300 text-black rounded-md p-2 hover:text-green-700">
+                        <a href="#domestic" className="no-underline">
+                            Domestic (HomeHelp etc)
+                        </a>
                     </li>
-                    <li className="border border-gray-300 text-black rounded-md px-4 py-2 text-sm md:text-base hover:text-green-700">
-                        <Link to="#fashion" className="no-underline">
+                    <li className="border border-gray-300 text-black rounded-md p-2 hover:text-green-700">
+                        <a href="#fashion" className="no-underline">
                             Fashion
-                        </Link>
+                        </a>
                     </li>
-                    <li className="border border-gray-300 text-black rounded-md px-4 py-2 text-sm md:text-base hover:text-green-700">
-                        <Link to="#finance-accounting" className="no-underline">
+                    <li className="border border-gray-300 text-black rounded-md p-2 hover:text-green-700">
+                        <a href="#finance-accounting" className="no-underline">
                             Finance/Accounting
-                        </Link>
+                        </a>
                     </li>
-                    <li className="border border-gray-300 text-black rounded-md px-4 py-2 text-sm md:text-base hover:text-green-700">
-                        <Link to="#food" className="no-underline">
+                    <li className="border border-gray-300 text-black rounded-md p-2 hover:text-green-700">
+                        <a href="#food" className="no-underline">
                             Food
-                        </Link>
+                        </a>
                     </li>
-                    <li className="border border-gray-300 text-black rounded-md px-4 py-2 text-sm md:text-base hover:text-green-700">
-                        <Link to="#legal" className="no-underline">
+                    <li className="border border-gray-300 text-black rounded-md p-2 hover:text-green-700">
+                        <a href="#legal" className="no-underline">
                             Legal
-                        </Link>
+                        </a>
                     </li>
-                    <li className="border border-gray-300 text-black rounded-md px-4 py-2 text-sm md:text-base hover:text-green-700">
-                        <Link to="#media-internet" className="no-underline">
+                    <li className="border border-gray-300 text-black rounded-md p-2 hover:text-green-700">
+                        <a href="#media-internet" className="no-underline">
                             Media/Internet
-                        </Link>
+                        </a>
                     </li>
-                    <li className="border border-gray-300 text-black rounded-md px-4 py-2 text-sm md:text-base hover:text-green-700">
-                        <Link to="#pets" className="no-underline">
+                    <li className="border border-gray-300 text-black rounded-md p-2 hover:text-green-700">
+                        <a href="#pets" className="no-underline">
                             Pets
-                        </Link>
+                        </a>
                     </li>
-                    <li className="border border-gray-300 text-black rounded-md px-4 py-2 text-sm md:text-base hover:text-green-700">
-                        <Link to="#retail" className="no-underline">
+                    <li className="border border-gray-300 text-black rounded-md p-2 hover:text-green-700">
+                        <a href="#retail" className="no-underline">
                             Retail
-                        </Link>
+                        </a>
                     </li>
-                    <li className="border border-gray-300 text-black rounded-md px-4 py-2 text-sm md:text-base hover:text-green-700">
-                        <Link to="#real-estate" className="no-underline">
+                    <li className="border border-gray-300 text-black rounded-md p-2 hover:text-green-700">
+                        <a href="#real-estate" className="no-underline">
                             Real Estate
-                        </Link>
+                        </a>
                     </li>
-                    <li className="border border-gray-300 text-black rounded-md px-4 py-2 text-sm md:text-base hover:text-green-700">
-                        <Link to="#security" className="no-underline">
+                    <li className="border border-gray-300 text-black rounded-md p-2 hover:text-green-700">
+                        <a href="#security" className="no-underline">
                             Security
-                        </Link>
+                        </a>
                     </li>
-                    <li className="border border-gray-300 text-black rounded-md px-4 py-2 text-sm md:text-base hover:text-green-700">
-                        <Link to="#sports-gaming" className="no-underline">
+                    <li className="border border-gray-300 text-black rounded-md p-2 hover:text-green-700">
+                        <a href="#sports-gaming" className="no-underline">
                             Sports/Gaming
-                        </Link>
+                        </a>
                     </li>
-                    <li className="border border-gray-300 text-black rounded-md px-4 py-2 text-sm md:text-base hover:text-green-700">
-                        <Link
-                            to="#technology-communications"
+                    <li className="border border-gray-300 text-black rounded-md p-2 hover:text-green-700">
+                        <a
+                            href="#technology-communications"
                             className="no-underline"
                         >
                             Technology/Communications
-                        </Link>
+                        </a>
                     </li>
-                    <li className="border border-gray-300 text-black rounded-md px-4 py-2 text-sm md:text-base hover:text-green-700">
-                        <Link to="#other" className="no-underline">
+                    <li className="border border-gray-300 text-black rounded-md p-2 hover:text-green-700">
+                        <a href="#other" className="no-underline">
                             Other
-                        </Link>
+                        </a>
                     </li>
                 </ul>
             </div>
