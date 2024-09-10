@@ -15,6 +15,7 @@ function InvestmentBids() {
       .post("bidsAccepted", payload)
       .then(({ data }) => {
         console.log(data);
+        alert(data.message);
       })
       .catch((err) => {
         const response = err.response;

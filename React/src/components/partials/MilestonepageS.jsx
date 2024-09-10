@@ -126,6 +126,39 @@ const MilestonePage = () => {
           </tr>
         </thead>
         <tbody>
+
+          {miles.filter(milestone => milestone.status === 'Done').map((milestone, index) => (
+            <tr key={index} className="hover:bg-gray-100">
+              <td className="border border-gray-300 px-4 py-2">{milestone.title}</td>
+              <td className="border border-gray-300 px-4 py-2">{milestone.amount}</td>
+              <td className="border border-gray-300 px-4 py-2">
+                <a href={milestone.document} className="text-blue-500 hover:underline">Download Milestone Documentation</a>
+              </td>
+              <td className="border border-gray-300 px-4 py-2">
+                <div className="flex space-x-2">
+                  <button
+                    onClick={() => handleStatusChange(milestone.title, 'Paid')}
+                    className={`px-3 py-1 rounded ${
+                      milestone.status === 'Paid'
+                        ? 'bg-green-500 text-white'
+                        : 'bg-gray-200 text-gray-700'
+                    }`}
+                  >
+                    Done
+                  </button>
+                  </div>
+
+                {/*</div>
+                {milestone.status === 'Done' && (
+                  <div className="text-green-500 mt-2">Done</div>
+                )}*/}
+
+              </td>
+
+            </tr>
+          ))}
+
+          
           {miles.filter(milestone => milestone.status === 'In Progress' ||
            milestone.status === 'To Do').map((milestone, index) => (
             <tr key={index} className="hover:bg-gray-100">
@@ -191,36 +224,7 @@ const MilestonePage = () => {
             </tr>
           ))}
 
-          {miles.filter(milestone => milestone.status === 'Done').map((milestone, index) => (
-            <tr key={index} className="hover:bg-gray-100">
-              <td className="border border-gray-300 px-4 py-2">{milestone.title}</td>
-              <td className="border border-gray-300 px-4 py-2">{milestone.amount}</td>
-              <td className="border border-gray-300 px-4 py-2">
-                <a href={milestone.document} className="text-blue-500 hover:underline">Download Milestone Documentation</a>
-              </td>
-              <td className="border border-gray-300 px-4 py-2">
-                <div className="flex space-x-2">
-                  <button
-                    onClick={() => handleStatusChange(milestone.title, 'Paid')}
-                    className={`px-3 py-1 rounded ${
-                      milestone.status === 'Paid'
-                        ? 'bg-green-500 text-white'
-                        : 'bg-gray-200 text-gray-700'
-                    }`}
-                  >
-                    Done
-                  </button>
-                  </div>
-
-                {/*</div>
-                {milestone.status === 'Done' && (
-                  <div className="text-green-500 mt-2">Done</div>
-                )}*/}
-
-              </td>
-
-            </tr>
-          ))}
+          
 {/*
           {miles.filter(milestone => milestone.status === 'To Do').map((milestone, index) => (
             <tr key={index} className="hover:bg-gray-100">

@@ -81,7 +81,7 @@ const navigate = useNavigate();
             stripeToken: $('#stripeToken').val(),
             //stripeToken: event.target.stripeToken.value
         } 
-        //console.log(payload);
+        console.log(payload);
       if(purpos == 'small_fee'){
           axiosClient.post("/stripe.post.coversation", payload).then(({data})=>{
           console.log(data);
@@ -147,7 +147,7 @@ const navigate = useNavigate();
       }
 
     //timeout  
-    }, 700);
+    }, 1000);
       //timeout
   };
 
