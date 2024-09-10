@@ -20,8 +20,7 @@ const Modal = ({ isOpen, onClose }) => {
       className="fixed inset-0 bg-gray-800 bg-opacity-75 flex justify-center items-center z-50"
       onClick={handleOverlayClick}
     >
-      <div className="bg-white rounded-xl p-6 h-auto relative w-[95vw] max-w-[500px] sm:w-[85vw] sm:max-w-[450px] lg:w-[70vw] lg:max-w-[500px] mx-4 mt-4 sm:mt-6">
-        <div className='flex justify-center py-4'>
+  <div className="bg-white rounded-xl p-6 h-[90vh] no-scrollbar max-h-[90vh] overflow-y-auto relative w-[95vw] max-w-[500px] sm:w-[85vw] sm:max-w-[450px] lg:w-[70vw] lg:max-w-[500px] mx-4 mt-4 sm:mt-6">        <div className='flex justify-center py-4'>
           <img src={logo2} alt="Logo" className="h-12 w-auto" />
         </div>
         <hr className='py-2' />

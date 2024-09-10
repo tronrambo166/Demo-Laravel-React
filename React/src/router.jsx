@@ -5,7 +5,7 @@ import Servicepage from './components/pages/Servicepage';
 import ListingResults from './components/partials/listingResults';
 import ListingDetails from './components/partials/ListingDetails';
 
-//Dashborad Components
+// Dashboard Components
 import Dashboard from './components/pages/Dashboard';
 import MyBusinesses from './components/partials/MyBusinesses';
 import Dashhome from './components/partials/Dashhome';
@@ -52,34 +52,6 @@ const router = createBrowserRouter([
                 element: <ListingResults />,
             },
             { path: "/listing/:id", element: <ListingDetails /> },
-            {
-                path: "dashboard",
-                element: <Dashboard />,
-                children: [
-                    { path: "/dashboard", element: <Dashhome /> },
-                    { path: "my-businesses", element: <MyBusinesses /> },
-                    { path: "add-milestone", element: <AddMilestone /> },
-                    { path: "milestones", element: <Milestones /> },
-                    { path: "investment-bids", element: <InvestmentBids /> },
-                    { path: "add-service", element: <AddService /> },
-                    {
-                        path: "service-milestone",
-                        element: <ServiceMilestone />,
-                    },
-                    { path: "service-bookings", element: <ServiceBookings /> },
-                    { path: "messages", element: <Messages /> },
-                    { path: "account/:user_id", element: <AccountPage /> },
-                    { path: "add-business", element: <AddBusiness /> },
-                    { path: "payment-form", element: <PaymentForm /> },
-                    { path: "services-table", element: <ServiceTable /> },
-                    {
-                        path: "addservicemilestone",
-                        element: <Addservicemilestone />,
-                    },
-                    { path: "mybookings", element: <MyBookings /> },
-                    { path: "addbusiness", element: <AddBusinesS /> }
-                ],
-            },
             { path: "/service-details/:id", element: <ServiceDetails /> },
             { path: "/business-milestones/:id", element: <MilestonesPage /> },
             { path: "/service-milestones/:id", element: <MilestonesPageS /> },
@@ -87,7 +59,6 @@ const router = createBrowserRouter([
                 path: "/checkout/:amount/:listing_id/:percent/:purpose",
                 element: <PaymentForm />,
             },
-
             {
                 path: "/checkoutS/:listing_id/:amount/:purpose/:percent",
                 element: <PaymentForm />,
@@ -107,6 +78,28 @@ const router = createBrowserRouter([
             { path: "/register", element: <Register /> },
             { path: "/login", element: <Login /> },
             { path: "/user-form", element: <UserForm /> },
+        ],
+    },
+    {
+        path: "/dashboard",
+        element: <Dashboard />, // This ensures the Dashboard doesn't use the DefaultLayout
+        children: [
+            { path: "", element: <Dashhome /> },
+            { path: "my-businesses", element: <MyBusinesses /> },
+            { path: "add-milestone", element: <AddMilestone /> },
+            { path: "milestones", element: <Milestones /> },
+            { path: "investment-bids", element: <InvestmentBids /> },
+            { path: "add-service", element: <AddService /> },
+            { path: "service-milestone", element: <ServiceMilestone /> },
+            { path: "service-bookings", element: <ServiceBookings /> },
+            { path: "messages", element: <Messages /> },
+            { path: "account/:user_id", element: <AccountPage /> },
+            { path: "add-business", element: <AddBusiness /> },
+            { path: "payment-form", element: <PaymentForm /> },
+            { path: "services-table", element: <ServiceTable /> },
+            { path: "addservicemilestone", element: <Addservicemilestone /> },
+            { path: "mybookings", element: <MyBookings /> },
+            { path: "addbusiness", element: <AddBusinesS /> }
         ],
     },
 ]);

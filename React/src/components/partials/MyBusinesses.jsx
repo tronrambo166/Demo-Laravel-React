@@ -8,7 +8,7 @@ const MyBusinesses = () => {
         const getBusinessAndServices = () => {
             setTimeout(() => {
                 axiosClient
-                    .get("/business/bBQhdsfE_WWe4Q-f7ieh7Hdhf3E")
+                    .get("/business/bBQhdsfE_WWe4Q-_f7ieh7Hdhf3E_")
                     .then(({ data }) => {
                         setBusiness(data.business);
                     })
@@ -71,6 +71,49 @@ const MyBusinesses = () => {
 
     const [editItem, setEditItem] = useState(null);
     const [showModal, setShowModal] = useState(false);
+      const [formData, setFormData] = useState({
+        title: '',
+        price: '',
+        category: '',
+        location: '',
+        fee: '',
+        turnover: '',
+        details: '',
+        investmentNeeded: '',
+
+        image: null,
+        pin: null,
+        identification: null,
+        video: null,
+        document: null,
+        link: ''
+      });
+      const [messages, setMessages] = useState({ success: '', error: '' });
+      // const navigate = useNavigate();
+    
+      const handleChange = (e) => {
+        const { name, value, files } = e.target;
+        setFormData({
+          ...formData,
+          [name]: files ? files[0] : value
+        });
+      };
+    
+      const handleSubmit = async (e) => {
+        e.preventDefault();
+        const data = new FormData();
+        Object.keys(formData).forEach(key => {
+          if (formData[key]) data.append(key, formData[key]);
+        });
+    
+        try {
+          const response = await axios.post('/create-business', data);
+          setMessages({ success: response.data.success || '', error: '' });
+          navigate('/some-page'); // Replace '/some-page' with the desired path
+        } catch (error) {
+          setMessages({ success: '', error: error.response?.data?.error || 'An error occurred' });
+        }
+      };
 
     const handleEdit = (item) => {
         setEditItem(item);
@@ -182,8 +225,8 @@ const MyBusinesses = () => {
             {/* Edit Modal */}
             {showModal && (
                 <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center">
-                    <div className="bg-white rounded-xl shadow-lg w-1/3 p-4 max-h-[500px] overflow-hidden overflow-y-auto scrollbar-hide">
-                        <h2 className="text-xl font-semibold mb-4">
+                    <div className="bg-white rounded-xl shadow-lg w-1/3 p-4 max-h-[500px] no-scrollbar overflow-hidden overflow-y-auto scrollbar-hide">
+                        <h2 className="text-2xl py-2 font-semibold mb-4">
                             Edit Business
                         </h2>
                         <form

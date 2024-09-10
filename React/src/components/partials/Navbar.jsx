@@ -40,7 +40,7 @@ const Navbar = () => {
           <Link to="/home" className="hover:text-green dark:hover:text-dark-green">Home</Link>
           <Link to="/services" className="hover:text-green dark:hover:text-dark-green">Services</Link>
           <Link to="/dashboard" className="hover:text-green dark:hover:text-dark-green">Add Your Business</Link>
-          <Link to="/" className="hover:text-green dark:hover:text-dark-green">Create Investor Account</Link>
+          <Link to="/dashboard" className="hover:text-green dark:hover:text-dark-green">Create Investor Account</Link>
           <Link to="/dashboard" className="hover:text-green dark:hover:text-dark-green">Dashboard</Link>
 
         </div>

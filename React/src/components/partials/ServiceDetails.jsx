@@ -8,6 +8,7 @@ import { Link } from 'react-router-dom';
 import { useStateContext } from "../../contexts/contextProvider";
 import {decode as base64_decode, encode as base64_encode} from 'base-64';
 import Navbar from './Navbar';
+import Modal from "./Authmodal";
 
 const ServiceDetails = () => {
   const{token,setUser,setAuth, auth} = useStateContext();
@@ -20,12 +21,15 @@ const ServiceDetails = () => {
   const [cartRes, setCartRes] = useState('');
   const [ratingRes, setRatingRes] = useState('');
   const [booked, setBooked] = useState('');
+  const [Contactmodal, setContactmodal] = useState('');
 
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+
+ 
   const navigate = useNavigate(); 
   const form = {
     service_id: atob(atob(id))
   };
-
   const auth_user = true;
   const plan = 'silver';
   const subscrib_id = '123';
@@ -37,6 +41,27 @@ const ServiceDetails = () => {
   const makeSession = (serviceId) => {
     console.log(`Making session for service ${serviceId}`);
   };
+
+  const handlecontactmodal = (event) => {
+    event.preventDefault();
+    setContactmodal(true);
+};
+
+const [isModalOpen, setModalOpen] = useState(false); // To control modal visibility
+
+const handleBookNow = () => {
+  if (!token) {
+    setModalOpen(true); // Open modal if token is missing
+  } else {
+    book(); // Call the book function if the user is authenticated
+  }
+};
+
+const handleAuthModalOpen = (event) => {
+  event.preventDefault();
+  setIsAuthModalOpen(true);
+};
+
 
   const renderStars = (rating) => {
     const stars = [];
@@ -97,6 +122,19 @@ const ServiceDetails = () => {
     getDetails();
   }, []);
 
+
+// Handle contact modal toggle
+const handleContactModal = (event) => {
+  event.preventDefault();
+  if (token) {
+    setContactmodal(!Contactmodal);
+  } else {
+    setIsAuthModalOpen(true);
+
+    // Optionally, you can redirect or show a message if the user is not logged in
+    alert('Please log in to contact the service provider.');
+  }
+};
 
     // begin getMilestones
     // this is from the getMilestones () in serviceDetails.vue
@@ -223,7 +261,7 @@ const ServiceDetails = () => {
               </div>
               <div>
                { !token? ( 
-                <button className=""> Book Now </button>
+                <button className="btn-primary py-2 px-6 rounded-xl mt-3"> Book Now </button>
                ): 
                ( <button onClick={book} className="btn-primary font-semibold w-[125px] h-[50px] whitespace-nowrap rounded-2xl mx-auto lg:mx-0"> Book Now </button> )} 
               </div>
@@ -243,11 +281,34 @@ const ServiceDetails = () => {
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic quasi delectus dolores, quos aperiam ut illum deleniti quaerat quod, ex, expedita atque officiis molestias ipsam natus saepe ipsum dolorum quisquam reprehenderit? Quae magni architecto dignissimos nesciunt numquam libero vero autem magnam distinctio quod iste, fuga voluptatibus voluptas corporis sit eos temporibus et nemo! Aspernatur nam, accusamus cumque quidem ducimus iusto!
           </p>
           <div className='flex items-center mt-2 gap-6 text-sm'>
+          {token ? (
+
             <Link to={`/service-milestones/${btoa(btoa(details.id))}`} key={details.id}>
-            <button className='border rounded-md py-1 px-2'>Service Milestone Breakdown</button>
-            </Link>
-            <button className='border py-1 rounded-md px-6'>Contact me</button>
-          </div>
+            <button  className='border rounded-md py-2 whitespace-nowrap hover:bg-slate-200 px-2'>Service Milestone Breakdown</button>
+            </Link>): (
+  <button onClick={handleAuthModalOpen} className='border hover:bg-slate-200 py-2 whitespace-nowrap rounded-md px-6'>
+  Service Milestone Breakdown
+</button>
+)}      
+            {token ? (
+  <button onClick={setContactmodal} className='border hover:bg-slate-200 py-2 whitespace-nowrap rounded-md px-6'>
+    Contact me
+  </button>
+) : (
+  <button onClick={handleAuthModalOpen} className='border hover:bg-slate-200 py-2 whitespace-nowrap rounded-md px-6'>
+    Contact me
+  </button>
+)}          </div>
+          {/* Conditional rendering of contact section */}
+{Contactmodal && token && (
+  <div className='contact py-4'>
+    <hr></hr>
+    <h1 className='font-bold py-2 text-xl'>Contact Us</h1>
+    <textarea name="message" placeholder="Write your message here" className="w-full border-gray-300 border rounded-lg p-2" rows="4"></textarea>
+  <button className='btn-primary px-6 py-2 my-3 rounded-full font-semibold text-white'>send</button>
+  </div>
+)}
+
           <div className="my-4 text-left">
             <h3 className="font-bold my-3">Reviews</h3>
             <div>
@@ -259,6 +320,10 @@ const ServiceDetails = () => {
           </div>
         </div>
       </div>
+      <Modal
+                isOpen={isAuthModalOpen}
+                onClose={() => setIsAuthModalOpen(false)}
+            />
     </div>
   );
 };

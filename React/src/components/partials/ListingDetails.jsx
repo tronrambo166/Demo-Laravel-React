@@ -19,7 +19,7 @@ const ListingDetails = ({ onClose }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [isUnlockPopupOpen, setIsUnlockPopupOpen] = useState(false);
-  const [isVisible, setIsVisible] = useState(true);
+  const [isVisible, setIsVisible] = useState(false);
 
   const handleClose = () => {
     setIsVisible(false);

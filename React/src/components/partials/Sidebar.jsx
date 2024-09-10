@@ -46,7 +46,7 @@ const Sidebar = () => {
           {isOpen ? <FaChevronLeft /> : <FaChevronRight />}
         </button>
       </div>
-      <div className="flex-1 overflow-y-auto px-4">
+      <div className="flex-1 no-scrollbar overflow-y-auto px-4">
         <ul className="space-y-2">
           <li className="nav-item py-2">
             <NavLink

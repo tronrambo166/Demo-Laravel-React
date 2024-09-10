@@ -34,14 +34,14 @@ const RegisterForm = () => {
   };
 
   return (
-    <form className="flex flex-col px-4 py-4">
+    <form className="flex  flex-col px-4 py-4">
       {step === 1 && (
         <>
           <div className="text-center mb-4">
             <h1 className='text-lg'>Registration</h1>
             <h2 className="text-md font-semibold">Step 1 of 2</h2>
           </div>
-          <div className="flex gap-4">
+          <div className="flex my-2 overflow-y-auto gap-4">
             <label className='text-sm text-[#666666] w-1/2'>
               First Name
               <input 
@@ -73,7 +73,7 @@ const RegisterForm = () => {
               className="border p-2 rounded-xl w-full" 
             />
           </label>
-          <label className="block mt-2">
+          <label className="block mt-3 text-gray-500">
             Gender (optional)
             <div className="flex items-center gap-3 mt-1">
               <label className="inline-flex items-center">
@@ -111,7 +111,7 @@ const RegisterForm = () => {
               </label>
             </div>
           </label>
-          <label className='text-sm mt-2'>
+          <label className='text-sm mt-4 text-gray-500'>
             Date of Birth
             <div className="flex space-x-2">
               <input 
@@ -140,6 +140,16 @@ const RegisterForm = () => {
               />
             </div>
           </label>
+          <div className="flex items-center justify-center my-4">
+      <div className="border-t border-gray-300 w-1/4"></div>
+      <h2 className="mx-2 ">or continue with</h2>
+      <div className="border-t border-gray-300 w-1/4"></div>
+    </div>
+    <div className="flex justify-center gap-4">
+      <h1 className="text-2xl"><FaGoogle /></h1>
+      <h1 className="text-2xl text-blue-600"><FaFacebook /></h1>
+    </div>
+
           <button 
             type="button" 
             onClick={handleNextStep} 
@@ -188,12 +198,12 @@ const RegisterForm = () => {
               />
             </label>
             <p className='text-xs'>By creating an account, you agree to the Terms of use and Privacy Policy.</p>
-            <div className="flex justify-between items-center border border-black rounded-xl p-2">
+            <div className="flex justify-between w-[260px] items-center border border-black rounded-xl p-2">
               <div className="flex items-center gap-2">
                 <input type="radio" className="form-radio text-green-500" />
                 <p className="text-sm">I'm not a robot</p>
               </div>
-              <img src={googlerecaptcha} alt="Google Recaptcha" className="w-20 h-8" />
+              <img src={googlerecaptcha} alt="Google Recaptcha" className="w-11 h-10" />
             </div>
             <div className="flex gap-2">
               <button 
@@ -209,6 +219,7 @@ const RegisterForm = () => {
               >
                 Register
               </button>
+
             </div>
           </div>
         </>

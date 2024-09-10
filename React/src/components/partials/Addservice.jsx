@@ -174,7 +174,6 @@ const AddService = ({ connected, userId }) => {
                 </div>
             )}
 
-            <h3 className="text-2xl font-bold mb-4 text-center">Add Service</h3>
 
             {connected === 0 ? (
                 <div className="w-full max-w-lg mx-auto bg-gray-100 p-6 rounded-lg shadow-md mb-6">
@@ -195,9 +194,12 @@ const AddService = ({ connected, userId }) => {
                     className="w-full max-w-3xl mx-auto space-y-6"
                 >
                     {/* Form Fields */}
+                    <h3 className="text-2xl font-bold mb-4 py-4">Add Service</h3>
+
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        
                         <div>
-                            <label className="block mb-2 text-sm font-semibold">
+                            <label className="block mb-2 text-gray-500 text-sm font-semibold">
                                 Service Title*
                             </label>
                             <input
@@ -211,7 +213,7 @@ const AddService = ({ connected, userId }) => {
                             />
                         </div>
                         <div>
-                            <label className="block mb-2 text-sm font-semibold">
+                            <label className="block mb-2 text-gray-500 text-sm font-semibold">
                                 Price*
                             </label>
                             <input
@@ -228,7 +230,7 @@ const AddService = ({ connected, userId }) => {
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                            <label className="block mb-2 text-sm font-semibold">
+                            <label className="block mb-2 text-gray-500 text-sm font-semibold">
                                 Service Category*
                             </label>
                             <select
@@ -267,7 +269,7 @@ const AddService = ({ connected, userId }) => {
                             </select>
                         </div>
                         <div>
-                            <label className="block mb-2 text-sm font-semibold">
+                            <label className="block mb-2 text-gray-500 text-sm font-semibold">
                                 Location*
                             </label>
                             <input
@@ -307,7 +309,7 @@ const AddService = ({ connected, userId }) => {
                     </div>
 
                     <div>
-                        <label className="block mb-2 text-sm font-semibold">
+                        <label className="block mb-2 text-gray-500 text-sm font-semibold">
                             Details*
                         </label>
                         <textarea
@@ -323,14 +325,14 @@ const AddService = ({ connected, userId }) => {
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                            <label className="block mb-2 text-sm font-semibold">
+                            <label className="block  text-gray-500 mb-2 text-sm font-semibold">
                                 Service Image*
                             </label>
                             <input
                                 type="file"
                                 name="image"
                                 onChange={handleFileChange}
-                                className="border border-gray-300 rounded px-3 py-2 w-full"
+                                className="border border-gray-300 rounded-xl px-3 py-2 w-full"
                             />
                         </div>
                         <div>
@@ -341,50 +343,50 @@ const AddService = ({ connected, userId }) => {
                                 type="file"
                                 name="pin"
                                 onChange={handleFileChange}
-                                className="border border-gray-300 rounded px-3 py-2 w-full"
+                                className="border border-gray-300 rounded-xl px-3 py-2 w-full"
                             />
                         </div>
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                            <label className="block mb-2 text-sm font-semibold">
+                            <label className="block mb-2 text-gray-500 text-sm font-semibold">
                                 Identification Image*
                             </label>
                             <input
                                 type="file"
                                 name="identification"
                                 onChange={handleFileChange}
-                                className="border border-gray-300 rounded px-3 py-2 w-full"
+                                className="border border-gray-300 text-gray-500 rounded-xl px-3 py-2 w-full"
                             />
                         </div>
                         <div>
-                            <label className="block mb-2 text-sm font-semibold">
+                            <label className="block mb-2 text-gray-500 text-sm font-semibold">
                                 Video (optional)
                             </label>
                             <input
                                 type="file"
                                 name="video"
                                 onChange={handleFileChange}
-                                className="border border-gray-300 rounded px-3 py-2 w-full"
+                                className="border border-gray-300 rounded-xl px-3 py-2 w-full"
                             />
                         </div>
                     </div>
 
                     <div>
-                        <label className="block mb-2 text-sm font-semibold">
+                        <label className="block mb-2text-gray-500 text-sm font-semibold">
                             Service Document (optional)
                         </label>
                         <input
                             type="file"
                             name="document"
                             onChange={handleFileChange}
-                            className="border border-gray-300 rounded px-3 py-2 w-full"
+                            className="border border-gray-300 rounded-xl px-3 py-2 w-full"
                         />
                     </div>
 
                     <div>
-                        <label className="block mb-2 text-sm font-semibold">
+                        <label className="block mb-2 text-gray-500 text-sm font-semibold">
                             Service Link (optional)
                         </label>
                         <input
@@ -392,7 +394,7 @@ const AddService = ({ connected, userId }) => {
                             name="link"
                             value={formData.link}
                             onChange={handleChange}
-                            className="border border-gray-300 rounded px-3 py-2 w-full"
+                            className="border border-gray-300 rounded-xl px-3 py-2 w-full"
                             placeholder="Add a URL (optional)"
                         />
                     </div>
@@ -400,7 +402,7 @@ const AddService = ({ connected, userId }) => {
                     <div>
                         <button
                             type="submit"
-                            className="block bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-600"
+                            className="block btn-primary text-white font-bold py-2 px-8 w-full mx-auto rounded "
                         >
                             Submit
                         </button>
