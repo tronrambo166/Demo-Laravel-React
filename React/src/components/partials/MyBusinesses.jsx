@@ -73,20 +73,25 @@ const MyBusinesses = () => {
     const [showModal, setShowModal] = useState(false);
       const [formData, setFormData] = useState({
         title: '',
-        price: '',
+        // price: '',
         category: '',
         location: '',
         fee: '',
         turnover: '',
         details: '',
+        share: '',
+        contact: '',
+        contactMail: '',
         investmentNeeded: '',
-
-        image: null,
+        reason: '',
+        companypin: null,
+        Financialstatements: null,
+        IdentificationImage: null,
         pin: null,
-        identification: null,
+        Directorsid: null,
         video: null,
-        document: null,
-        link: ''
+        businessdocument: null,
+        businessink: ''
       });
       const [messages, setMessages] = useState({ success: '', error: '' });
       // const navigate = useNavigate();
