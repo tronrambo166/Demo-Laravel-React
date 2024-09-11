@@ -426,7 +426,7 @@ sessionStorage.setItem("purpose", "One time unlock - Small fee");
             </p>
             <div className="flex gap-2">
             <div className="flex w-full items-center gap-10">
-            {token ? (
+  {token && !conv ? (
   <a
   onClick={handleOpen}
 
@@ -435,7 +435,9 @@ sessionStorage.setItem("purpose", "One time unlock - Small fee");
     <FontAwesomeIcon icon={faLock} className="mr-2" />
     Unlock To Invest
   </a>
-) : (
+) : token && conv? ('Unlocked!')
+
+  :(
   <a
     onClick={() => setIsModalOpen(true)} // Opens the modal
     className="bg-black hover:bg-gray-700 w-1/2 text-sm text-center rounded-full text-white py-[6px] cursor-pointer"

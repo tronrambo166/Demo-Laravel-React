@@ -13,7 +13,7 @@
             	@if($type == 'Monetery')
             Proceed to progress with the milestones work?</p>
             <div class="button-container" style="display: flex; margin-top: 20px;">
-                <a target="_blank" href="https://test.jitume.com/agreeToBid/{{$bid_id}}" class="button button-primary" style="display: inline-block; padding: 12px 24px; text-decoration: none; color: #fff; border-radius: 6px; transition: background-color 0.3s ease; background-color: green;">Ok</a>
+                <a target="_blank" href="http://127.0.0.1:8000/api/agreeToBid/{{$bid_id}}" class="button button-primary" style="display: inline-block; padding: 12px 24px; text-decoration: none; color: #fff; border-radius: 6px; transition: background-color 0.3s ease; background-color: green;">Ok</a>
                 <a href="#" class="button button-secondary" style="display: inline-block; padding: 12px 24px; text-decoration: none; color: #dc3545; border-radius: 6px; transition: background-color 0.3s ease; margin-left: 10px;">Cancel</a>
             </div>
              <!-- If you require a project manager, please click here (Please not that investor with assets must have a project manager) <a target="_blank" href="https://test.jitume.com/#/projectManagers/{{$bid_id}}"

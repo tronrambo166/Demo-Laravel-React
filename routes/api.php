@@ -38,10 +38,9 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::post('bidCommitsEQP', [bidsEmailController::class, 'bidCommitsEQP'])->name('bidCommitsEQP');
     Route::get('bidCommits/{amount}/{business_id}/{percent}', [checkoutController::class, 'bidCommitsForm'])->name('bidCommits');
     Route::post('bidCommits', [checkoutController::class, 'bidCommits'])->name('bidCommits');
-    Route::get('agreeToBid/{bidId}', [bidsEmailController::class, 'agreeToBid'])->name('agreeToBid');
-    Route::get('agreeToNextmile/{bidId}', [bidsEmailController::class, 'agreeToNextmile'])->name('agreeToNextmile');
+    
     Route::post('bookingAccepted', [bidsEmailController::class, 'bookingAccepted'])->name('bookingAccepted');
-    Route::get('agreeToMileS/{s_id}/{booker_id}', [bidsEmailController::class, 'agreeToMileS'])->name('agreeToMileS');
+    
     Route::get('FindProjectManagers/{bid_id}', [BusinessController::class, 'FindProjectManagers'])->name('FindProjectManagers');
     Route::get('releaseEquipment/{b_owner_id}/{manager_id}', [BusinessController::class, 'releaseEquipment'])->name('releaseEquipment');
     //});
@@ -155,6 +154,10 @@ Route::get('getMilestonesS_Auth/{id}', [ServiceController::class, 'getMilestones
 });
 //P R O T E C T E D    R O U T E S
 
+//Email Click Routes
+Route::get('agreeToMileS/{s_id}/{booker_id}', [bidsEmailController::class, 'agreeToMileS'])->name('agreeToMileS');
+Route::get('agreeToBid/{bidId}', [bidsEmailController::class, 'agreeToBid'])->name('agreeToBid');
+Route::get('agreeToNextmile/{bidId}', [bidsEmailController::class, 'agreeToNextmile'])->name('agreeToNextmile');
 
 
 
