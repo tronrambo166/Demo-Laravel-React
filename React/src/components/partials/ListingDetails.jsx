@@ -67,7 +67,7 @@ const ListingDetails = ({ onClose }) => {
     setShowSubs(false);
   };
   const handleSubscribe = () => {
-    if (details.subscribed) {
+    if (subscribeData.subscribed) {
       setShowSubs(true);
       setShowSmallFee(false);
     } else {
@@ -248,8 +248,9 @@ const closeAuthModal = () => {
           })
     };
 
-      getDetails();
+      
       isSubscribed();
+      getDetails();
       getMilestones();
 
     }, [])
@@ -379,20 +380,31 @@ const closeAuthModal = () => {
 sessionStorage.setItem("purpose", "One time unlock - Small fee");
     }
 
-    const unlockBySubs = (listingId, subscribId, plan) => {
-    console.log(`Unlocking listing ${listingId} with plan ${plan}`);
-    axiosClient.get('/getMilestones/'+form.listing_id)
-          .then(({ data }) => {
-           setAllow(data.allowToReview);
-           setAmount_r(data.amount_required);
-            //console.log(amount_required)
-          })
+    const unlockBySubs = (listing_id, sub_id, plan) => {
+    axiosClient.get('unlockBySubs/' + listing_id+'/'+sub_id+'/'+plan).then((data) => {
+                  //console.log(data)
+                  if(data.data.status == 200){
+                    if(plan == 'token'){
+                    $.alert({
+                      title: 'Alert!',
+                      content: 'Thanks, '+(subscribeData.token_left-1)+' more tokens to go!',
+                    });
+                    return;
+                  }
+
+                    else location.reload();
+                  }
+
+                  if(data.data.error){
+                  alert('Business not in range!')
+                  }
+
+               })
           .catch(err => {
             console.log(err); 
           })
   };
 
-  //console.log(amount+'jj')
 
 //CORE METHODS END
 
@@ -512,7 +524,7 @@ sessionStorage.setItem("purpose", "One time unlock - Small fee");
                 <div className="flex flex-col items-center">
                   {plan === 'platinum' || plan === 'gold' ? (
                     <button
-                      onClick={() => unlockBySubs(form.listing_id, subscrib_id, 'platinum')}
+                      
                       className="bg-green text-white py-2 px-4 rounded-lg shadow-md hover:bg-green-700 transition duration-300"
                     >
                       Unlock To Invest
@@ -611,7 +623,7 @@ sessionStorage.setItem("purpose", "One time unlock - Small fee");
       <div className={`fixed inset-0 flex items-center justify-center z-50 bg-gray-800 bg-opacity-50 ${!isVisible ? 'hidden' : ''}`}>
       <div className="bg-white rounded-lg shadow-lg p-6 max-w-sm w-full">
         {/* Conditionally render content */}
-        {!showSubs && (
+        {!conv && (
           <div className='flex gap-6 justify-center'>
             <button
               onClick={handleUnlockFee}
@@ -623,12 +635,12 @@ sessionStorage.setItem("purpose", "One time unlock - Small fee");
               onClick={handleSubscribe}
               className="text-lg border rounded-md border-black py-2 px-6 font-semibold mb-4"
             >
-              {details.subscribed ? 'Subscription' : 'Subscribe'}
+              {subscribeData.subscribed ? 'Subscription' : 'Subscribe'}
             </button>
           </div>
         )}
 
-        {!conv && (
+        {!conv && !showSubs &&(
           <>
             <p className="text-gray-700 mb-6">
               This business requests a small unlock fee of <b>${details.investors_fee}</b> to view their full business information.
@@ -657,24 +669,25 @@ sessionStorage.setItem("purpose", "One time unlock - Small fee");
 
         {showSubs && (
           <div>
-            {tokenLeft > 0 && plan && (
+            {subscribeData.token_left > 0 && subscribeData.plan == 'silver' && (
               <p className="text-warning mb-3 text-center">
-                Your <span>{plan}</span> expires in <b>{expire}</b> days.
-                <span className="text-dark small d-block">Are you sure you want to use one of your {tokenLeft} business information tokens?</span>
+                Your <span>{subscribeData.plan}</span> expires in <b>{subscribeData.expire}</b> days.
+                <span className="text-dark small d-block">Are you sure you want to use one of your {subscribeData.tokenLeft} business information tokens?</span>
               </p>
             )}
-            {tokenLeft === 0 && (
+            {subscribeData.token_left === 0 && (
               <p className="text-dark mb-3 text-center">
                 Please use <b>'Small fee'</b> option to unlock
               </p>
             )}
             <div className="flex flex-wrap gap-4 justify-center">
-              {['silver', 'silver-trial', 'gold', 'gold-trial', 'platinum', 'platinum-trial'].includes(plan) && (
+              {['silver', 'silver-trial', 'gold', 'gold-trial', 'platinum', 'platinum-trial'].includes(subscribeData.plan) && (
                 <button
-                  onClick={handleUseToken}
+                   onClick={unlockBySubs(form.listing_id,subscribeData.sub_id,'token')}
+
                   className="btn-primary text-white py-2 px-6 rounded hover:bg-blue-600 transition"
                 >
-                  Use token <small>({tokenLeft} left)</small>
+                  Use token <small>({subscribeData.token_left} left)</small>
                 </button>
               )}
               <button

@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { AiOutlineCloudUpload } from "react-icons/ai";
 import axios from "axios";
 import axiosClient from "../../axiosClient";
 
@@ -142,6 +143,41 @@ const AddService = ({ connected, userId }) => {
             });
       }
 
+//CONNCET
+
+    const [Con, setCon] = useState('');
+    const [id, setid] = useState('');
+    useEffect(() => {
+      const getAccount = (id) => {
+        axiosClient.get('/business/account')
+          .then(({ data }) => {
+            console.log(data);
+            setCon(data.connected);
+          })
+          .catch(err => {
+            console.log(err);
+          });
+    };
+    getAccount();
+
+    const getUser = () => { 
+      axiosClient.get('/checkAuth')
+        .then(({ data }) => {           
+          setid(data.user.id);
+        // Debugging id
+        })
+        .catch(err => {
+          console.log(err); 
+        });
+    };
+    getUser();
+
+  }, []);
+
+    const connectToStripe = () => { 
+    window.location.href = 'http://127.0.0.1:8000/connect/'+ id;
+    };
+
     return (
         <div className="container mx-auto px-4 py-6">
             {/* Success Message */}
@@ -175,31 +211,28 @@ const AddService = ({ connected, userId }) => {
             )}
 
 
-            {connected === 0 ? (
-                <div className="w-full max-w-lg mx-auto bg-gray-100 p-6 rounded-lg shadow-md mb-6">
-                    <p className="text-center text-gray-700 mb-4">
-                        Before adding a service, you must onboard to Jitume
-                        Stripe platform to receive service milestone payments.
-                    </p>
-                    <a
-                        href={`/connect-stripe/${userId}`}
-                        className="block text-center bg-gray-200 border border-gray-400 rounded py-2 px-4 hover:bg-gray-300"
-                    >
-                        Connect to Stripe
-                    </a>
-                </div>
-            ) : (
-                <form
+            {Con ? (
+              <div >
+              <p className="text-center bg-light p-2 "> You must onboard to Jitume Stripe platform to receive business milestone payments.</p>
+              <button onClick={connectToStripe}
+              className="btn-primary py-2 px-6 rounded-lg text-white focus:outline-none"
+              >
+              Connect to Stripe
+              </button>
+              </div>
+                ):(
+                              <form
                     onSubmit={handleSubmit}
-                    className="w-full max-w-3xl mx-auto space-y-6"
+                    className="w-full max-w-7xl mx-auto space-y-6"
                 >
                     {/* Form Fields */}
-                    <h3 className="text-2xl font-bold mb-4 py-4">Add Service</h3>
+                    <h3 className="text-2xl font-bold mb-4 py-4 text-gray-800">
+                        Add Service
+                    </h3>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        
                         <div>
-                            <label className="block mb-2 text-gray-500 text-sm font-semibold">
+                            <label className="block mb-1 text-gray-700 text-sm font-semibold">
                                 Service Title*
                             </label>
                             <input
@@ -208,12 +241,12 @@ const AddService = ({ connected, userId }) => {
                                 value={formData.title}
                                 onChange={handleChange}
                                 required
-                                className="border border-gray-300 rounded px-3 py-2 w-full"
+                                className="border border-gray-300 rounded px-2 py-1 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 placeholder="Service Title"
                             />
                         </div>
                         <div>
-                            <label className="block mb-2 text-gray-500 text-sm font-semibold">
+                            <label className="block mb-1 text-gray-700 text-sm font-semibold">
                                 Price*
                             </label>
                             <input
@@ -222,7 +255,7 @@ const AddService = ({ connected, userId }) => {
                                 value={formData.price}
                                 onChange={handleChange}
                                 required
-                                className="border border-gray-300 rounded px-3 py-2 w-full"
+                                className="border border-gray-300 rounded px-2 py-1 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 placeholder="Price"
                             />
                         </div>
@@ -230,14 +263,14 @@ const AddService = ({ connected, userId }) => {
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                            <label className="block mb-2 text-gray-500 text-sm font-semibold">
+                            <label className="block mb-1 text-gray-700 text-sm font-semibold">
                                 Service Category*
                             </label>
                             <select
                                 name="category"
                                 value={formData.category}
                                 onChange={handleChange}
-                                className="border border-gray-300 rounded px-3 py-2 w-full"
+                                className="border border-gray-300 rounded px-2 py-1 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
                             >
                                 <option value="" disabled hidden>
                                     Select a category
@@ -269,7 +302,7 @@ const AddService = ({ connected, userId }) => {
                             </select>
                         </div>
                         <div>
-                            <label className="block mb-2 text-gray-500 text-sm font-semibold">
+                            <label className="block mb-1 text-gray-700 text-sm font-semibold">
                                 Location*
                             </label>
                             <input
@@ -280,36 +313,26 @@ const AddService = ({ connected, userId }) => {
                                 value={formData.location}
                                 onChange={handleChange}
                                 required
-                                className="border border-gray-300 rounded px-3 py-2 w-full"
+                                className="border border-gray-300 rounded px-2 py-1 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 placeholder="Enter a location..."
                             />
-                            <input
-                                hidden
-                                name="lat"
-                                id="lat"
-                                value=""
-                            />
-                            <input
-                                hidden
-                                name="lng"
-                                id="lng"
-                                value=""
-                            />
-                            {/*suggestion-list box*/}
-                      <ul id="suggestion-list" className="absolute w-[250px] bg-white  border-t-0 rounded-b-md shadow-lg z-10 top-full">
-                      </ul>
-                      <div id="result_list" style={{top:'582px', left:'809px'}} className="absolute w-[250px] bg-white  border-gray-300 border-t-0 rounded-b-md shadow-lg z-10 top-full">
+                            <input hidden name="lat" id="lat" value="" />
+                            <input hidden name="lng" id="lng" value="" />
 
-                      </div>
-                      {/*suggestion-list box*/}
-
+                            <ul
+                                id="suggestion-list"
+                                className="absolute w-[250px] bg-white border-t-0 rounded-b-md shadow-lg z-10 top-full"
+                            ></ul>
+                            <div
+                                id="result_list"
+                                style={{ top: "582px", left: "809px" }}
+                                className="absolute w-[250px] bg-white border-gray-300 border-t-0 rounded-b-md shadow-lg z-10 top-full"
+                            ></div>
                         </div>
-
-
                     </div>
 
                     <div>
-                        <label className="block mb-2 text-gray-500 text-sm font-semibold">
+                        <label className="block mb-1 text-gray-700 text-sm font-semibold">
                             Details*
                         </label>
                         <textarea
@@ -318,95 +341,151 @@ const AddService = ({ connected, userId }) => {
                             onChange={handleChange}
                             required
                             rows="4"
-                            className="border border-gray-300 rounded px-3 py-2 w-full"
+                            className="border border-gray-300 rounded px-2 py-1 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
                             placeholder="Provide details about your service"
                         />
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                            <label className="block  text-gray-500 mb-2 text-sm font-semibold">
-                                Service Image*
+                        <div className="relative">
+                            <label className="block mb-1 text-gray-700 text-sm font-semibold">
+                                Upload Image
                             </label>
                             <input
                                 type="file"
                                 name="image"
                                 onChange={handleFileChange}
-                                className="border border-gray-300 rounded-xl px-3 py-2 w-full"
+                                accept="image/*"
+                                className="hidden"
+                                id="upload-image"
                             />
-                        </div>
-                        <div>
-                            <label className="block mb-2 text-sm font-semibold">
-                                Service Pin*
+                            <label
+                                htmlFor="upload-image"
+                                className="flex items-center w-full border border-gray-300 rounded px-2 py-1 cursor-pointer hover:bg-gray-100"
+                            >
+                                <AiOutlineCloudUpload className="text-2xl mr-2" />
+                                <span className="flex-1 text-left">
+                                    Click to upload image
+                                </span>
                             </label>
-                            <input
-                                type="file"
-                                name="pin"
-                                onChange={handleFileChange}
-                                className="border border-gray-300 rounded-xl px-3 py-2 w-full"
-                            />
                         </div>
-                    </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                            <label className="block mb-2 text-gray-500 text-sm font-semibold">
-                                Identification Image*
+                        {/* Upload Identification */}
+                        <div className="relative">
+                            <label className="block mb-1 text-gray-700 text-sm font-semibold">
+                                Upload Identification
                             </label>
                             <input
                                 type="file"
                                 name="identification"
                                 onChange={handleFileChange}
-                                className="border border-gray-300 text-gray-500 rounded-xl px-3 py-2 w-full"
+                                accept="image/*"
+                                className="hidden"
+                                id="upload-identification"
                             />
+                            <label
+                                htmlFor="upload-identification"
+                                className="flex items-center w-full border border-gray-300 rounded px-2 py-1 cursor-pointer hover:bg-gray-100"
+                            >
+                                <AiOutlineCloudUpload className="text-2xl mr-2" />
+                                <span className="flex-1 text-left">
+                                    Click to upload identification
+                                </span>
+                            </label>
                         </div>
-                        <div>
-                            <label className="block mb-2 text-gray-500 text-sm font-semibold">
-                                Video (optional)
+
+                        {/* Upload Document */}
+                        <div className="relative">
+                            <label className="block mb-1 text-gray-700 text-sm font-semibold">
+                                Upload Document
+                            </label>
+                            <input
+                                type="file"
+                                name="document"
+                                onChange={handleFileChange}
+                                accept=".pdf,.doc,.docx"
+                                className="hidden"
+                                id="upload-document"
+                            />
+                            <label
+                                htmlFor="upload-document"
+                                className="flex items-center w-full border border-gray-300 rounded px-2 py-1 cursor-pointer hover:bg-gray-100"
+                            >
+                                <AiOutlineCloudUpload className="text-2xl mr-2" />
+                                <span className="flex-1 text-left">
+                                    Click to upload document
+                                </span>
+                            </label>
+                        </div>
+
+                        {/* Upload Video */}
+                        <div className="relative">
+                            <label className="block mb-1 text-gray-700 text-sm font-semibold">
+                                Upload Video
                             </label>
                             <input
                                 type="file"
                                 name="video"
                                 onChange={handleFileChange}
-                                className="border border-gray-300 rounded-xl px-3 py-2 w-full"
+                                accept="video/*"
+                                className="hidden"
+                                id="upload-video"
+                            />
+                            <label
+                                htmlFor="upload-video"
+                                className="flex items-center w-full border border-gray-300 rounded px-2 py-1 cursor-pointer hover:bg-gray-100"
+                            >
+                                <AiOutlineCloudUpload className="text-2xl mr-2" />
+                                <span className="flex-1 text-left">
+                                    Click to upload video
+                                </span>
+                            </label>
+                        </div>
+
+                        {/* Upload Pin */}
+                        <div className="relative">
+                            <label className="block mb-1 text-gray-700 text-sm font-semibold">
+                                Upload Pin
+                            </label>
+                            <input
+                                type="file"
+                                name="pin"
+                                onChange={handleFileChange}
+                                accept="image/*"
+                                className="hidden"
+                                id="upload-pin"
+                            />
+                            <label
+                                htmlFor="upload-pin"
+                                className="flex items-center w-full border border-gray-300 rounded px-2 py-1 cursor-pointer hover:bg-gray-100"
+                            >
+                                <AiOutlineCloudUpload className="text-2xl mr-2" />
+                                <span className="flex-1 text-left">
+                                    Click to upload pin
+                                </span>
+                            </label>
+                        </div>
+                        <div>
+                            <label className="block mb-1 text-gray-700 text-sm font-semibold">
+                                Upload Link
+                            </label>
+                            <input
+                                type="text"
+                                name="link"
+                                value={formData.link}
+                                onChange={handleChange}
+                                className="border border-gray-300 rounded px-2 py-1 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                placeholder="Add link"
                             />
                         </div>
                     </div>
 
-                    <div>
-                        <label className="block mb-2text-gray-500 text-sm font-semibold">
-                            Service Document (optional)
-                        </label>
-                        <input
-                            type="file"
-                            name="document"
-                            onChange={handleFileChange}
-                            className="border border-gray-300 rounded-xl px-3 py-2 w-full"
-                        />
-                    </div>
-
-                    <div>
-                        <label className="block mb-2 text-gray-500 text-sm font-semibold">
-                            Service Link (optional)
-                        </label>
-                        <input
-                            type="text"
-                            name="link"
-                            value={formData.link}
-                            onChange={handleChange}
-                            className="border border-gray-300 rounded-xl px-3 py-2 w-full"
-                            placeholder="Add a URL (optional)"
-                        />
-                    </div>
-
-                    <div>
-                        <button
-                            type="submit"
-                            className="block btn-primary text-white font-bold py-2 px-8 w-full mx-auto rounded "
-                        >
-                            Submit
-                        </button>
-                    </div>
+                    <button
+                        type="submit"
+                        className="w-full bg-blue-500 text-white py-2 rounded mt-4 hover:bg-blue-600 transition"
+                    >
+                        Add Service
+                    </button>
                 </form>
             )}
         </div>

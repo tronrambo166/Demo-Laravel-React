@@ -90,6 +90,30 @@ const MilestonePage = () => {
           </tr>
         </thead>
         <tbody>
+
+        {miles.filter(milestone => milestone.status === 'Done').map((milestone, index) => (
+            <tr key={index} className="hover:bg-gray-100">
+              <td className="border border-gray-300 px-4 py-2">{milestone.title}</td>
+              <td className="border border-gray-300 px-4 py-2">{milestone.amount}</td>
+              <td className="border border-gray-300 px-4 py-2">
+                <a href={milestone.document} className="text-blue-500 hover:underline">Download Milestone Documentation</a>
+              </td>
+              <td className="border border-gray-300 px-4 py-2">
+                <div className="flex space-x-2">
+                  <button
+                    
+                    className="px-3 py-1 rounded bg-grey text-dark"
+                  >
+                    {milestone.status}
+                  </button>
+
+                </div>
+   
+              </td>
+            </tr>
+          ))}
+
+
           {miles.filter(milestone => milestone.status === 'In Progress').map((milestone, index) => (
             <tr key={index} className="hover:bg-gray-100">
               <td className="border border-gray-300 px-4 py-2">{milestone.title}</td>
@@ -101,40 +125,21 @@ const MilestonePage = () => {
                 <div className="flex space-x-2">
 
                   <button
-                    onClick={() => handleStatusChange(milestone.title, 'Done')}
+                    
                     className="px-3 py-1 rounded bg-green text-white"
                   >
                     {milestone.status}
                   </button>
 
                 </div>
-                {milestone.status === 'In Progress' && (
-                  <div className="text-red-500 mt-2">{milestone.due}</div>
-                )}
+                
               </td>
             </tr>
           ))}
-          {miles.filter(milestone => milestone.status === 'Done').map((milestone, index) => (
-            <tr key={index} className="hover:bg-gray-100">
-              <td className="border border-gray-300 px-4 py-2">{milestone.title}</td>
-              <td className="border border-gray-300 px-4 py-2">{milestone.amount}</td>
-              <td className="border border-gray-300 px-4 py-2">
-                <a href={milestone.document} className="text-blue-500 hover:underline">Download Milestone Documentation</a>
-              </td>
-              <td className="border border-gray-300 px-4 py-2">
-                <div className="flex space-x-2">
-                  <button
-                    onClick={() => handleStatusChange(milestone.title, 'Done')}
-                    className="px-3 py-1 rounded bg-grey text-dark"
-                  >
-                    {milestone.status}
-                  </button>
 
-                </div>
-   
-              </td>
-            </tr>
-          ))}
+
+          
+
           {miles.filter(milestone => milestone.status === 'To Do').map((milestone, index) => (
             <tr key={index} className="hover:bg-gray-100">
               <td className="border border-gray-300 px-4 py-2">{milestone.title}</td>
@@ -145,29 +150,17 @@ const MilestonePage = () => {
               <td className="border border-gray-300 px-4 py-2">
                 <div className="flex space-x-2">
                   <button
-                    onClick={() => handleStatusChange(milestone.title, 'Paid')}
                     className={`px-3 py-1 rounded ${
-                      milestone.status === 'Paid'
-                        ? 'bg-green-500 text-white'
+                      milestone.status === 'To Do'
+                        ? 'bg-green-500 text-dark'
                         : 'bg-gray-200 text-gray-700'
                     }`}
                   >
-                    Paid
+                    {milestone.status}
                   </button>
-                  <button
-                    onClick={() => handleStatusChange(milestone.title, 'Done')}
-                    className={`px-3 py-1 rounded ${
-                      milestone.status === 'Done'
-                        ? 'bg-green text-white'
-                        : 'bg-gray-200 text-gray-700'
-                    }`}
-                  >
-                    Done
-                  </button>
+
                 </div>
-                {milestone.status === 'To Do' && (
-                  <div className="text-gray-500 mt-2">Pending</div>
-                )}
+                
               </td>
             </tr>
           ))}

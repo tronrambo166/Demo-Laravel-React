@@ -64,9 +64,10 @@ const ListingResults = () => {
           .then(({ data }) => {
            setResults(data.data);
            res = data.data;
-           //console.log(res);
+           console.log(data);
             var x = navigator.geolocation;
             x.getCurrentPosition(success, failure);
+            //navigator.geolocation.watchPosition(success[, error[, options]])
               
           })
           .catch(err => {

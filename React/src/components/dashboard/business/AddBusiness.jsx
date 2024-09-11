@@ -149,12 +149,61 @@ const AddBusiness = () => {
             });
       }
 
+    const [Con, setCon] = useState('');
+    const [id, setid] = useState('');
+    useEffect(() => {
+      const getAccount = (id) => {
+        axiosClient.get('/business/account')
+          .then(({ data }) => {
+            console.log(data);
+            setCon(data.connected);
+          })
+          .catch(err => {
+            console.log(err);
+          });
+    };
+    getAccount();
+
+    const getUser = () => { 
+      axiosClient.get('/checkAuth')
+        .then(({ data }) => {           
+          setid(data.user.id);
+        // Debugging id
+        })
+        .catch(err => {
+          console.log(err); 
+        });
+    };
+    getUser();
+
+  }, []);
+
+    const connectToStripe = () => { 
+    window.location.href = 'http://127.0.0.1:8000/connect/'+ id;
+    };
+
     return (
         <div className="p-4 bg-gray-100 min-h-screen">
             <div className="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-lg mb-8">
                 <h2 className="text-xl font-bold mb-4 dark:text-white">
                     Add Business
                 </h2>
+
+              {!Con ? (
+              <div >
+              <p className="text-center bg-light p-2 "> You must onboard to Jitume Stripe platform to receive business milestone payments.</p>
+              <button onClick={connectToStripe}
+              className="btn-primary py-2 px-6 rounded-lg text-white focus:outline-none"
+              >
+              Connect to Stripe
+              </button>
+              </div>
+                ):
+              (
+
+
+              
+
                 <form
                     className="grid grid-cols-1 md:grid-cols-2 gap-4"
                     onSubmit={handleSubmit}
@@ -268,24 +317,13 @@ const AddBusiness = () => {
                             onChange={handleInputChange}
                             required
                         >
-                            <option value="" disabled hidden>
-                                Select Yearly Turnover*
-                            </option>
-                            <option value="Less than $10,000">
-                                Less than $10,000
-                            </option>
-                            <option value="$10,000 - $50,000">
-                                $10,000 - $50,000
-                            </option>
-                            <option value="$50,000 - $100,000">
-                                $50,000 - $100,000
-                            </option>
-                            <option value="$100,000 - $500,000">
-                                $100,000 - $500,000
-                            </option>
-                            <option value="More than $500,000">
-                                More than $500,000
-                            </option>
+    
+                            <option hidden>Yearly Turnover*</option>
+                            <option value="0-10000">$0-$10000</option>
+                            <option value="10000-100000">$10000-$100000</option>
+                            <option value="100000-250000">$100000-$250000</option>
+                            <option value="250000-500000">$250000-$500000</option>
+                            <option value="500000-">$500000+</option>
                             {/* Add more ranges as needed */}
                         </select>
                     </div>
@@ -302,13 +340,23 @@ const AddBusiness = () => {
                             <option value="" disabled hidden>
                                 Select Category*
                             </option>
-                            <option value="Business Planning">
-                                Business Planning
-                            </option>
-                            <option value="IT">IT</option>
-                            <option value="Legal Project Management">
-                                Legal Project Management
-                            </option>
+                            <option value="Agriculture">Agriculture</option>
+                            <option value="Arts/Culture">Arts/Culture</option>
+                            <option value="Auto">Auto</option>
+                            <option value="Sports/Gaming">Sports/Gaming</option>
+                            <option value="Real State">Real State</option>
+                            <option value="Food">Food</option>
+                            <option value="Legal">Legal</option>
+                            <option value="Security">Security</option>
+                            <option value="Media/Internet">Media/Internet</option>
+                            <option value="Fashion">Fashion</option>
+                            <option value="Technology/Communications">Technology/Communications</option>
+                            <option value="Renewable/Energy">Renewable Energy</option>
+                            <option value="Retail">Retail</option>
+                            <option value="Finance/Accounting">Finance/Accounting</option>
+                            <option value="Pets">Pets</option>
+                            <option value="Domestic (Home Help etc)">Domestic (Home Help etc)</option>
+                            <option value="Other">Other</option>
                             {/* Add more categories as needed */}
                         </select>
                     </div>
@@ -434,18 +482,21 @@ const AddBusiness = () => {
                         </button>
                     </div>
                 </form>
+                )}
 
                 <input
                                 
                                 name="lat"
                                 id="lat"
                                 value=""
+                                hidden
                             />
                             <input
                                 
                                 name="lng"
                                 id="lng"
                                 value=""
+                                hidden
                             />
 
                 {/* Success/Error Messages */}

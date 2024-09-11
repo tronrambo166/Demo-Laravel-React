@@ -57,7 +57,7 @@ Route::middleware('auth:sanctum')->group(function() {
     //Subscribe***
     Route::get('isSubscribed/{id}', [BusinessController::class, 'isSubscribed'])->name('isSubscribed');
 
-    Route::get('/stripeSubscribe/{amount}/{plan}/{days}/{range}', [checkoutController::class, 'stripeSubscribeGet'])->name('stripeSubscribe');
+    Route::get('/stripeSubscribe/{amount}/{plan}/{days}/{range}/{inv}', [checkoutController::class, 'stripeSubscribeGet'])->name('stripeSubscribe');
     Route::get('/stripeSubscribeSuccess', [checkoutController::class, 'stripeSubscribeSuccess'])->name('stripeSubscribeSuccess');
     Route::get('/cancelSubscription/{id}', [checkoutController::class, 'cancelSubscription'])->name('cancelSubscription');
 

@@ -152,12 +152,12 @@ public function agreeToBid($bidId)
               'investor_agree' => 1       
         ]);
         Session::put('login_success','Thanks for your review, you will get an email when this milestone completes!');
-        return redirect('/');
+       return redirect()->to('http://127.0.0.1:5173/');
      
        }
         catch(\Exception $e){
             Session::put('failed',$e->getMessage());
-            return redirect()->back();
+            return redirect()->to('http://127.0.0.1:5173/');
        }  
 }
 
@@ -234,17 +234,18 @@ public function agreeToNextmile($bidId)
         }
         catch(\Exception $e){
             Session::put('failed',$e->getMessage());
-            return redirect('/');
+            return redirect()->to('http://127.0.0.1:5173/');
        } 
         }
 
         Session::put('login_success','Thanks for your review, you will get an email when this milestone completes!');
-        return redirect('/');
+        return redirect()->to('http://127.0.0.1:5173/');
+        //return redirect('/');
      
        }
         catch(\Exception $e){
             Session::put('failed',$e->getMessage());
-            return redirect()->back();
+            return redirect()->to('http://127.0.0.1:5173/');
        }  
 }  
 

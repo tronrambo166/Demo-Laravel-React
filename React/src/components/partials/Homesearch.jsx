@@ -30,7 +30,7 @@ const Homesearch = () => {
         const payload = {
             location: locationInputRef.current.value,
             category: categoryRef.current.value,
-            name: nameRef.current.value,
+            listing_name: nameRef.current.value,
             lat: $("#lat").val(),
             lng: $("#lng").val(),
         };
@@ -38,7 +38,7 @@ const Homesearch = () => {
         axiosClient
             .post("/search", payload)
             .then(({ data }) => {
-                console.log(data + "h");
+                console.log(data);
                 Object.entries(data.results).forEach((entry) => {
                     const [index, row] = entry;
                     ids = ids + row.id + ",";
@@ -194,26 +194,19 @@ const Homesearch = () => {
                         <option value="Agriculture">Agriculture</option>
                         <option value="Arts/Culture">Arts/Culture</option>
                         <option value="Auto">Auto</option>
-                        <option value="Domestic (Home Help etc)">
-                            Domestic (Home Help etc)
-                        </option>
+                        <option value="Domestic (Home Help etc)">Domestic (Home Help etc)</option>
                         <option value="Fashion">Fashion</option>
-                        <option value="Finance/Accounting">
-                            Finance/Accounting
-                        </option>
+                        <option value="Finance/Accounting">Finance/Accounting</option>
                         <option value="Food">Food</option>
                         <option value="Legal">Legal</option>
                         <option value="Media/Internet">Media/Internet</option>
                         <option value="Other">Other</option>
                         <option value="Pets">Pets</option>
-                        <option value="Real Estate">Real Estate</option>
+                        <option value="Real State">Real State</option>
                         <option value="Retail">Retail</option>
                         <option value="Security">Security</option>
                         <option value="Sports/Gaming">Sports/Gaming</option>
-                        <option value="Technology/Communications">
-                            Technology/Communications
-                        </option>
-                        <option value="Services">Services</option>
+                        <option value="Technology/Communications">Technology/Communications</option>
                     </select>
                     <FontAwesomeIcon
                         icon={faChevronDown}

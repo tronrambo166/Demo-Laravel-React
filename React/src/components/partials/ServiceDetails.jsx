@@ -124,6 +124,35 @@ const handleAuthModalOpen = (event) => {
 
 
 // Handle contact modal toggle
+  const sendMessage = (event) => {
+    event.preventDefault();
+    const payload = {
+      service_id: form.service_id,
+      msg: $('#msg').val()
+    };
+
+    axiosClient
+      .post("serviceMsg", payload)
+      .then(({ data }) => {
+        console.log(data);
+        if (data.success) {
+        $.alert({
+          title: 'Alert!',
+          content: data.success,
+        });
+      }
+      })
+      .catch((err) => {
+        const response = err.response;
+        if (response && response.status === 422) {
+          console.log(response.data.errors);
+        }
+        console.log(err);
+      });
+
+    }
+
+
 const handleContactModal = (event) => {
   event.preventDefault();
   if (token) {
@@ -304,8 +333,8 @@ const handleContactModal = (event) => {
   <div className='contact py-4'>
     <hr></hr>
     <h1 className='font-bold py-2 text-xl'>Contact Us</h1>
-    <textarea name="message" placeholder="Write your message here" className="w-full border-gray-300 border rounded-lg p-2" rows="4"></textarea>
-  <button className='btn-primary px-6 py-2 my-3 rounded-full font-semibold text-white'>send</button>
+    <textarea id="msg" name="message" placeholder="Write your message here" className="w-full border-gray-300 border rounded-lg p-2" rows="4"></textarea>
+  <button onClick = {sendMessage} className='btn-primary px-6 py-2 my-3 rounded-full font-semibold text-white'>send</button>
   </div>
 )}
 

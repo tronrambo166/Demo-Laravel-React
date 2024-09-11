@@ -2,13 +2,7 @@ import { useEffect, useState } from 'react';
 import axiosClient from "../../axiosClient";
 
 function Messages() {
-  const [messages, setMessages] = useState([
-    { id: 1, from: "Service Provider", serviceName: "Spurs", message: "Hey there", time: "23 Feb, 05:10pm" },
-    { id: 2, from: "Vito Corleone", serviceName: "Spurs", message: "Great!!", time: "28 Oct, 09:03am" },
-    { id: 3, from: "Vito Corleone", serviceName: "Spurs", message: "Hi there, please contact at vito@gmail.com", time: "20 Oct, 03:57am" },
-    { id: 4, from: "John Doe", serviceName: "Spurs", message: "Ok, cool!", time: "19 Oct, 10:21am" },
-    { id: 5, from: "John Doe", serviceName: "Spurs", message: "Hi there, are you free?", time: "19 Oct, 10:19am" },
-  ]);
+  const [messages, setMessages] = useState([]);
 
   const [selectedMessage, setSelectedMessage] = useState(null);
 
@@ -17,7 +11,7 @@ function Messages() {
       axiosClient.get('/business/service_messages')
         .then(({ data }) => {
           setMessages(data.messages);           
-          console.log(data);    
+          console.log(messages);    
 
         })
         .catch(err => {
@@ -48,10 +42,10 @@ function Messages() {
           <tbody>
             {messages.map((msg) => (
               <tr key={msg.id} className="text-gray-700 hover:bg-gray-50 transition-colors">
-                <td className="py-3 px-4 border-b">{msg.from}</td>
-                <td className="py-3 px-4 border-b">{msg.serviceName}</td>
-                <td className="py-3 px-4 border-b">{msg.message}</td>
-                <td className="py-3 px-4 border-b">{msg.time}</td>
+                <td className="py-3 px-4 border-b">{msg.sender}</td>
+                <td className="py-3 px-4 border-b">{msg.service}</td>
+                <td className="py-3 px-4 border-b">{msg.msg}</td>
+                <td className="py-3 px-4 border-b">{msg.created_at}</td>
                 <td className="py-3 px-4 border-b text-center">
                   <button
                     onClick={() => handleReply(msg)}

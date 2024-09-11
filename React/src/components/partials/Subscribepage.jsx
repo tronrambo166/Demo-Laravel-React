@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import axiosClient from "../../axiosClient";
 //import { useParams } from 'react-router-dom';
 
 const Subscribepage = () => {
@@ -13,6 +14,8 @@ const Subscribepage = () => {
     const [frequency, setFrequency] = useState('monthly');
     const navigate = useNavigate();
     const { id } = useParams();
+
+      const [u_id, setid] = useState('');
 
     const [amount, setAmount] = useState('0');
     const [range, setRange] = useState('all');
@@ -91,12 +94,15 @@ const Subscribepage = () => {
         const business_id_e = btoa(form.business_id);
         const plan_e = btoa(plan);
         const days_e = btoa(days);
+        const inv = u_id;
+
+
         $.confirm({
           title: 'Are you sure?',
           content: 'Are you sure to pay?',
           buttons: {
             confirm: function () {
-              window.location.href = 'http://127.0.0.1:8000/stripeSubscribe/' + amount_e+'/'+plan_e+'/'+days_e+'/'+range_e;
+              window.location.href = 'http://127.0.0.1:8000/stripeSubscribe/' + amount_e+'/'+plan_e+'/'+days_e+'/'+range_e+'/'+inv;
              //navigate('/stripeSubscribe/' + amount_e+'/'+plan_e+'/'+days_e+'/'+range_e);
             },
             cancel: function () {
@@ -122,6 +128,20 @@ const Subscribepage = () => {
     const goBack = () => {
         navigate(-1);
     };
+
+    useEffect(() => {
+    const getUser = () => { 
+      axiosClient.get('/checkAuth')
+        .then(({ data }) => {            
+          setid(data.user.id);   
+          console.log(data.user.id);     
+        })
+        .catch(err => {
+          console.log(err); 
+        });
+    };
+    getUser();
+  }, []);
 
     return (
         <div>
@@ -160,7 +180,7 @@ const Subscribepage = () => {
                             <h1 className="text-xl mb-4">Silver</h1>
                             <div
                                 className={`border rounded-xl p-4 text-center shadow-sm w-full sm:w-[300px] cursor-pointer 
-                                ${selectedPackage === 'silver' ? 'bg-green-100 border-green' : ''}`}
+                                ${plan === 'silver' ? 'bg-green-100 border-green' : ''}`}
                                 onClick={() => handlePackageSelect(packagePrices.silver[frequency])}
                             >
                                 <h1>{packagePrices.silver[frequency]}</h1>
@@ -183,7 +203,7 @@ const Subscribepage = () => {
                             <h1 className="text-xl mb-4">Gold</h1>
                             <div
                                 className={`border text-center p-4 rounded-md shadow-sm w-full sm:w-[300px] cursor-pointer 
-                                ${selectedPackage === 'gold' ? 'bg-green-100 border-green' : ''}`}
+                                ${plan === 'gold' ? 'bg-green-100 border-green' : ''}`}
                                 onClick={() => handlePackageSelect(packagePrices.gold[frequency])}
                             >
                                 <h1>{packagePrices.gold[frequency]}</h1>
@@ -205,7 +225,7 @@ const Subscribepage = () => {
                             <h1 className="text-xl mb-4">Platinum</h1>
                             <div
                                 className={`border text-center p-4 rounded-md shadow-sm w-full sm:w-[300px] cursor-pointer 
-                                ${selectedPackage === 'platinum' ? 'bg-green-100 border-green' : ''}`}
+                                ${plan === 'platinum' ? 'bg-green-100 border-green' : ''}`}
                                 onClick={() => handlePackageSelect(packagePrices.platinum[frequency])}
                             >
                                 <h1>{packagePrices.platinum[frequency]}</h1>

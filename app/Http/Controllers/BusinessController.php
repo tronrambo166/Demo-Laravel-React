@@ -36,12 +36,12 @@ class BusinessController extends Controller
   }
 
 //private $auth_id;
-  //  public function __construct(StripeClient $client)
-  //   {   
-  //       $this->Client = $client;
-  //       //$this->middleware('business');
+   public function __construct(StripeClient $client)
+    {   
+        $this->Client = $client;
+        //$this->middleware('business');
   
-  //   }
+    }
 
 public function auth_id(){
   $auth_email = Session::get('business_email');
@@ -59,7 +59,7 @@ public function account(){
 $user = User::where('id',Auth::id())->first();
 $user2 = array(); $user2[] = $user;
 
-if($user->connect_id)
+if($user->connect_id && $user->completed_onboarding)
 $connected = 1;
 else $connected = 0;
 
@@ -566,8 +566,7 @@ public function activate_milestone($id){
   }
   //return $total.' = '.$this_business->investment_needed;
   if($total != $this_business->investment_needed){
-    Session::put('failed','A business must have one or more milestones that cover the full amount requested before activation!');
-            return redirect()->back();
+    return response()->json([ 'status' => 404, 'message' => 'A business must have one or more milestones that cover the full amount requested before activation!']);
   }
   
   $thisMile2 = Milestones::where('listing_id',$id)->first();
@@ -575,10 +574,10 @@ public function activate_milestone($id){
   ->update([
   'status' => 'In Progress'
   ]);
-   Listing::where('id',$id)->update(['active' => 1]);
+   $activate = Listing::where('id',$id)->update(['active' => 1]);
 
-  Session::put('success','The business is activated and ready to accept investment!');
-  return redirect()->back();
+  if($activate)
+    return response()->json([ 'status' => 200, 'message' => 'Activated!']);
 }
 
 public function delete_milestone($id){
@@ -1134,7 +1133,9 @@ public function assetEquip_download($id, $type){
       $results['subscribed'] = 0;
       return response()->json([ 'data' => $results, 'conv'=>$conv, 'count' => $count, 'reviews' => $reviews] );
     }
+      if($subs->plan == 'platinum' || $subs->plan == 'platinum-trial' || $subs->plan == 'silver-trial')
       $conv = true;
+
       $expire_date = date('Y-m-d',$stripe_sub->current_period_end);
       //Get Stripe Subscription
       $count = 1;
@@ -1328,7 +1329,7 @@ else{
     ]);
 }
 
-        return response()->json(['success' => 'Success']);
+        return response()->json(['status' => 200]);
 
 }
 

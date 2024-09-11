@@ -333,8 +333,15 @@ return response()->json(['results'=>$listings, 'loc' => $loc, 'success' => "Succ
 }
 
 public function searchResults($ids){
+
 $results = array();
-$ids = explode(',',$ids); 
+
+if($ids==0)
+  return response()->json([ 'data' => $results, 'count'=>0] );
+
+  $ids = explode(',',$ids); 
+
+
 foreach($ids as $id){ 
 
      //if(strlen($id) > 3) $id = dechex($id); return $id;

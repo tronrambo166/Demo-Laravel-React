@@ -1,119 +1,88 @@
-import { FaUser, FaCog, FaBell,FaWrench,FaEnvelope,FaCopy,FaDollarSign,FaHome } from 'react-icons/fa';
-//import  profile from "../../images/profile.png";
+import { FaUser, FaCog, FaBell, FaWrench, FaEnvelope, FaCopy, FaDollarSign, FaHome } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
-import { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react';
 import axiosClient from "../../../axiosClient";
 import { useParams, useNavigate } from 'react-router-dom';
 
 function AccountPage() {
- 
- const { user_id } = useParams();
+  const { user_id } = useParams();
+  const navigate = useNavigate();
+  
+  const connectToStripe = () => {
+    window.location.href = `http://127.0.0.1:8000/connect/${user_id}`;
+  };
 
+  const [details, setDetails] = useState([]);
+  const [bal, setBal] = useState('');
+  const [balP, setBalP] = useState('');
+  const [C, setC] = useState('');
 
-  const connectToStripe = () => { 
-    window.location.href = 'http://127.0.0.1:8000/connect/'+ user_id;
-        // axiosClient.get('/connect/'+ user_id)
-        //   .then(({ data }) => {
-        //     console.log(data)
-        //   })
-        //   .catch(err => {
-        //     console.log(err); 
-        //   })
-    };
-
- const [details, setDetails] = useState([]);
- const [bal, setBal] = useState('');
- const [balP, setBalP] = useState('');
- const [C, setC] = useState('');
-
-    useEffect(() => {
-    const getAccount = (id) => {
-        axiosClient.get('/business/account')
-          .then(({ data }) => {
-            console.log(data.connected);
-            setBal(data.balanceA);
-
-            setBalP(data.balanceP);
-            setC(data.connected);
-            setDetails(data.user)
-          })
-          .catch(err => {
-            console.log(err);
-          });
+  useEffect(() => {
+    const getAccount = () => {
+      axiosClient.get('/business/account')
+        .then(({ data }) => {
+          setBal(data.balanceA);
+          setBalP(data.balanceP);
+          setC(data.connected);
+          setDetails(data.user);
+        })
+        .catch(err => {
+          console.log(err);
+        });
     };
     getAccount();
   }, []);
 
   return (
-    <div className="container mx-auto p-6">
-      <div className="max-w-md mx-auto bg-white rounded-lg shadow-lg p-6">
-        <div className="flex items-center mb-6">
-          <div className="flex-shrink-0">
-            <svg
-              className="h-12 w-12 text-blue-500"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M12 14l9-9m0 0l-9-9m9 9H3"
-              ></path>
-            </svg>
-          </div>
+    <div className="min-h-screen  flex flex-col justify-center items-center p-6">
+      <div className="w-full max-w-lg bg-white rounded-xl shadow-lg p-8">
+        <div className="flex items-center mb-8">
+          <FaUser className="text-green w-12 h-12" />
           <div className="ml-4">
-            <h1 className="text-2xl font-semibold text-gray-800">Account Details</h1>
-            <p className="text-gray-500">Manage your account and view your balance</p>
+            <h1 className="text-3xl font-bold text-gray-900">Account Details</h1>
+            <p className="text-sm text-gray-600">Manage your business account</p>
           </div>
         </div>
-        
-        <div className="border-t border-gray-200 pt-6">
-          <div className="flex justify-between mb-4">
+
+        <div className="border-t border-gray-200 pt-6 space-y-4">
+          <div className="flex justify-between">
             <span className="text-gray-600">First Name:</span>
             <span className="font-semibold text-gray-800">{details.fname}</span>
           </div>
-          <div className="flex justify-between mb-4">
+          <div className="flex justify-between">
             <span className="text-gray-600">Last Name:</span>
             <span className="font-semibold text-gray-800">{details.lname}</span>
           </div>
-          <div className="flex justify-between mb-4">
+          <div className="flex justify-between">
             <span className="text-gray-600">Balance Available:</span>
             <span className="font-semibold text-green-600">{bal}</span>
           </div>
-          <div className="flex justify-between mb-4">
+          <div className="flex justify-between">
             <span className="text-gray-600">Balance Pending:</span>
             <span className="font-semibold text-red-600">{balP}</span>
           </div>
 
           <div className="mt-6">
-           {/* <button
-              className="btn-primary py-2 px-6 rounded-lg text-white focus:outline-none"
-            >
-              View Stripe Account
-            </button>*/}
-
-            {C? (
-              <button onClick={connectToStripe}
-              className="btn-primary py-2 px-6 rounded-lg text-white focus:outline-none"
+            {C ? (
+              <button
+                onClick={connectToStripe}
+                className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg transition-all ease-in-out duration-200"
               >
-              View Stripe Account
-              </button>):(
-
-              <div >
-              <p className="text-center bg-light p-2 "> You must onboard to Jitume Stripe platform to receive business milestone payments.</p>
-              <button onClick={connectToStripe}
-              className="btn-primary py-2 px-6 rounded-lg text-white focus:outline-none"
-              >
-              Connect to Stripe
+                View Stripe Account
               </button>
+            ) : (
+              <div>
+                <p className="text-center text-gray-700 mb-4 py-1">
+                      You must connect to the Stripe platform to receive payments.
+                </p>
+                <button
+                  onClick={connectToStripe}
+                  className="w-full btn-primary text-white py-3 rounded-lg transition-all ease-in-out duration-200"
+                >
+                  Connect to Stripe
+                </button>
               </div>
             )}
-
-            
-
           </div>
         </div>
       </div>

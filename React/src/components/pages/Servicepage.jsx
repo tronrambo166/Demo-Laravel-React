@@ -33,7 +33,7 @@ const Servicepage = () => {
         const payload = {
             location: locationInputRef.current.value,
             category: categoryRef.current.value,
-            name: nameRef.current.value,
+            listing_name: nameRef.current.value,
             lat: $('#lat').val(),
             lng: $('#lng').val(),
         } 

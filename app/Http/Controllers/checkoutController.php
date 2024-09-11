@@ -130,7 +130,7 @@ class checkoutController extends Controller
 
 
      //__________________________SUBSCRIBE________________________
-     public function stripeSubscribeGet($amount,$plan,$days,$range)
+     public function stripeSubscribeGet($amount,$plan,$days,$range,$inv_id)
     {
       //$listing=base64_decode($listing_id);
       $days=base64_decode($days);
@@ -170,9 +170,9 @@ class checkoutController extends Controller
               'line_items' => [[
                 'price' => $price_id,
                 // For metered billing, do not pass quantity
-                'quantity' => 1,
+                'quantity' => 1
               ]],
-              'client_reference_id' =>$plan.'_'.$range
+              'client_reference_id' =>$plan.'_'.$range.'_'.$inv_id
             ]);
             echo "<script>location.href='$session->url'</script>";
             //header("Location: " . $session->url);
@@ -188,10 +188,19 @@ class checkoutController extends Controller
           $session_id,
           []
         );
+
         //echo '<pre>'; print_r($checkout);  echo '<pre>'; exit;
         $stripe_sub_id = $checkout->subscription;
+        $user_email = $checkout->customer_details->email;
 
         if($checkout->amount_total == 0){
+          $inv = User::where('email', $user_email)->first();
+
+          if(!$inv)
+          return response()->json(['error' => 'Your email was not found in Jitume database!']);
+
+          $investor_id = $inv->id;
+
             $sub = $this->Client->subscriptions->retrieve(
               $stripe_sub_id, []
         );
@@ -205,12 +214,16 @@ class checkoutController extends Controller
        }
 
        else{
+
         $original_amount = ($checkout->amount_total)/100;
         $transferAmount=($checkout->amount_total)/100;
         $plan_range=explode('_',$checkout->client_reference_id);
         $plan = $plan_range[0];
         $range = $plan_range[1];
+        $investor_id = $plan_range[2];
        }
+
+       //echo $investor_id; exit;
 
        
         $start_date = date('Y-m-d');
@@ -228,12 +241,17 @@ class checkoutController extends Controller
         }
 
     //Stripe
+    //$investor_id = base64_decode($investor_id);
+
+    if($investor_id == '' || $investor_id == null)
+      $investor_id = Auth::id();
+
     try{
 
          //DB INSERT
          BusinessSubscriptions::create([
         'plan' => $plan,
-        'investor_id' => Auth::id(),
+        'investor_id' => $investor_id,
         'amount' => $transferAmount,
         'start_date' => $start_date,
         'expire_date' => $expire_date,
