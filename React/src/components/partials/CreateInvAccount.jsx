@@ -14,22 +14,22 @@ function CreateInvestorAccount({ isOpen, onClose }) {
 
     // Form state for registration
     const [registrationData, setRegistrationData] = useState({
+        fname: "",
+        mname: "",
+        lname: "",
         email: "",
-        firstName: "",
-        middleName: "",
-        lastName: "",
-        passportId: "",
-        taxPin: "",
-        fileId: null,
-        fileTaxPin: null,
-        investmentIndustry: "",
-        investmentRange: "",
-        termsAgreed: false,
-        contact: "",
-        contactMail: "",
-        yearlyTurnover: "",
-        title: "",
-        amount: "",
+        password: "",
+        pin: "",
+        id_passport: "",
+        investor: "",
+        id_no: "",
+        tax_pin: "",
+        inv_range: "",
+        interested_cats: "",
+        past_investment: "",
+        website: "",
+        attached_id: null,
+        terms: false,
     });
 
     if (!isOpen) return null;
@@ -199,26 +199,13 @@ function CreateInvestorAccount({ isOpen, onClose }) {
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-2 sm:gap-4">
                             <div>
                                 <label className="block text-gray-700 text-sm">
-                                    Title
-                                </label>
-                                <input
-                                    type="text"
-                                    name="title"
-                                    value={registrationData.title}
-                                    onChange={handleRegistrationChange}
-                                    className="border rounded-lg px-3 py-2 w-full text-sm"
-                                />
-                            </div>
-
-                            <div>
-                                <label className="block text-gray-700 text-sm">
                                     First Name{" "}
                                     <span className="text-red-500">*</span>
                                 </label>
                                 <input
                                     type="text"
-                                    name="firstName"
-                                    value={registrationData.firstName}
+                                    name="fname"
+                                    value={registrationData.fname}
                                     onChange={handleRegistrationChange}
                                     className="border rounded-lg px-3 py-2 w-full text-sm"
                                     required
@@ -231,8 +218,8 @@ function CreateInvestorAccount({ isOpen, onClose }) {
                                 </label>
                                 <input
                                     type="text"
-                                    name="middleName"
-                                    value={registrationData.middleName}
+                                    name="mname"
+                                    value={registrationData.mname}
                                     onChange={handleRegistrationChange}
                                     className="border rounded-lg px-3 py-2 w-full text-sm"
                                 />
@@ -245,8 +232,8 @@ function CreateInvestorAccount({ isOpen, onClose }) {
                                 </label>
                                 <input
                                     type="text"
-                                    name="lastName"
-                                    value={registrationData.lastName}
+                                    name="lname"
+                                    value={registrationData.lname}
                                     onChange={handleRegistrationChange}
                                     className="border rounded-lg px-3 py-2 w-full text-sm"
                                     required
@@ -255,7 +242,7 @@ function CreateInvestorAccount({ isOpen, onClose }) {
 
                             <div>
                                 <label className="block text-gray-700 text-sm">
-                                    E-Mail{" "}
+                                    Email{" "}
                                     <span className="text-red-500">*</span>
                                 </label>
                                 <input
@@ -268,15 +255,36 @@ function CreateInvestorAccount({ isOpen, onClose }) {
                                 />
                             </div>
 
-                            <div>
+                            <div className="relative">
                                 <label className="block text-gray-700 text-sm">
-                                    Director's Passport/ID No.{" "}
+                                    Password{" "}
                                     <span className="text-red-500">*</span>
                                 </label>
                                 <input
-                                    type="text"
-                                    name="passportId"
-                                    value={registrationData.passportId}
+                                    type={showPassword ? "text" : "password"}
+                                    name="password"
+                                    value={registrationData.password}
+                                    onChange={handleRegistrationChange}
+                                    className="border rounded-lg px-3 py-2 w-full text-sm pr-10"
+                                    required
+                                />
+                                <button
+                                    type="button"
+                                    onClick={togglePasswordVisibility}
+                                    className="absolute right-2 top-9 text-gray-500 hover:text-gray-700"
+                                >
+                                    {showPassword ? <FaEyeSlash /> : <FaEye />}
+                                </button>
+                            </div>
+
+                            <div>
+                                <label className="block text-gray-700 text-sm">
+                                    Pin <span className="text-red-500">*</span>
+                                </label>
+                                <input
+                                    type="number"
+                                    name="pin"
+                                    value={registrationData.pin}
                                     onChange={handleRegistrationChange}
                                     className="border rounded-lg px-3 py-2 w-full text-sm"
                                     required
@@ -285,105 +293,107 @@ function CreateInvestorAccount({ isOpen, onClose }) {
 
                             <div>
                                 <label className="block text-gray-700 text-sm">
-                                    Individual/Company Tax PIN{" "}
+                                    ID/Passport No.{" "}
                                     <span className="text-red-500">*</span>
                                 </label>
                                 <input
-                                    type="number"
-                                    name="taxPin"
-                                    value={registrationData.taxPin}
+                                    type="text"
+                                    name="id_passport"
+                                    value={registrationData.id_passport}
                                     onChange={handleRegistrationChange}
                                     className="border rounded-lg px-3 py-2 w-full text-sm"
                                     required
                                 />
                             </div>
 
-                            <div className="relative">
-                                <label className="block text-gray-700 text-sm">
-                                    Upload Director's Passport/ID
-                                </label>
-                                <input
-                                    type="file"
-                                    name="fileId"
-                                    onChange={handleRegistrationChange}
-                                    className="border rounded-lg px-3 py-2 w-full pr-8 text-sm"
-                                />
-                                <FaUpload className="absolute right-3 top-8 text-gray-500" />
-                            </div>
-
-                            <div className="relative">
-                                <label className="block text-gray-700 text-sm">
-                                    Upload Tax PIN
-                                </label>
-                                <input
-                                    type="file"
-                                    name="fileTaxPin"
-                                    onChange={handleRegistrationChange}
-                                    className="border rounded-lg px-3 py-2 w-full pr-8 text-sm"
-                                />
-                                <FaUpload className="absolute right-3 top-8 text-gray-500" />
-                            </div>
-
                             <div>
                                 <label className="block text-gray-700 text-sm">
-                                    Industry of Investment
+                                    Investor Type{" "}
+                                    <span className="text-red-500">*</span>
                                 </label>
                                 <input
                                     type="text"
-                                    name="investmentIndustry"
-                                    value={registrationData.investmentIndustry}
+                                    name="investor"
+                                    value={registrationData.investor}
                                     onChange={handleRegistrationChange}
                                     className="border rounded-lg px-3 py-2 w-full text-sm"
+                                    required
                                 />
                             </div>
 
                             <div>
                                 <label className="block text-gray-700 text-sm">
-                                    Investment Range
+                                    ID No.{" "}
+                                    <span className="text-red-500">*</span>
                                 </label>
-                                <select
-                                    name="investmentRange"
-                                    value={registrationData.investmentRange}
+                                <input
+                                    type="text"
+                                    name="id_no"
+                                    value={registrationData.id_no}
                                     onChange={handleRegistrationChange}
                                     className="border rounded-lg px-3 py-2 w-full text-sm"
+                                    required
+                                />
+                            </div>
+
+                            <div>
+                                <label className="block text-gray-700 text-sm">
+                                    Tax Pin{" "}
+                                    <span className="text-red-500">*</span>
+                                </label>
+                                <input
+                                    type="text"
+                                    name="tax_pin"
+                                    value={registrationData.tax_pin}
+                                    onChange={handleRegistrationChange}
+                                    className="border rounded-lg px-3 py-2 w-full text-sm"
+                                    required
+                                />
+                            </div>
+
+                            <div>
+                                <label className="block text-gray-700 text-sm">
+                                    Investment Range{" "}
+                                    <span className="text-red-500">*</span>
+                                </label>
+                                <select
+                                    name="inv_range"
+                                    value={registrationData.inv_range}
+                                    onChange={handleRegistrationChange}
+                                    className="border rounded-lg px-3 py-2 w-full text-sm"
+                                    required
                                 >
-                                    <option value="">Select range</option>
-                                    <option value="1000-5000">1000-5000</option>
-                                    <option value="5000-10000">
-                                        5000-10000
-                                    </option>
-                                    <option value="10000-50000">
-                                        10000-50000
-                                    </option>
+                                    <option value="">Select...</option>
+                                    <option value="1-10K">1-10K</option>
+                                    <option value="10-50K">10-50K</option>
+                                    <option value="50-100K">50-100K</option>
+                                    <option value="100K+">100K+</option>
                                 </select>
                             </div>
 
                             <div>
                                 <label className="block text-gray-700 text-sm">
-                                    Yearly Turnover
+                                    Interested Categories{" "}
+                                    <span className="text-red-500">*</span>
                                 </label>
-                                <select
-                                    name="yearlyTurnover"
-                                    value={registrationData.yearlyTurnover}
+                                <input
+                                    type="text"
+                                    name="interested_cats"
+                                    value={registrationData.interested_cats}
                                     onChange={handleRegistrationChange}
                                     className="border rounded-lg px-3 py-2 w-full text-sm"
-                                >
-                                    <option value="">Select turnover</option>
-                                    <option value="Under 1M">Under 1M</option>
-                                    <option value="1M-5M">1M-5M</option>
-                                    <option value="5M-10M">5M-10M</option>
-                                    <option value="Over 10M">Over 10M</option>
-                                </select>
+                                    required
+                                />
                             </div>
 
                             <div>
                                 <label className="block text-gray-700 text-sm">
-                                    Contact Number
+                                    Past Investments
                                 </label>
                                 <input
-                                    type="tel"
-                                    name="contact"
-                                    value={registrationData.contact}
+                                    type="text"
+                                    name="past_investment"
+                                    value={registrationData.past_investment}
                                     onChange={handleRegistrationChange}
                                     className="border rounded-lg px-3 py-2 w-full text-sm"
                                 />
@@ -391,12 +401,12 @@ function CreateInvestorAccount({ isOpen, onClose }) {
 
                             <div>
                                 <label className="block text-gray-700 text-sm">
-                                    Contact Email
+                                    Website
                                 </label>
                                 <input
-                                    type="email"
-                                    name="contactMail"
-                                    value={registrationData.contactMail}
+                                    type="url"
+                                    name="website"
+                                    value={registrationData.website}
                                     onChange={handleRegistrationChange}
                                     className="border rounded-lg px-3 py-2 w-full text-sm"
                                 />
@@ -404,37 +414,42 @@ function CreateInvestorAccount({ isOpen, onClose }) {
 
                             <div>
                                 <label className="block text-gray-700 text-sm">
-                                    Amount
+                                    Attach ID Document{" "}
+                                    <span className="text-red-500">*</span>
                                 </label>
                                 <input
-                                    type="number"
-                                    name="amount"
-                                    value={registrationData.amount}
+                                    type="file"
+                                    name="attached_id"
                                     onChange={handleRegistrationChange}
                                     className="border rounded-lg px-3 py-2 w-full text-sm"
+                                    required
                                 />
                             </div>
 
-                            <div className="flex items-center space-x-2">
+                            <div className="flex items-center">
                                 <input
                                     type="checkbox"
-                                    name="termsAgreed"
-                                    checked={registrationData.termsAgreed}
+                                    name="terms"
+                                    checked={registrationData.terms}
                                     onChange={handleRegistrationChange}
-                                    className="text-blue-500"
+                                    className="mr-2"
                                     required
                                 />
-                                <label className="text-gray-700 text-sm">
-                                    I have read and agree to the Terms of Use
-                                    and Privacy Policy
+                                <label className="text-sm text-gray-600">
+                                    I have read and agree to the{" "}
+                                    <a
+                                        href="#"
+                                        className="text-blue-500 hover:underline"
+                                    >
+                                        Terms of Use and Privacy Policy
+                                    </a>
                                 </label>
                             </div>
                         </div>
 
-                        {/* Submit Button */}
                         <button
                             type="submit"
-                            className="btn btn-primary rounded-full mt-4"
+                            className="btn btn-primary rounded-full"
                         >
                             Create Account
                         </button>
