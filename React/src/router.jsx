@@ -70,7 +70,7 @@ const router = createBrowserRouter([
             },
             { path: "/subscribe/:id", element: <Subscribepage /> },
             { path: "/checkout", element: <PaymentForm /> },
-            { path: "/categorypage", element: <CategoryPage /> },
+            { path: "/category/:name", element: <CategoryPage /> },
             { path: "/createinvestor", element: <InvestorRegistration /> },
 
             { path: "/mile", element: <Mile /> },

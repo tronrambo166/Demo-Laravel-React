@@ -1,85 +1,88 @@
+import { Link } from 'react-router-dom'; // Import Link from react-router-dom
+
+
 const CategoryLinks = () => {
     return (
         <div className="text-center py-3 pb-0">
-            <div className="max-w-4xl mx-auto">
-                <ul className="flex flex-wrap justify-center gap-2">
+            <div className="max-w-4xl mx-auto">   
+                 <ul className="flex flex-wrap justify-center gap-2">
                     <li className="border border-gray-300 text-black rounded-md p-2 hover:text-green-700">
-                        <a href="#arts-culture" className="no-underline">
+                        <Link to="/category/arts-culture" className="no-underline">
                             Arts/Culture
-                        </a>
+                        </Link>
                     </li>
                     <li className="border border-gray-300 text-black rounded-md p-2 hover:text-green-700">
-                        <a href="#auto" className="no-underline">
+                        <Link to="/category/auto" className="no-underline">
                             Auto
-                        </a>
+                      </Link>
                     </li>
                     <li className="border border-gray-300 text-black rounded-md p-2 hover:text-green-700">
-                        <a href="#domestic" className="no-underline">
+                        <Link to={`/category/${'Domestic'}`} className="no-underline">
                             Domestic (HomeHelp etc)
-                        </a>
+                        </Link>
                     </li>
                     <li className="border border-gray-300 text-black rounded-md p-2 hover:text-green-700">
-                        <a href="#fashion" className="no-underline">
+                        <Link to="/category/fashion" className="no-underline">
                             Fashion
-                        </a>
+                        </Link>
                     </li>
                     <li className="border border-gray-300 text-black rounded-md p-2 hover:text-green-700">
-                        <a href="#finance-accounting" className="no-underline">
+                        <Link to="/category/finance-accounting" className="no-underline">
                             Finance/Accounting
-                        </a>
+                        </Link>
                     </li>
                     <li className="border border-gray-300 text-black rounded-md p-2 hover:text-green-700">
-                        <a href="#food" className="no-underline">
+                        <Link to="/category/food" className="no-underline">
                             Food
-                        </a>
+                        </Link>
                     </li>
                     <li className="border border-gray-300 text-black rounded-md p-2 hover:text-green-700">
-                        <a href="#legal" className="no-underline">
+                        <Link to="/category/legal" className="no-underline">
                             Legal
-                        </a>
+                        </Link>
                     </li>
                     <li className="border border-gray-300 text-black rounded-md p-2 hover:text-green-700">
-                        <a href="#media-internet" className="no-underline">
+                        <Link to="/category/media-internet" className="no-underline">
                             Media/Internet
-                        </a>
+                        </Link>
                     </li>
                     <li className="border border-gray-300 text-black rounded-md p-2 hover:text-green-700">
-                        <a href="#pets" className="no-underline">
+                        <Link to="/category/pets" className="no-underline">
                             Pets
-                        </a>
+                        </Link>
                     </li>
                     <li className="border border-gray-300 text-black rounded-md p-2 hover:text-green-700">
-                        <a href="#retail" className="no-underline">
+                        <Link to="/category/retail" className="no-underline">
                             Retail
-                        </a>
+                        </Link>
                     </li>
                     <li className="border border-gray-300 text-black rounded-md p-2 hover:text-green-700">
-                        <a href="#real-estate" className="no-underline">
+                        <Link to="/category/real-estate" className="no-underline">
                             Real Estate
-                        </a>
+                        </Link>
                     </li>
                     <li className="border border-gray-300 text-black rounded-md p-2 hover:text-green-700">
-                        <a href="#security" className="no-underline">
+                        <Link to="/category/security" className="no-underline">
                             Security
-                        </a>
+                        </Link>
                     </li>
                     <li className="border border-gray-300 text-black rounded-md p-2 hover:text-green-700">
-                        <a href="#sports-gaming" className="no-underline">
+                        <Link to="/category/sports-gaming" className="no-underline">
                             Sports/Gaming
-                        </a>
+                        </Link>
                     </li>
                     <li className="border border-gray-300 text-black rounded-md p-2 hover:text-green-700">
-                        <a
-                            href="#technology-communications"
+                        <Link
+        to  ="/category#technology-communications"
                             className="no-underline"
                         >
                             Technology/Communications
-                        </a>
+                        </Link>
                     </li>
                     <li className="border border-gray-300 text-black rounded-md p-2 hover:text-green-700">
-                        <a href="#other" className="no-underline">
+                        <Link to="/category/other" className="no-underline">
                             Other
-                        </a>
+                        </Link>
                     </li>
                 </ul>
             </div>

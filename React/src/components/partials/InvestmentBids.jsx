@@ -5,12 +5,12 @@ function InvestmentBids() {
   const [bids, setBids] = useState([]);
   const [selectedBids, setSelectedBids] = useState([]); 
 
-  const AcceptBids = (reject) => {
+  const AcceptBids = () => {
       const payload = {
       bid_ids: selectedBids,
-      reject: reject
+      reject: 0
     };
-    alert(reject);
+    alert(0);
 
     //console.log(payload); return;
     axiosClient
@@ -100,7 +100,7 @@ function InvestmentBids() {
       </div>
       <div className="flex gap-2 pt-3 items-center justify-end">
       <button
-  onClick={AcceptBids(0)}
+  onClick={AcceptBids}
   disabled={selectedBids.length === 0}  // Disable if no bids are selected
   className={`py-2 px-4 rounded-lg text-white focus:outline-none focus:ring-2 transition-colors ${
     selectedBids.length === 0 
@@ -111,7 +111,7 @@ function InvestmentBids() {
   Accept Bids
 </button>
 
-        <button onClick={AcceptBids(1)} className="bg-red-500 text-white py-2 px-4 rounded-lg hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-300 transition-colors">
+        <button onClick={AcceptBids} className="bg-red-500 text-white py-2 px-4 rounded-lg hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-300 transition-colors">
           Reject Bids
         </button>
       </div>

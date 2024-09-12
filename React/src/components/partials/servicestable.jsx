@@ -28,7 +28,7 @@ const ServiceTable = () => {
     return (
         <div className="p-4">
             
-                <section className="bg-white shadow-md rounded-lg mb-6 p-4">
+                {/* <section className="bg-white shadow-md rounded-lg mb-6 p-4">
                     <h1 className="text-[#2D3748] font-semibold text-xl mb-3">
                         My Investments
                     </h1>
@@ -114,7 +114,7 @@ const ServiceTable = () => {
                         </table>
                     </div>
                     )}
-                </section>
+                </section> */}
             
 
             <section className="bg-white shadow-md rounded-lg mb-6 p-4">
