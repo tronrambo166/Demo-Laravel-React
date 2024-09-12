@@ -69,6 +69,46 @@ const MilestonePage = () => {
 
     }
 
+    //DOWNLOAD
+  const download_doc = mile_id => e => {
+      axiosClient({
+          url: 'download_milestoneDocS/' + listing_id + '/' + mile_id, //your url
+          method: 'GET',
+          //responseType: 'blob',
+        }).then((data) => {
+        console.log(data);
+        if((data.data.size == 3)){
+          $.alert({
+          title: 'Alert!',
+          content: 'The business has no such document or the file not found!',
+           type: 'red',
+            buttons: {
+            tryAgain: {
+            text: 'Close',
+            btnClass: 'btn-red',
+            action: function(){
+            }
+        }}  
+        });
+        } //console.log(data);
+        else{
+          const href = URL.createObjectURL(data.data);
+          const link = document.createElement('a');
+          link.href = href;
+
+          if(data.data.type == 'application/vnd.openxmlformats-officedocument.wordprocessingml.document')
+          link.setAttribute('download', 'milestone.docx'); //or any other extension
+          else
+           link.setAttribute('download', 'milestone.pdf');
+            
+          document.body.appendChild(link);
+          link.click();
+        }
+
+      });
+    }
+
+
   return (
     <div className="container mx-auto p-5">
       <h3 className="text-left my-5 text-2xl font-bold">Milestones</h3>
@@ -132,7 +172,9 @@ const MilestonePage = () => {
               <td className="border border-gray-300 px-4 py-2">{milestone.title}</td>
               <td className="border border-gray-300 px-4 py-2">{milestone.amount}</td>
               <td className="border border-gray-300 px-4 py-2">
-                <a href={milestone.document} className="text-blue-500 hover:underline">Download Milestone Documentation</a>
+                <button
+                onClick={ download_doc(milestone.mile_id) } className="text-black hover:underline">Download Milestone Documentation
+               </button>
               </td>
               <td className="border border-gray-300 px-4 py-2">
                 <div className="flex space-x-2">
@@ -151,7 +193,7 @@ const MilestonePage = () => {
                 {/*</div>
                 {milestone.status === 'Done' && (
                   <div className="text-green-500 mt-2">Done</div>
-                )}*/}
+                */}
 
               </td>
 
@@ -165,7 +207,9 @@ const MilestonePage = () => {
               <td className="border border-gray-300 px-4 py-2">{milestone.title}</td>
               <td className="border border-gray-300 px-4 py-2">{milestone.amount}</td>
               <td className="border border-gray-300 px-4 py-2">
-                <a href={milestone.document} className="text-black hover:underline">Download Milestone Documentation</a>
+                <button
+                onClick={ download_doc(milestone.mile_id) } className="text-black hover:underline">Download Milestone Documentation
+               </button>
               </td>
               <td className="border border-gray-300 px-4 py-2">
                 <div className="flex space-x-2">
@@ -198,7 +242,7 @@ const MilestonePage = () => {
                 </div>
                 {/*{milestone.status === 'In Progress' && (
                   <div className="text-red-500 mt-2">{milestone.due}</div>
-                )}*/}
+                */}
               </td>
 
               {booked && milestone.status === 'To Do' && milestone.active ?( 
@@ -254,7 +298,7 @@ const MilestonePage = () => {
               <td className="border border-gray-300 px-4 py-2">{milestone.time_left}  </td>*/}
 
          {/*   </tr>
-          ))}*/}*/}
+          ))}*/}
 
         </tbody>
       </table>

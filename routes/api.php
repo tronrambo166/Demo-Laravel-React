@@ -135,7 +135,7 @@ Route::get('getBookers/{s_id}', [ServiceController::class, 'getBookers'])->name(
 Route::get('service_messages', [ServiceController::class, 'service_messages'])->name('service-messages');
 
 
-Route::get('/dashhome', [BusinessController::class, 'home'])->name('services/index');
+Route::get('/dashhome', [BusinessController::class, 'home']);
 Route::get('bBQhdsfE_WWe4Q-_f7ieh7Hdhf8F_', [ServiceController::class, 'listings'])->name('services');
 //Route::post('add_eqp', [ServiceController::class, 'add_eqp'])->name('add_eqp');
 Route::post('up_service', [ServiceController::class, 'up_listing'])->name('up_service');

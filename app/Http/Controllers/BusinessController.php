@@ -674,6 +674,7 @@ return response()->json([ 'data' => 'Failed!', 'progress' => 0, 'length' => 0 ])
  public function download_milestone_doc($id, $mile_id){
     
     $doc = Milestones::where('id',$mile_id)->first();
+    if($doc)
     $file=$doc->document;
     if( $file == null || !file_exists(public_path($file)) ){
 

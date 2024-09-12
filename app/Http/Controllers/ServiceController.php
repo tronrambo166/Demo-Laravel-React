@@ -614,6 +614,7 @@ return response()->json([ 'data' => $milestones, 'done_msg' => $done_msg,
  public function download_milestone_doc($id, $mile_id){
     
     $doc = Smilestones::where('id',$mile_id)->first();
+    if($doc)
     $file=$doc->document;
     if( $file == null || !file_exists(public_path($file)) ){
 

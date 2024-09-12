@@ -38,6 +38,45 @@ const MilestonePage = () => {
     // Update milestone status logic here
   };
 
+  //DOWNLOAD
+  const download_doc = mile_id => e => {
+      axiosClient({
+          url: 'download_milestoneDoc/' + listing_id + '/' + mile_id, //your url
+          method: 'GET',
+          responseType: 'blob',
+        }).then((data) => {
+        console.log(data);
+        if((data.data.size == 3)){
+          $.alert({
+          title: 'Alert!',
+          content: 'The business has no such document or the file not found!',
+           type: 'red',
+            buttons: {
+            tryAgain: {
+            text: 'Close',
+            btnClass: 'btn-red',
+            action: function(){
+            }
+        }}  
+        });
+        } //console.log(data);
+        else{
+          const href = URL.createObjectURL(data.data);
+          const link = document.createElement('a');
+          link.href = href;
+
+          if(data.data.type == 'application/vnd.openxmlformats-officedocument.wordprocessingml.document')
+          link.setAttribute('download', 'milestone.docx'); //or any other extension
+          else
+           link.setAttribute('download', 'milestone.pdf');
+            
+          document.body.appendChild(link);
+          link.click();
+        }
+
+      });
+    }
+
   return (
     <div className="container mx-auto p-5">
       <h3 className="text-left my-5 text-2xl font-bold">Milestones</h3>
@@ -65,21 +104,7 @@ const MilestonePage = () => {
         ))}
       </div>
 
-      <div className="w-full flex justify-end mb-4">
-        <div className="relative inline-block w-1/4">
-          <button className="w-full bg-gray-200 border py-2 px-4 rounded inline-flex items-center justify-between">
-            Select Business
-            <svg className="w-4 h-4 ml-2" fill="currentColor" viewBox="0 0 20 20">
-              <path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" />
-            </svg>
-          </button>
-          <ul className="dropdown-menu absolute hidden text-gray-700 pt-1">
-            <li className="bg-gray-200 hover:bg-gray-400 py-2 px-4 block whitespace-no-wrap">Business 1</li>
-            <li className="bg-gray-200 hover:bg-gray-400 py-2 px-4 block whitespace-no-wrap">Business 2</li>
-          </ul>
-        </div>
-      </div>
-
+      
       <table className="table-auto w-full border-collapse border border-gray-300">
         <thead>
           <tr className="bg-gray-200">
@@ -96,7 +121,9 @@ const MilestonePage = () => {
               <td className="border border-gray-300 px-4 py-2">{milestone.title}</td>
               <td className="border border-gray-300 px-4 py-2">{milestone.amount}</td>
               <td className="border border-gray-300 px-4 py-2">
-                <a href={milestone.document} className="text-blue-500 hover:underline">Download Milestone Documentation</a>
+               <button
+                onClick={ download_doc(milestone.id) } className="text-black hover:underline">Download Milestone Documentation
+               </button>
               </td>
               <td className="border border-gray-300 px-4 py-2">
                 <div className="flex space-x-2">
@@ -119,7 +146,9 @@ const MilestonePage = () => {
               <td className="border border-gray-300 px-4 py-2">{milestone.title}</td>
               <td className="border border-gray-300 px-4 py-2">{milestone.amount}</td>
               <td className="border border-gray-300 px-4 py-2">
-                <a href={milestone.document} className="text-black hover:underline">Download Milestone Documentation</a>
+                <button 
+                onClick={ download_doc(milestone.id) } className="text-black hover:underline">Download Milestone Documentation
+                </button>
               </td>
               <td className="border border-gray-300 px-4 py-2">
                 <div className="flex space-x-2">
@@ -145,7 +174,9 @@ const MilestonePage = () => {
               <td className="border border-gray-300 px-4 py-2">{milestone.title}</td>
               <td className="border border-gray-300 px-4 py-2">{milestone.amount}</td>
               <td className="border border-gray-300 px-4 py-2">
-                <a href={milestone.document} className="text-blue-500 hover:underline">Download Milestone Documentation</a>
+                <button 
+                onClick={ download_doc(milestone.id) } className="text-black hover:underline">Download Milestone Documentation
+                </button>
               </td>
               <td className="border border-gray-300 px-4 py-2">
                 <div className="flex space-x-2">

@@ -290,7 +290,7 @@ const handleContactModal = (event) => {
               </div>
               <div>
                { !token? ( 
-                <button className="btn-primary py-2 px-6 rounded-xl mt-3"> Book Now </button>
+                <button onClick={handleAuthModalOpen} className="btn-primary py-2 px-6 rounded-xl mt-3"> Book Now </button>
                ): 
                ( <button onClick={book} className="btn-primary font-semibold w-[125px] h-[50px] whitespace-nowrap rounded-2xl mx-auto lg:mx-0"> Book Now </button> )} 
               </div>

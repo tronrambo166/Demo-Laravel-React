@@ -96,13 +96,14 @@ const Dashboardhero = () => {
                                 <FaEnvelope />
                                 <span>Messages</span>
                             </Link>
-                            <Link
+                            {id && <Link
                                 to={`./account/${id}`}
                                 className="flex items-center gap-1"
                             >
                                 <FaDollarSign />
                                 <span>Account</span>
                             </Link>
+                        }
                         </div>
                     </div>
                 </div>
