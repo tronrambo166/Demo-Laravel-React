@@ -1386,9 +1386,9 @@ $info=['investor_name'=>$investor_name, 'contact'=>$investor->email,
          });
 
 if($mail1 && $mail2)
-return response()->json(['status' => 'success']);
+return response()->json(['status' => 200]);
 else
-return response()->json(['status' => 'failed']);
+return response()->json(['status' => 400]);
 }
 
 

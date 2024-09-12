@@ -63,7 +63,7 @@ public function bidsAccepted(Request $request)
            }
           }
         Session::put('success','Rejected!');
-        return redirect()->back();
+        return response()->json(['message' => 'Rejected!']);
         }
         //REJECT 
 

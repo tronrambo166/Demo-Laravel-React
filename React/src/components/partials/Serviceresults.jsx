@@ -276,14 +276,14 @@ const categories = [
       </h5>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="space-y-4 overflow-y-auto">
+        <div className="space-y-4 no-scrollbar   overflow-y-auto">
           {results.length === 0 ? (
             <p className="text-center text-gray-500">No results found.</p>
           ) : (
             results.map((row, index) => (
               <Link to={`/service-details/${btoa(btoa(row.id))}`} key={row.id} >
               <div
-                className="border h-48 border-gray-300 rounded-lg shadow-md flex"
+                className="border h-48 my-3 border-gray-300 rounded-lg shadow-md flex"
                 key={index}
               >
                 {row.video ? (
@@ -308,10 +308,10 @@ const categories = [
                       {row.category}
                     </p>
                   </div>
-                  <div className="pt-[30px]">
+                  <div className="pt-[10px]">
                     <div className="flex justify-evenly gap-6 items-end">
-                      <div className="flex flex-col text-[15px] text-[#0A0A0A]/70 gap-2">
-                        <p className="whitespace-nowrap">
+                      <div className="flex flex-col text-[13px] text-[#0A0A0A]/70 gap-2">
+                        <p className="">
                           <FontAwesomeIcon
                             icon={faLocationDot}
                             className="mr-2"

@@ -343,35 +343,33 @@ const ListingResults = () => {
       </div>
 
       {/* Price Range Slider */}
-      <div className=" w-[100%] flex-col my-6">
-
-        <div id="turnover_slider" className=" w-[50%]" >
+      <div className="flex justify-between gap-[10px] items-center my-6">
+    <div id="turnover_slider" className="w-[45%]">
         <label className="text-gray-700 font-semibold mb-2">Turnover Range</label>
-        <div id="slider" class=""> </div>
-            <div className="row mt-3">
-                <div className="col-6  mt-1">
-                    <span id="price_low" className="py-0 btn-light" name="min"> </span>
-                </div>
-                <div className="col-6 mt-1 pr-0">
-                    <span id="price_high" className="float-right py-0 btn-light" name="min"> </span>
-                </div>
+        <div id="slider" class=""></div>
+        <div className="row mt-3">
+            <div className="col-6 mt-1">
+                <span id="price_low" className="py-0 btn-light" name="min"></span>
+            </div>
+            <div className="col-6 mt-1 pr-0">
+                <span id="price_high" className="float-right py-0 btn-light" name="min"></span>
             </div>
         </div>
+    </div>
 
-        <div id="amount_slider" className=" w-[50%] mt-[4]"  >
+    <div id="amount_slider" className="w-[45%] mr-[50px] mt-1">
         <label className="text-gray-700 font-semibold mb-2">Amount Range</label>
-        <div id="slider2" class=""> </div>
-            <div className="row mt-3">
-                <div className="col-6  mt-1">
-                    <span id="price_low2" className="py-0 btn-light" name="min"> </span>
-                </div>
-                <div className="col-6 mt-1 pr-0">
-                    <span id="price_high2" className="float-right py-0 btn-light" name="min"> </span>
-                </div>
+        <div id="slider2" class=""></div>
+        <div className="row mt-3">
+            <div className="col-6 mt-1">
+                <span id="price_low2" className="py-0 btn-light" name="min"></span>
+            </div>
+            <div className="col-6 mt-1 pr-0">
+                <span id="price_high2" className="float-right py-0 btn-light" name="min"></span>
             </div>
         </div>
-
-      </div>
+    </div>
+</div>
       {/* Price Range Slider */}
 
         {/*<PriceRangeFilter />
@@ -383,13 +381,13 @@ const ListingResults = () => {
       </h5>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="space-y-4 overflow-y-auto">
+        <div className="space-y-4 no-scrollbar overflow-y-auto">
           {count === 0 ? (
             <p className="text-center text-gray-500">No results found.</p>
           ) : (
             results.map((row, index) => (
               <Link to={`/listing/${btoa(btoa(row.id))}`} key={row.id} > <div
-                className="border my-4 h-48 border-gray-300 rounded-lg shadow-md flex"
+                className="border my-4 h-48 border-gray-300 rounded-lg  shadow-md flex"
                 key={index}
               >
                 {row.video ? (
@@ -414,16 +412,14 @@ const ListingResults = () => {
                       {row.category}
                     </p>
                   </div>
-                  <div className="pt-[30px]">
+                  <div className="pt-[10px]">
                     <div className="flex justify-evenly gap-6 items-end">
-                      <div className="flex flex-col text-[15px] text-[#0A0A0A]/70 gap-2">
-                        <p className="whitespace-nowrap">
-                          <FontAwesomeIcon
-                            icon={faLocationDot}
-                            className="mr-2"
-                          />
-                          Location: {row.location}
-                        </p>
+                      <div className="flex flex-wrap flex-col text-[13px] text-[#0A0A0A]/70 gap-2">
+                      <p className=" text-ellipsis">
+  <FontAwesomeIcon icon={faLocationDot} className="mr-2" />
+  Location: {row.location}
+</p>
+
                         <p className="float">
                           <FontAwesomeIcon
                             icon={faPhone}

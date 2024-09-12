@@ -32,6 +32,8 @@ import Register from './views/register';
 import Login from './views/login';
 import ServiceTable from './components/partials/servicestable';
 import CategoryPage from './components/partials/Categorypage';
+import ProjectManagers from './components/partials/projectManagers';
+import EquipmentRelease from './components/partials/EquipmentRelease';
 import InvestorRegistration from './components/partials/Investreg';
 import Addservicemilestone from './components/partials/Addservicemilestone';
 import MyBookings from './components/partials/Mybookings';
@@ -53,6 +55,7 @@ const router = createBrowserRouter([
             },
             { path: "/listing/:id", element: <ListingDetails /> },
             { path: "/service-details/:id", element: <ServiceDetails /> },
+            { path: "/asset-service-details/:id/:bid_id", element: <ServiceDetails /> },
             { path: "/business-milestones/:id", element: <MilestonesPage /> },
             { path: "/service-milestones/:id", element: <MilestonesPageS /> },
             {
@@ -68,6 +71,8 @@ const router = createBrowserRouter([
                 name: "serviceresults",
                 element: <ServiceResults />,
             },
+            { path: "/projectManagers/:bid_id", element: <ProjectManagers /> },
+            { path: "/equipmentRelease/:b_owner_id/:manager_id", element: <EquipmentRelease /> },
             { path: "/subscribe/:id", element: <Subscribepage /> },
             { path: "/checkout", element: <PaymentForm /> },
             { path: "/category/:name", element: <CategoryPage /> },

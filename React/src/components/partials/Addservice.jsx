@@ -295,7 +295,7 @@ const AddService = ({ connected, userId }) => {
                                 <option value="Public Relations">
                                     Public Relations
                                 </option>
-                                <option value="Project/Asset Management">
+                                <option value="0">
                                     Project/Asset Management
                                 </option>
                                 <option value="Other">Other</option>

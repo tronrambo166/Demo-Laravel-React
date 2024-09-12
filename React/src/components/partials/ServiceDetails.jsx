@@ -13,7 +13,8 @@ import Modal from "./Authmodal";
 const ServiceDetails = () => {
   const{token,setUser,setAuth, auth} = useStateContext();
   const { id } = useParams();
-  const { business_bid_id } = '';//useParams();
+  const { bid_id } = useParams();
+  const { business_bid_id } = ''; //useParams();
   const [notes, setNotes] = useState('');
   const [rebookRes, setRebookRes] = useState('');
   const [details, setDetails] = useState('');
@@ -179,7 +180,7 @@ const handleContactModal = (event) => {
             date: $('#date').val(),
             note: notes,
             service_id: form.service_id,
-            business_bid_id: business_bid_id
+            business_bid_id: bid_id
         } 
         console.log(payload);
         axiosClient.post("/serviceBook",payload).then(({data})=>{
@@ -246,11 +247,16 @@ const handleContactModal = (event) => {
       <div className="px-4 md:px-6 lg:px-8 xl:px-12 my-3 pt-3 w-full flex flex-col md:flex-row justify-center mx-auto gap-4 md:gap-6 lg:gap-8">
         <div className="md:w-1/3 flex flex-col mr-0">
           <div className="relative">
-            <img
+            {!bid_id? (<img
               className="w-full max-h-[250px] shadow-sm rounded-lg"
               src={'../'+details.image}
               alt="Service"
+            />):(<img
+              className="w-full max-h-[250px] shadow-sm rounded-lg"
+              src={'../../'+details.image}
+              alt="Service"
             />
+            )}
             <div className="absolute bottom-0 left-0 w-full bg-gray-800 bg-opacity-60 rounded-b-lg text-white text-center py-2">
               <p className="flex items-center justify-center">
                 <FontAwesomeIcon icon={faMapMarkerAlt} className="mr-2" />
