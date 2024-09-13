@@ -84,8 +84,8 @@ const Subscribepage = () => {
     const Checkout = () => {
     //alert(amount+plan+days)
 
-    if(plan == 'gold' && range == 'all')
-        alert('Please select a range!');
+    if(!plan)
+        alert('Please select a plan!');
 
     else {
         if (selectedPackage){
@@ -185,7 +185,7 @@ const Subscribepage = () => {
                             >
                                 <h1>{packagePrices.silver[frequency]}</h1>
                                 <p className="whitespace-nowrap">
-                                    10 free "Start conversations" per<br /> month from any range.
+                                    10 free "Unlock tokens" per<br /> month from any range.
                                 </p>
                                 
                             </div>
@@ -208,7 +208,7 @@ const Subscribepage = () => {
                             >
                                 <h1>{packagePrices.gold[frequency]}</h1>
                                 <p className="whitespace-nowrap">
-                                    Silver + access to all data from one<br /> chosen range.
+                                     30 free "Unlock tokens" per<br /> month for any range.
                                 </p>
                                 
                             </div>

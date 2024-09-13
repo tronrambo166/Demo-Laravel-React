@@ -379,8 +379,9 @@ const closeAuthModal = () => {
 
 sessionStorage.setItem("purpose", "One time unlock - Small fee");
     }
-
-    const unlockBySubs = (listing_id, sub_id, plan) => {
+    //= mile_id => e =>
+    const unlockBySubs = (listing_id, sub_id, plan,e) => {
+       //e.preventDefault();
     axiosClient.get('unlockBySubs/' + listing_id+'/'+sub_id+'/'+plan).then((data) => {
                   //console.log(data)
                   if(data.data.status == 200){
@@ -389,7 +390,7 @@ sessionStorage.setItem("purpose", "One time unlock - Small fee");
                       title: 'Alert!',
                       content: 'Thanks, '+(subscribeData.token_left-1)+' more tokens to go!',
                     });
-                    return;
+                    location.reload();
                   }
 
                     else location.reload();
@@ -683,7 +684,7 @@ sessionStorage.setItem("purpose", "One time unlock - Small fee");
             <div className="flex flex-wrap gap-4 justify-center">
               {['silver', 'silver-trial', 'gold', 'gold-trial', 'platinum', 'platinum-trial'].includes(subscribeData.plan) && (
                 <button
-                   onClick={unlockBySubs(form.listing_id,subscribeData.sub_id,'token')}
+                   onClick={() => unlockBySubs(form.listing_id,subscribeData.sub_id,'token')}
 
                   className="btn-primary text-white py-2 px-6 rounded hover:bg-blue-600 transition"
                 >
@@ -697,7 +698,7 @@ sessionStorage.setItem("purpose", "One time unlock - Small fee");
                 No
               </button>
             </div>
-            <p className="text-danger text-center">The business is not in your range!</p>
+            {/*<p className="text-danger text-center">The business is not in your range!</p>*/}
           </div>
         )}
       </div>

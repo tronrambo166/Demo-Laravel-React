@@ -151,7 +151,8 @@ class checkoutController extends Controller
       else $trial_price = $price;
 
       if($price == 0)
-        return view('checkoutSubscribe.stripe',compact('price','plan','payLink','trial_price','base_price'));
+        echo "<script>location.href='$payLink'</script>";
+        //return view('checkoutSubscribe.stripe',compact('price','plan','payLink','trial_price','base_price'));
     //If trial
 
       if($plan == 'silver' && $days == 30) $price_id = 'price_1O6uaiJkjwNxIm6zzQ5b2t46';
@@ -230,7 +231,7 @@ class checkoutController extends Controller
         $expire_date = date('Y-m-d', strtotime($start_date. '+30 days'));
 
         $token_remaining = null;
-        if($plan == 'silver' || $plan == 'gold' || $plan=='silver-trial' || $plan=='gold-trial'){
+        if($plan == 'silver' || $plan=='silver-trial' || $plan=='gold-trial'){
             $token_remaining = 10;
         }
 
@@ -239,6 +240,9 @@ class checkoutController extends Controller
             $trial = 1;
             $expire_date = date('Y-m-d', strtotime($start_date. '+7 days'));
         }
+
+        if($plan == 'gold')
+          $token_remaining = 30;
 
     //Stripe
     //$investor_id = base64_decode($investor_id);
