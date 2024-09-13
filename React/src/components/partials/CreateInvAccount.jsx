@@ -224,7 +224,7 @@ function CreateInvestorAccount({ isOpen, onClose }) {
 
                            <button
                                type="submit"
-                               className="btn btn-primary rounded-full py-2 px-4 text-white bg-blue-600 hover:bg-blue-700"
+                               className="btn btn-primary rounded-full py-2 px-4 text-white  "
                            >
                                Log In
                            </button>

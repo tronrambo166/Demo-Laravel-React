@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-
+import { AiOutlineClose } from "react-icons/ai";
 const EditModal = ({
     showModal,
     setShowModal,
@@ -80,12 +80,29 @@ const EditModal = ({
 
     if (!showModal) return null;
 
+    if (!showModal) return null;
+
+const handleOverlayClick = (e) => {
+    if (e.target === e.currentTarget) {
+        setShowModal(false);
+    }
+};
+
     return (
-        <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
+        <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50" onClick={handleOverlayClick}>
             <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-lg no-scrollbar">
-                <h2 className="text-lg font-semibold mb-4">
+                <div className="flex  py-4 justify-between items-center">
+                <h2 className="text-xl text-green font-semibold ">
                     Edit Business Details
                 </h2>
+                <button 
+                className=" " 
+                onClick={() => setShowModal(false)}
+            >
+                <AiOutlineClose size={24} />
+            </button>
+            </div>
+
                 <div className="overflow-y-auto max-h-[calc(100vh-10rem)] no-scrollbar">
                     <form onSubmit={handleSubmit}>
                         {/* Title */}
@@ -439,17 +456,17 @@ const EditModal = ({
                             />
                         </div>
 
-                        <div className="flex justify-end space-x-4">
+                        <div className="flex justify-start space-x-4">
                             <button
                                 type="button"
                                 onClick={() => setShowModal(false)}
-                                className="bg-gray-500 text-white px-4 py-2 rounded"
+                                className="bg-gray-500  hover:bg-gray-600 text-white px-4 py-2 rounded"
                             >
                                 Cancel
                             </button>
                             <button
                                 type="submit"
-                                className="bg-blue-500 text-white px-4 py-2 rounded"
+                                className="btn-primary text-white px-6 py-2 rounded"
                             >
                                 Save
                             </button>

@@ -9,11 +9,15 @@ import {
     FaHome,
 } from "react-icons/fa";
 import profile from "../../../images/profile.png";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axiosClient from "../../axiosClient";
+import { useStateContext } from '../../contexts/contextProvider'
 
 const Dashboardhero = () => {
+    const { token, setToken } = useStateContext();
+    const navigate = useNavigate();
+
     const [user, setUser] = useState({});
     const [id, setId] = useState("");
 
@@ -26,6 +30,18 @@ const Dashboardhero = () => {
             })
             .catch(console.error);
     }, []);
+
+    const onLogout = (ev) => {
+        ev.preventDefault();
+        axiosClient
+            .get('/logout')
+            .then(({}) => {
+                setUser(null);
+                setToken(null);
+                navigate("/"); // Redirect to the guest layout
+            })
+            .catch(console.error);
+    };
 
     return (
         <div
@@ -45,9 +61,9 @@ const Dashboardhero = () => {
                         <FaHome />
                         <span>Home</span>
                     </Link>
-                    <div className="flex items-center text-sm gap-2 text-white">
+                    <div onClick={onLogout} className="flex items-center text-sm gap-2 pointer text-white">
                         <FaUser />
-                        <span>Sign out</span>
+                        <span >Sign out</span>
                     </div>
                     <FaCog className="text-white" />
                     <FaBell className="text-white" />
@@ -96,14 +112,15 @@ const Dashboardhero = () => {
                                 <FaEnvelope />
                                 <span>Messages</span>
                             </Link>
-                            {id && <Link
-                                to={`./account/${id}`}
-                                className="flex items-center gap-1"
-                            >
-                                <FaDollarSign />
-                                <span>Account</span>
-                            </Link>
-                        }
+                            {id && (
+                                <Link
+                                    to={`./account/${id}`}
+                                    className="flex items-center gap-1"
+                                >
+                                    <FaDollarSign />
+                                    <span>Account</span>
+                                </Link>
+                            )}
                         </div>
                     </div>
                 </div>

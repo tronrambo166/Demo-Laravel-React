@@ -4,7 +4,7 @@ import rightArrow from "../../images/right vector.png";
 
 const Herosection = () => {
     return (
-        <div className="bg-white h-[80vh] relative mt-8">
+        <div id="hero" className="bg-white h-[80vh] relative mt-8">
             {/* Vector on the left */}
             <img
                 src={leftArrow}
