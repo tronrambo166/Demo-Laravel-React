@@ -18,58 +18,51 @@ const Herosection = () => {
     };
 
     return (
-        <div className="bg-white relative mt-10">
-            {/* Arrows for Navigation */}
+        <div className="bg-white relative mt-10 lg:mt-20">
             <img
                 src={leftArrow}
                 alt="Left Arrow"
-                className="absolute left-0 top-1/2 transform -translate-y-1/2 z-10 hidden md:block"
-                style={{ height: "80px", width: "auto" }}
+                className="absolute left-0 top-1/2 transform -translate-y-1/2 z-10 h-[60px] lg:h-[100px] w-auto"
             />
             <img
                 src={rightArrow}
                 alt="Right Arrow"
-                className="absolute right-0 top-1/3 transform -translate-y-1/2 z-10 hidden md:block"
-                style={{ height: "80px", width: "auto" }}
+                className="absolute right-0 top-1/3 transform -translate-y-1/2 z-10 h-[60px] lg:h-[100px] w-auto"
             />
 
-            {/* Hero Section Content */}
-            <div className="flex flex-col lg:flex-row justify-center items-center text-center lg:text-left gap-6 lg:gap-10 w-full lg:w-[900px] h-auto mx-auto">
-                <div className="flex flex-col gap-6 w-full lg:w-1/2 px-4">
-                    <h2 className="text-lg font-semibold text-gray-600">
+            <div className="flex flex-col lg:flex-row lg:items-center gap-6 lg:gap-16 text-center lg:text-left mx-auto w-full lg:w-[900px] h-auto lg:h-[406px] my-0 px-4 lg:px-0">
+                <div className="flex flex-col gap-6 lg:w-1/3">
+                    <h2 className="text-lg lg:text-md font-semibold text-[#0A0A0A]/60">
                         Welcome to Jitume
                     </h2>
-                    <h1 className="text-3xl md:text-4xl font-bold text-black leading-tight">
-                        Real businesses, real{" "}
-                        <br className="hidden lg:block" />
-                        solutions,{" "}
-                        <span className="text-green font-bold text-dark-green">
+                    <h1 className="text-2xl lg:text-3xl text-black font-bold">
+                        Real businesses, real <br className="hidden lg:block" />{" "}
+                        solutions,
+                        <span className="text-green-500 font-bold">
+                            {" "}
                             real change
                         </span>
                     </h1>
-                    <h2 className="text-md text-gray-900 font-semibold">
+                    <h2 className="text-lg lg:text-md text-[#0A0A0A] font-semibold">
                         Invest in a business you believe in with{" "}
                         <br className="hidden lg:block" /> as little as $100
                     </h2>
                     <button
                         onClick={handleOpenAuthModal}
-                        className="btn-primary font-semibold w-40 h-12 rounded-full mx-auto lg:mx-0"
+                        className="btn-primary font-semibold w-full max-w-[125px] h-[50px] whitespace-nowrap rounded-2xl mx-auto lg:mx-0"
                     >
                         Join today
                     </button>
                 </div>
-
-                {/* Hero Image */}
-                <div className="w-full lg:w-1/2 px-4">
+                <div className="flex-1 lg:pl-12">
                     <img
                         src={heroimg}
                         alt="hero-image"
-                        className="w-full max-w-[350px] lg:max-w-none mx-auto"
+                        className="w-full h-auto"
                     />
                 </div>
             </div>
 
-            {/* Modal */}
             {isAuthModalOpen && (
                 <Modal
                     isOpen={isAuthModalOpen}

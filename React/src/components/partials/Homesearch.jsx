@@ -156,26 +156,26 @@ const Homesearch = () => {
     //KEVIN
 
     return (
-        <div className="flex flex-col pt-6 justify-center">
-        <h1 className="text-center text-black text-lg md:text-xl font-semibold">
+        <div className="flex flex-col pt-16 lg:pt-24 justify-center px-4 lg:px-8">
+        <h1 className="text-center text-black text-xl lg:text-2xl font-semibold">
             Your platform to invest in local businesses
         </h1>
-    
+
         {/* Search section starts */}
-        <div className="flex flex-col md:flex-row gap-4 justify-center pt-8 px-4 md:px-6 items-center w-full max-w-3xl mx-auto">
+        <div className="flex flex-col gap-4 md:flex-row justify-center pt-6 px-2 sm:px-6 md:px-4 items-center w-full max-w-3xl mx-auto">
             <input
                 ref={nameRef}
                 type="text"
-                className="border py-2 text-sm md:text-md px-4 font-regular border-[#666666]/30 rounded-xl focus:outline-none w-full md:flex-1"
+                className="border py-2 text-md px-4 font-regular border-[#666666]/30 rounded-xl focus:outline-none w-full md:w-auto"
                 placeholder="What are you looking for?"
             />
-            <div className="relative w-full md:flex-1">
+            <div className="relative w-full md:w-auto">
                 <input
                     onKeyUp={getPlaces}
                     id="searchbox"
                     type="text"
                     placeholder="Location"
-                    className="border border-[#666666]/30 w-full text-sm md:text-md rounded-xl py-2 px-4 focus:outline-none"
+                    className="border border-[#666666]/30 w-full text-md rounded-xl py-2 px-4 focus:outline-none"
                     ref={locationInputRef}
                 />
                 <FontAwesomeIcon
@@ -183,12 +183,12 @@ const Homesearch = () => {
                     className="absolute right-4 top-1/2 transform -translate-y-1/2 text-black cursor-pointer"
                 />
             </div>
-            <div className="relative w-full md:flex-1">
+            <div className="relative w-full md:w-auto">
                 <select
-                    className="border border-[#666666]/30 w-full text-sm md:text-md rounded-xl py-2 px-4 focus:outline-none appearance-none"
+                    className="border border-[#666666]/30 w-full text-md rounded-xl py-2 px-4 focus:outline-none appearance-none"
                     ref={categoryRef}
                 >
-                    <option className="text-slate-400" value="">
+                    <option className="text-gray-400" value="">
                         Select a category
                     </option>
                     <option value="Agriculture">Agriculture</option>
@@ -213,7 +213,6 @@ const Homesearch = () => {
                     className="absolute right-4 top-1/2 transform -translate-y-1/2 text-black cursor-pointer pointer-events-none"
                 />
             </div>
-            {/* Search button */}
             <button
                 onClick={Search}
                 className="btn-primary w-full md:w-auto py-3 rounded-full px-4 focus:outline-none mt-4 md:mt-0"
@@ -221,22 +220,20 @@ const Homesearch = () => {
                 <FontAwesomeIcon icon={faSearch} />
             </button>
         </div>
-    
-        {/* Suggestion and results list */}
         <ul
             id="suggestion-list"
-            className="absolute w-[250px] bg-white border-t-0 rounded-b-md shadow-lg z-10 top-full"
+            className="absolute w-full max-w-xs bg-white border-t-0 rounded-b-md shadow-lg z-10 top-full"
         ></ul>
         <div
             id="result_list"
-            className="absolute w-[250px] bg-white border-gray-300 border-t-0 rounded-b-md shadow-lg z-10 top-full"
+            className="absolute w-full max-w-xs bg-white border-gray-300 border-t-0 rounded-b-md shadow-lg z-10 top-full"
         ></div>
         <input type="text" name="lat" id="lat" hidden value="" />
         <input type="text" name="lng" id="lng" hidden value="" />
-    
-        {/* Button section */}
-        <div className="flex font-semibold flex-wrap gap-4 py-6 justify-center items-center w-full mx-auto">
-            <button className="btn-primary w-40 md:w-50 rounded-lg py-2 text-sm px-4 text-white">
+        {/* Search section ends */}
+
+        <div className="flex flex-wrap gap-4 py-8 justify-center items-center w-full mx-auto">
+            <button className="btn-primary w-48 rounded-lg py-2 text-sm px-4 text-white">
                 Agriculture
             </button>
             <button className="bg-black hover:bg-gray-800 py-2 rounded-lg text-sm px-4 text-white">
@@ -244,7 +241,6 @@ const Homesearch = () => {
             </button>
         </div>
     </div>
-    
     );
 };
 
